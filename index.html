@@ -1,0 +1,1565 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Cecelia 的个人作品集：创意编码、交互叙事、视觉与空间设计。">
+<meta name="theme-color" content="#f4f3ee">
+<title>Cecelia's Resume Website</title>
+
+<style>
+:root{
+  --bg:#f4f3ee;
+  --ink:#22251f;
+  --muted:#73776b;
+  --line:#cdd0c3;
+  --green:#cad4ad;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer;color:inherit}
+a{color:inherit;text-decoration:none}
+button:focus-visible,a:focus-visible{
+  outline:2px solid #6f8554;
+  outline-offset:5px;
+}
+button:disabled{cursor:default;opacity:.7}
+[hidden]{display:none!important}
+svg{display:block;width:100%;height:auto}
+
+.wrap{width:min(1320px,90%);margin:auto}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:25px 0;
+}
+.brand{font-size:24px;font-weight:600;letter-spacing:-1.5px}
+.links{display:flex;gap:24px;font-size:11px}
+.links a:hover{text-decoration:underline}
+.micro{font:9px monospace;letter-spacing:.09em;color:var(--muted)}
+.hero{padding:64px 0 25px}
+.herohead{display:flex;justify-content:space-between;gap:15px}
+h1{
+  font-size:clamp(80px,15vw,200px);
+  font-weight:500;
+  line-height:.87;
+  letter-spacing:-.075em;
+  margin:40px 0;
+}
+h1 span{
+  display:block;
+  font-size:.34em;
+  letter-spacing:-.055em;
+  margin-top:18px;
+  line-height:1.1;
+}
+h1 b{font-weight:400;font-size:.45em;vertical-align:top}
+.introgrid{
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  gap:40px;
+  align-items:end;
+}
+.introgrid p{
+  font-size:13px;
+  line-height:1.9;
+  color:var(--muted);
+  margin:0;
+}
+.disciplines{justify-self:end;font-size:12px;line-height:1.8}
+.underlink{
+  display:flex;
+  justify-content:space-between;
+  gap:65px;
+  padding:10px 0;
+  border-bottom:1px solid;
+  margin-top:13px;
+}
+.heroline{
+  display:flex;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  padding:45px 0 20px;
+  font:9px monospace;
+}
+.sectionhead{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:end;
+  padding:65px 0 25px;
+}
+h2{
+  font-size:clamp(34px,5vw,62px);
+  line-height:1.03;
+  letter-spacing:-.055em;
+  font-weight:400;
+  margin:10px 0 0;
+}
+h2 em{font-family:Georgia,serif}
+.filters{display:flex;gap:20px}
+.filter{
+  background:none;
+  border:0;
+  border-bottom:1px solid transparent;
+  padding:8px 0;
+  font-size:11px;
+  color:var(--muted);
+}
+.filter.active{border-color:var(--ink);color:var(--ink)}
+.feature{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  width:100%;
+  padding:0;
+  border:0;
+  text-align:left;
+  background:#2a3028;
+  color:var(--bg);
+}
+.featurecopy{
+  padding:40px;
+  display:flex;
+  align-items:start;
+  flex-direction:column;
+}
+.featurecopy h3{
+  font-size:clamp(44px,6vw,79px);
+  font-weight:400;
+  letter-spacing:-.06em;
+  line-height:1;
+  margin:30px 0 20px;
+}
+.featurecopy p{font-size:12px;line-height:1.9;color:#c5cdba}
+.featurecopy .micro{color:#bac6ab}
+.featurecopy .underlink{
+  width:100%;
+  margin-top:auto;
+  font-size:11px;
+  border-color:#707d64;
+}
+.featureart{
+  background:#d4ccdf;
+  padding:48px 32px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+.gamewindow{
+  width:100%;
+  border:1px solid #a18aae;
+  box-shadow:10px 12px 0 #b9acc7;
+  transform:rotate(-3deg);
+  transition:transform .4s;
+}
+.feature:hover .gamewindow{transform:rotate(0deg)}
+.windowbar{
+  background:#cbb7de;
+  padding:9px 12px;
+  color:#62536f;
+  font:9px monospace;
+  display:flex;
+  justify-content:space-between;
+}
+.worknote{
+  display:flex;
+  justify-content:space-between;
+  font-size:9px;
+  color:var(--muted);
+  padding:24px 0 14px;
+  gap:20px;
+}
+.masonry{columns:3;column-gap:4px}
+.project{
+  width:100%;
+  padding:0;
+  border:0;
+  text-align:left;
+  background:none;
+  break-inside:avoid;
+  margin:0 0 4px;
+}
+.project svg{transition:filter .3s}
+.project:hover svg{filter:brightness(.94)}
+.caption{
+  display:flex;
+  justify-content:space-between;
+  padding:15px 4px 28px;
+  font-size:13px;
+}
+.caption small{
+  display:block;
+  font-size:9px;
+  color:var(--muted);
+  margin-top:7px;
+}
+.studio{
+  display:grid;
+  grid-template-columns:.8fr 1.5fr;
+  gap:35px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  margin-top:65px;
+  padding:40px 0;
+}
+.studio p,.about p{
+  font-size:12px;
+  line-height:1.9;
+  color:var(--muted);
+}
+.studioindex{margin-top:30px}
+.studioindex button{
+  display:flex;
+  justify-content:space-between;
+  width:100%;
+  border:0;
+  border-top:1px solid var(--line);
+  padding:13px 0;
+  background:none;
+  text-align:left;
+  font-size:11px;
+}
+.studioindex button:hover{color:#6e8655}
+.studioimage{
+  display:flex;
+  align-items:center;
+  perspective:1000px;
+  overflow:hidden;
+}
+.studioimage svg{transition:transform .4s}
+.studioimage g[data-open]{cursor:pointer}
+.studioimage g[data-open]:hover{opacity:.65}
+.lifecards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;
+}
+.lifecard{background:none;padding:0;border:0;text-align:left}
+.lifeart{
+  height:245px;
+  display:grid;
+  place-items:center;
+  position:relative;
+  overflow:hidden;
+}
+.lifeart strong{font:italic 70px Georgia,serif;letter-spacing:-4px}
+.lifeart small{
+  position:absolute;
+  bottom:19px;
+  left:20px;
+  font:9px monospace;
+}
+.hiking{background:#e0e4d5}
+.cocktails{background:#e8dcd2}
+.archive{background:#ddd6e6}
+.about{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:70px;
+  padding:85px 0;
+}
+.skills{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 20px;
+  margin-top:27px;
+}
+.skills span{
+  border-top:1px solid var(--line);
+  padding:15px 0;
+  font-size:11px;
+  line-height:1.6;
+}
+.closing{border-top:1px solid var(--line);padding-top:20px}
+.closing a{
+  display:flex;
+  justify-content:space-between;
+  font-size:clamp(80px,20vw,270px);
+  letter-spacing:-.08em;
+  line-height:1.2;
+}
+.closing a span{font-size:.6em;align-self:center}
+footer{
+  border-top:1px solid var(--line);
+  padding:20px 0;
+  display:flex;
+  justify-content:space-between;
+  font:9px monospace;
+  color:var(--muted);
+}
+.footnote{
+  font-size:10px;
+  line-height:1.8;
+  color:var(--muted);
+  padding-bottom:25px;
+}
+.sr{
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip-path:inset(50%);
+}
+dialog{
+  width:min(840px,94vw);
+  max-height:90vh;
+  border:1px solid var(--line);
+  border-radius:0;
+  background:var(--bg);
+  padding:0;
+  color:var(--ink);
+}
+dialog
+.modalbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:13px 23px;
+  border-bottom:1px solid var(--line);
+  font:10px monospace;
+}
+.close{
+  background:none;
+  border:0;
+  font-size:25px;
+  min-width:40px;
+  min-height:40px;
+}
+.modalbody{padding:28px}
+.modalbody h2{font-size:42px}
+.modalbody p{font-size:13px;line-height:1.8;color:var(--muted)}
+.action{
+  border:1px solid var(--ink);
+  background:var(--ink);
+  color:var(--bg);
+  padding:12px 17px;
+  font-size:11px;
+  display:inline-block;
+}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+.notice{
+  font-size:10px!important;
+  border-left:2px solid #bca3ce;
+  padding-left:10px;
+}
+.tabs{display:flex;gap:4px;margin-top:22px}
+.tabs button{
+  flex:1;
+  padding:13px 8px;
+  background:none;
+  border:1px solid #c8b5d5;
+  font-size:11px;
+}
+.tabs button.active{background:#7d688c;color:white}
+.game .modalbar{background:#cbb7de}
+.game{background:#f5eef3}
+.game .action{background:#7d688c;border-color:#7d688c}
+.scene{
+  position:relative;
+  aspect-ratio:640/410;
+  border:4px solid #b6a0c8;
+  overflow:hidden;
+  margin:20px 0;
+}
+.scene>svg{
+  width:100%;
+  height:100%;
+  position:absolute;
+  inset:0;
+}
+.hotspot{
+  position:absolute;
+  transform:translate(-50%,-50%);
+  min-width:34px;
+  min-height:34px;
+  background:#75627f;
+  border:2px solid #fff1dc;
+  color:#fff;
+  font:11px monospace;
+  box-shadow:3px 3px 0 #ab95b8;
+}
+.hotspot.done{background:#708f7e}
+.objectinfo{
+  padding:18px 0;
+  border-top:1px solid #d5c7dc;
+  min-height:160px;
+}
+.objectinfo h3{font:26px Georgia,serif;margin:0}
+.status{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font:10px monospace;
+  color:#766081;
+}
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin:24px 0;
+}
+.slot{
+  aspect-ratio:4/5;
+  background:#e8e4dc;
+  border:1px solid var(--line);
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  font-size:11px;
+  color:var(--muted);
+}
+.slot b{font:42px Georgia,serif;color:#afa99d}
+.gallery figure{margin:0}
+.gallery img{
+  width:100%;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  display:block;
+}
+.gallery figcaption{font-size:11px;line-height:1.6;padding:10px 0}
+.detailart svg{max-height:330px;margin-top:25px}
+
+@media(max-width:900px){
+  .masonry{columns:2}
+  .studio{grid-template-columns:1fr}
+  .studioimage{max-width:720px;margin:auto}
+  .studioindex{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+  .featurecopy{padding:28px}
+  .featureart{padding:28px}
+  .about{gap:35px}
+  .lifeart{height:200px}
+  .lifeart strong{font-size:53px}
+}
+@media(max-width:560px){
+  .top{padding:20px 0}
+  .links{gap:14px;font-size:10px}
+  .hero{padding-top:35px}
+  .herohead{font-size:7px}
+  .herohead span:last-child{display:none}
+  h1{font-size:17vw;margin:35px 0}
+  h1 span{font-size:.42em}
+  .introgrid{grid-template-columns:1fr}
+  .disciplines{display:none}
+  .introgrid p{font-size:12px}
+  .heroline{font-size:8px;padding-top:28px}
+  .sectionhead{padding-top:45px;gap:10px}
+  h2{font-size:38px}
+  .filters{gap:14px}
+  .filter{font-size:10px}
+  .feature{grid-template-columns:1fr}
+  .featurecopy h3{font-size:61px}
+  .featurecopy{padding:28px}
+  .featurecopy .underlink{margin-top:16px}
+  .featureart{padding:36px 24px}
+  .worknote{font-size:8px;flex-wrap:wrap;gap:6px}
+  .masonry{columns:2}
+  .caption{font-size:11px;padding-bottom:23px}
+  .caption small{font-size:8px;line-height:1.6}
+  .studio{margin-top:40px;padding:30px 0;gap:15px}
+  .lifecards{grid-template-columns:1fr}
+  .lifeart{height:240px}
+  .lifeart strong{font-size:75px}
+  .about{grid-template-columns:1fr;gap:24px;padding:55px 0}
+  .skills span{font-size:10px}
+  .closing a{font-size:23vw}
+  .modalbody{padding:19px}
+  .modalbody h2{font-size:34px}
+  .gallery{grid-template-columns:1fr 1fr}
+  .slot:last-child{grid-column:1/-1;aspect-ratio:2/1}
+  .hotspot{min-width:30px;min-height:30px;font-size:9px}
+  .status{font-size:9px}
+  footer{font-size:8px}
+  .footnote{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{transition:none!important}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap" id="home">
+  <header class="top">
+    <a class="brand" href="#home">cecelia✳</a>
+    <nav class="links" aria-label="主导航">
+      <a href="#work">Work</a>
+      <a href="#studio">Studio</a>
+      <a href="#life">Life</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="herohead micro">
+        <span>INDEPENDENT THINKING. INTERACTIVE MAKING.</span>
+        <span>DESIGN / CODE / PLAY</span>
+      </div>
+
+      <h1>Cecelia’s<b>✳</b><span>Resume Website</span></h1>
+
+      <div class="introgrid">
+        <p>
+          用 JavaScript / TypeScript 与 p5.js 写下交互，<br>
+          以 Blender、Three.js、图像与声音构建体验。<br>
+          也在山野、调酒与日常观察中寻找灵感。
+        </p>
+        <div class="disciplines">
+          Creative coding<br>
+          Interactive experiences<br>
+          Visual & spatial design
+          <a class="underlink" href="#studio">
+            走进我的房间 <span>↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="heroline">
+        <span>DESIGNER & CREATIVE CODER</span>
+        <a href="#work">SCROLL TO EXPLORE ↓</a>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sectionhead">
+        <div>
+          <span class="micro">01 / PROJECT & STUDIES</span>
+          <h2>Selected <em>work.</em></h2>
+        </div>
+        <div class="filters" aria-label="作品筛选">
+          <button class="filter active" data-filter="all"
+            aria-pressed="true">全部</button>
+          <button class="filter" data-filter="interactive"
+            aria-pressed="false">交互</button>
+          <button class="filter" data-filter="visual"
+            aria-pressed="false">视觉</button>
+        </div>
+      </div>
+
+      <button class="feature" data-open="game"
+        data-category="interactive">
+        <div class="featurecopy">
+          <span class="micro">385 A3 / UPKEEP</span>
+          <h3>The Next<br>Chapter.</h3>
+          <p>
+            一间房的成长，一些被留下的东西。<br>
+            关于照料、记忆与长大的交互叙事。
+          </p>
+          <span class="underlink">
+            进入两个阶段的房间 <span>↗</span>
+          </span>
+        </div>
+        <div class="featureart">
+          <div class="gamewindow">
+            <div class="windowbar">
+              <span>The Next Chapter</span>
+              <span>− □ ×</span>
+            </div>
+            <div id="cover"></div>
+          </div>
+        </div>
+      </button>
+
+      <div class="worknote">
+        <span>EXPLORATIONS & PROPOSED DIRECTIONS</span>
+        <span>以下为围绕项目展开的新概念提案</span>
+      </div>
+
+      <div class="masonry" id="projects"></div>
+      <span class="sr" id="filterStatus" aria-live="polite"></span>
+    </section>
+
+    <section class="studio" id="studio">
+      <div>
+        <span class="micro">02 / THE PERSONAL SIDE</span>
+        <h2>A room,<br>full of <em>me.</em></h2>
+        <p>
+          从代码与画面，到山野与杯中风味。<br>
+          点击一件物品，认识生活里的我。
+        </p>
+        <div class="studioindex">
+          <button data-open="hiking">
+            01 / 徒步装备 <span>↗</span>
+          </button>
+          <button data-open="cocktails">
+            02 / 调酒角 <span>↗</span>
+          </button>
+          <button data-open="archive">
+            03 / UQT 档案 <span>↗</span>
+          </button>
+          <button data-open="game">
+            04 / The Next Chapter <span>↗</span>
+          </button>
+        </div>
+      </div>
+      <div class="studioimage" id="studioArt"></div>
+    </section>
+
+    <section id="life">
+      <div class="sectionhead">
+        <div>
+          <span class="micro">03 / EVERYDAY OBSERVATIONS</span>
+          <h2>Outside the <em>canvas.</em></h2>
+        </div>
+      </div>
+
+      <div class="lifecards">
+        <button class="lifecard" data-open="hiking">
+          <div class="lifeart hiking">
+            <strong>Wander.</strong>
+            <small>ON THE TRAIL / 01</small>
+          </div>
+          <div class="caption">
+            <span>徒步与山野<small>个人照片收藏位</small></span>
+            <span>↗</span>
+          </div>
+        </button>
+
+        <button class="lifecard" data-open="cocktails">
+          <div class="lifeart cocktails">
+            <strong>Balance.</strong>
+            <small>AFTER HOURS / 02</small>
+          </div>
+          <div class="caption">
+            <span>个人调酒<small>风味、比例与观察</small></span>
+            <span>↗</span>
+          </div>
+        </button>
+
+        <button class="lifecard" data-open="archive">
+          <div class="lifeart archive">
+            <strong>Archive.</strong>
+            <small>UQT / 03</small>
+          </div>
+          <div class="caption">
+            <span>UQT 课程档案<small>过程、交付与复盘</small></span>
+            <span>↗</span>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div>
+        <span class="micro">04 / DESIGN & DEVELOPMENT</span>
+        <h2>Curiosity,<br>made<br><em>tangible.</em></h2>
+      </div>
+
+      <div>
+        <p>
+          我把设计和代码当作相互连接的表达方式：
+          用 JavaScript / TypeScript 与 p5.js 组织交互，
+          用 Blender、Three.js 和渲染库探索空间，
+          再用绘图与音频工具丰富感官细节。
+        </p>
+        <p>
+          在 385 A3 团队项目 The Next Chapter 中，
+          我们围绕 upkeep 展开：观察同一间房如何伴随女孩成长，
+          物品如何被照料、保留或放下。
+          作品通过兄妹的物品线索，呈现共同生活的痕迹。
+        </p>
+
+        <div class="skills">
+          <span>JavaScript / TypeScript</span>
+          <span>p5.js / Creative coding</span>
+          <span>Three.js / 渲染库</span>
+          <span>Blender / 三维创作</span>
+          <span>引擎代码与交互逻辑</span>
+          <span>绘图与视觉软件</span>
+          <span>音频软件与声音编辑</span>
+          <span>交互叙事与原型设计</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="closing">
+    <span class="micro">ALWAYS CURIOUS. ALWAYS MAKING.</span>
+    <a href="#home">Cecelia<span>↗</span></a>
+  </div>
+
+  <footer>
+    <span>CECELIA / DESIGN · CODE · PLAY</span>
+    <a href="#home">BACK TO TOP ↑</a>
+  </footer>
+
+  <p class="footnote">
+    The Next Chapter 房间为基于项目大纲制作的交互原型；
+    概念视觉与真实课程成果已分开标注。
+    个人照片、课程作业及原 A3 游戏可继续接入。
+  </p>
+</div>
+
+<dialog id="modal" aria-labelledby="modalTitle">
+  <div class="modalbar">
+    <span id="modalLabel"></span>
+    <button class="close" id="close" aria-label="关闭">×</button>
+  </div>
+  <div class="modalbody" id="modalBody"></div>
+</dialog>
+
+<noscript>
+  <p>请启用 JavaScript 以使用房间、作品详情与游戏功能。</p>
+</noscript>
+
+<script>
+"use strict";
+
+/*
+  在这里添加真实内容。
+
+  1. 在仓库中新建 assets 文件夹并上传照片。
+  2. 将下面对应数组改成类似：
+     hiking: [
+       {
+         src: "./assets/hiking-01.jpg",
+         caption: "我的徒步记录"
+       }
+     ]
+
+  originalGameUrl：填写原 p5.js 游戏的完整网址。
+  email：填写联系方式；留空时不会显示。
+*/
+const CONTENT = {
+  originalGameUrl: "",
+  email: "",
+  hiking: [],
+  cocktails: [],
+  archive: []
+};
+
+const $ = id => document.getElementById(id);
+
+const svg = (body, view="0 0 640 410") =>
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+view+
+  '" aria-hidden="true">'+body+'</svg>';
+
+const rect = (x,y,w,h,c) =>
+  '<rect x="'+x+'" y="'+y+'" width="'+w+
+  '" height="'+h+'" fill="'+c+'"/>';
+
+const star = (x,y,c) =>
+  '<path fill="'+c+'" d="M'+x+' '+y+
+  'h4v6h6v4h-6v6h-4v-6h-6v-4h6Z"/>';
+
+function teddy(x,y){
+  return '<g transform="translate('+x+' '+y+')">'+
+    '<path fill="#997990" d="M0 4h8V0h9v7h15V0h9v4h6v15h-7v10h6v19h-7v8H9v-8H1V29h7V19H0Z"/>'+
+    '<path fill="#d4ab8e" d="M5 7h6v8H5ZM36 7h6v8h-6ZM12 12h23v16H12ZM13 31h22v20H13Z"/>'+
+    '<path fill="#54445d" d="M16 17h3v3h-3ZM29 17h3v3h-3ZM22 23h5v3h-5Z"/>'+
+    '<path fill="#b5a2d0" d="M14 29h20v5H14Z"/>'+
+    '</g>';
+}
+
+/* 两阶段房间：所有插画由 SVG 生成，不依赖外部图片。 */
+function roomArt(stage=0,carry=false,light=true){
+  let a =
+    rect(0,0,640,278,"#eee0eb")+
+    rect(0,278,640,132,"#dfbda7");
+
+  for(let y=24;y<255;y+=48){
+    for(let x=20;x<630;x+=58){
+      a+=rect(x,y,3,3,"#ccb6d3");
+    }
+  }
+
+  for(let y=306;y<410;y+=32){
+    a+=rect(0,y,640,2,"#c79f93");
+  }
+
+  a+=rect(0,263,640,15,"#c3afd0");
+
+  a+=rect(362,42,142,153,"#ae9abd");
+  a+=rect(369,49,128,139,"#fff1dd");
+  a+=rect(377,57,112,123,"#9fc7d7");
+  a+=rect(431,57,6,123,"#fff1dd");
+  a+=rect(377,117,112,6,"#fff1dd");
+
+  a+='<path fill="#d6e5e4" d="M380 97h26v-7h21v7h17v7h-64ZM451 144h18v-7h19v15h-37Z"/>';
+
+  a+=rect(346,34,25,170,"#c7b1d7");
+  a+=rect(497,34,25,170,"#c7b1d7");
+
+  a+='<path fill="#b7bdc9" d="M143 311h305v9h17v49h-17v10H143v-10h-17v-49h17Z"/>';
+  a+='<path fill="#e4cddd" d="M150 321h292v8h12v29h-12v10H150v-10h-12v-29h12Z"/>';
+
+  a+=rect(33,106,185,8,"#b28e9f");
+
+  ["#acbca9","#b49acd","#dcafa7","#d3bd98"].forEach((c,i)=>{
+    a+=rect(48+i*26,64-i%2*8,20,42+i%2*8,c);
+    a+=rect(52+i*26,74-i%2*8,12,3,"#f6e7d7");
+  });
+
+  a+=rect(514,223,101,84,"#b390aa");
+
+  for(let i=0;i<3;i++){
+    a+=rect(520,229+i*25,89,20,"#ddc2cb");
+    a+=rect(560,237+i*25,9,4,"#9b7d97");
+  }
+
+  a+=rect(518,307,7,17,"#9b7d97");
+  a+=rect(603,307,7,17,"#9b7d97");
+
+  if(stage===0){
+    a+=rect(60,232,192,92,"#bda0b3");
+    a+=rect(69,226,173,92,"#f3e5ce");
+    a+=rect(77,248,156,40,"#d7bbcb");
+    a+=rect(82,254,95,36,"#b6aed1");
+
+    a+=teddy(182,214);
+
+    for(let x=85;x<240;x+=27){
+      a+=rect(x,264,6,61,"#f3e5ce");
+    }
+
+    a+=rect(60,230,8,111,"#f3e5ce");
+    a+=rect(244,230,8,111,"#f3e5ce");
+    a+=rect(66,292,180,7,"#f3e5ce");
+
+    a+=rect(302,223,6,42,"#ab90b4");
+    a+=rect(289,263,32,6,"#ab90b4");
+
+    a+='<path fill="'+(light?"#f5d59d":"#c0aec9")+
+      '" d="M293 189h23v9h7v13h8v15h-53v-15h8v-13h7Z"/>';
+
+    a+=rect(108,128,108,4,"#ab93bc");
+    a+=rect(108,128,4,39,"#ab93bc");
+    a+=rect(158,128,4,27,"#ab93bc");
+    a+=rect(213,128,4,54,"#ab93bc");
+
+    a+=star(109,165,"#c7b5d3");
+    a+=star(159,154,"#e4c18e");
+    a+=star(214,180,"#b2c6c8");
+
+    a+='<path fill="#a9cdd4" d="M551 180h34v7h7v26h-7v7h-34v-7h-7v-26h7Z"/>';
+    a+=rect(552,216,33,9,"#bda2cb");
+    a+=star(566,195,"#fff0d6");
+  }else{
+    a+=rect(52,252,194,75,"#a28aa8");
+    a+=rect(59,246,180,58,"#f2e3d1");
+    a+=rect(119,248,120,56,"#b9a4d1");
+    a+=rect(64,251,45,27,"#fff2df");
+
+    for(let x=133;x<230;x+=35){
+      a+=rect(x,260,12,12,"#dfcce8");
+    }
+
+    a+=rect(50,242,7,99,"#a28aa8");
+    a+=rect(243,250,7,91,"#a28aa8");
+
+    a+=rect(294,282,134,34,"#b18ba7");
+    a+=rect(301,278,120,31,"#e6bfc7");
+    a+=rect(306,316,7,38,"#b18ba7");
+    a+=rect(409,316,7,38,"#b18ba7");
+
+    a+=rect(328,287,22,17,"#fff0db");
+    a+=rect(350,291,7,10,"#fff0db");
+    a+=rect(376,291,22,17,"#fff0db");
+    a+=rect(398,295,7,10,"#fff0db");
+
+    a+=rect(363,265,13,15,"#9bbac1");
+    a+=rect(409,271,13,15,"#d5a0b5");
+
+    a+=rect(154,133,67,58,"#fff0dc");
+    a+='<path fill="#d69bad" d="M164 170h10v-10h10v-10h10v10h10v10h9v5h-49ZM173 175h31v10h-31Z"/>';
+    a+=star(207,141,"#e4c28f");
+
+    a+=rect(251,156,43,43,"#d3c5e3");
+    a+=star(271,169,"#a789bc");
+
+    a+=rect(525,167,64,44,"#a893b6");
+    a+=rect(531,173,52,31,"#d9d1e4");
+    a+=rect(537,179,40,19,"#9ac4cd");
+    a+=rect(549,211,16,8,"#ad99bb");
+    a+=rect(539,218,36,5,"#ad99bb");
+
+    if(carry)a+=teddy(272,236);
+  }
+
+  return svg(a);
+}
+
+/* 可交互的个人工作室。 */
+function studioArt(){
+  return svg(`
+    <g stroke="#7d8470" stroke-width="1.2"
+      stroke-linejoin="round">
+
+      <path fill="#ebece3"
+        d="M83 277L317 156L560 279L321 399Z"/>
+      <path fill="#f7f5ed"
+        d="M83 277V85L317 17V156Z"/>
+      <path fill="#e2e5d9"
+        d="M317 17L560 98V279L317 156Z"/>
+
+      <path fill="#f7f5ed"
+        d="M366 62L503 107V191L366 140Z"/>
+      <path fill="#cbd7bd"
+        d="M374 74L495 113V178L374 132Z"/>
+      <path fill="none"
+        d="M434 94V154M374 103L495 150"/>
+
+      <g data-open="archive" role="button" tabindex="0"
+        aria-label="打开 UQT 档案">
+        <path fill="#e1ddcf"
+          d="M135 124L243 89V189L135 233Z"/>
+        <path fill="#f5f2e6"
+          d="M145 131L234 102V180L145 215Z"/>
+        <path d="M157 149L223 127M157 167L223 145M157 187L215 166"
+          fill="none"/>
+        <text x="162" y="180" fill="#6f785f"
+          stroke="none" font-size="13">UQT</text>
+      </g>
+
+      <path fill="#b9c0aa"
+        d="M229 227L330 177L433 222L329 279Z"/>
+      <path fill="#f0eee3"
+        d="M229 220L330 170L433 216L329 272Z"/>
+      <path fill="none"
+        d="M238 230V301M329 279V345M422 231V298"/>
+
+      <g data-open="game" role="button" tabindex="0"
+        aria-label="打开 The Next Chapter">
+        <path fill="#bdc6af"
+          d="M300 158L372 185V228L300 200Z"/>
+        <path fill="#344033"
+          d="M307 168L365 190V216L307 194Z"/>
+        <path fill="#d2dcb9" stroke="none"
+          d="M327 181L341 194L327 195Z"/>
+        <path fill="#e4e7d7"
+          d="M300 200L372 228L344 243L274 215Z"/>
+      </g>
+
+      <path fill="#e5e7dc"
+        d="M343 285L375 268L409 285L374 306Z"/>
+      <path fill="none"
+        d="M347 292V324M374 306V340M406 289V321"/>
+
+      <g data-open="hiking" role="button" tabindex="0"
+        aria-label="打开徒步收藏">
+        <path d="M128 232L110 306M144 234L128 314"
+          stroke-width="3"/>
+        <path fill="#a8b492"
+          d="M127 307L144 298L151 314L176 322L178 335L154 345L126 330Z"/>
+        <path fill="#d7d7c6"
+          d="M109 319L125 311L133 327L157 335L159 347L135 357L108 342Z"/>
+      </g>
+
+      <g data-open="cocktails" role="button" tabindex="0"
+        aria-label="打开调酒收藏">
+        <path fill="#b4bfa7"
+          d="M463 253L506 232L548 250L506 273Z"/>
+        <path fill="none"
+          d="M471 263V313M536 260V313"/>
+        <path fill="#c4c9bf"
+          d="M481 215L495 220L497 244L479 238Z"/>
+        <path fill="#e1c7ac"
+          d="M511 236L537 246L521 252Z"/>
+        <path fill="none"
+          d="M521 252V261M515 260L529 266"/>
+      </g>
+
+      <path fill="#bac4a7"
+        d="M444 284L471 298L466 330L448 322Z"/>
+      <path fill="none"
+        d="M458 294V245Q435 237 438 222Q461 229 458 261Q482 245 483 230Q458 240 458 279"/>
+    </g>
+  `);
+}
+
+const artworks=[
+  {
+    title:"Objects that stay",
+    type:"visual",
+    label:"记忆与物品 · 概念提案",
+    desc:"把重复照料留下的痕迹，转译为连续的线与层层累积的视觉轨迹。",
+    art:svg(
+      rect(0,0,360,440,"#30382c")+
+      Array.from({length:19},(_,i)=>
+        '<ellipse cx="180" cy="220" rx="'+(42+i*6)+
+        '" ry="'+(88-i*2)+'" transform="rotate('+
+        (i*9)+' 180 220)" fill="none" stroke="#c3d0aa" stroke-width=".8"/>'
+      ).join("")+
+      '<text x="22" y="405" fill="#ccd6be" font-family="monospace" font-size="10">OBJECTS HOLD MEMORIES</text>',
+      "0 0 360 440"
+    )
+  },
+  {
+    title:"One room, many chapters",
+    type:"interactive",
+    label:"空间叙事 · 概念提案",
+    desc:"保持房间的空间结构，让物品与使用习惯的变化成为成长的线索。",
+    art:studioArt().replace(
+      / data-open="[^"]*"| role="button"| tabindex="0"| aria-label="[^"]*"/g,
+      ""
+    )
+  },
+  {
+    title:"The quiet act of care",
+    type:"visual",
+    label:"UPKEEP · 视觉提案",
+    desc:"铺好毯子、整理书本、保存画作。照料不是一次事件，而是重复发生的日常。",
+    art:svg(
+      rect(0,0,360,420,"#d8dfcc")+
+      '<text x="24" y="100" font-family="Georgia" font-size="83" fill="#37442d">Care,</text>'+
+      '<text x="25" y="164" font-family="Arial" font-size="49" fill="#37442d">over time.</text>'+
+      '<g fill="none" stroke="#879774"><circle cx="180" cy="279" r="65"/>'+
+      '<path d="M115 279H245M180 214V344M134 233L226 325M226 233L134 325"/></g>',
+      "0 0 360 420"
+    )
+  },
+  {
+    title:"A chapter in type",
+    type:"visual",
+    label:"叙事排版 · 概念提案",
+    desc:"用章节、字形比例与留白组织关于成长的故事。",
+    art:svg(
+      rect(0,0,360,450,"#d7cde2")+
+      '<text x="24" y="116" font-family="Georgia" font-style="italic" font-size="83" fill="#675174">A</text>'+
+      '<text x="24" y="207" font-family="Georgia" font-style="italic" font-size="70" fill="#675174">chapter</text>'+
+      '<text x="24" y="291" font-family="Georgia" font-style="italic" font-size="78" fill="#675174">in type.</text>'+
+      '<path d="M24 335H334M24 360H334" stroke="#ac99bb"/>',
+      "0 0 360 450"
+    )
+  },
+  {
+    title:"Carry / Leave / Care",
+    type:"interactive",
+    label:"行为反馈 · 概念提案",
+    desc:"通过保留与放下的选择，让玩家在下一个阶段看见自己的决定。",
+    art:svg(
+      rect(0,0,360,280,"#e7e3d9")+
+      '<g fill="none" stroke="#9aab8c">'+
+      '<path d="M36 61C70 243 289 42 322 216M36 79C70 261 289 60 322 234M36 43C70 225 289 24 322 198"/>'+
+      '<circle cx="36" cy="61" r="12"/>'+
+      '<circle cx="322" cy="216" r="12"/></g>',
+      "0 0 360 280"
+    )
+  }
+];
+
+const modal=$("modal");
+const body=$("modalBody");
+let lastFocus=null;
+
+function openModal(title,label,html,game=false){
+  if(!modal.open)lastFocus=document.activeElement;
+
+  modal.classList.toggle("game",game);
+  $("modalLabel").textContent=label;
+
+  body.innerHTML='<h2 id="modalTitle"></h2>'+html;
+  $("modalTitle").textContent=title;
+
+  if(!modal.open)modal.showModal();
+}
+
+$("close").onclick=()=>modal.close();
+
+modal.addEventListener("close",()=>{
+  if(lastFocus&&lastFocus.isConnected)lastFocus.focus();
+});
+
+modal.addEventListener("click",e=>{
+  if(e.target===modal){
+    const r=modal.getBoundingClientRect();
+
+    if(
+      e.clientX<r.left ||
+      e.clientX>r.right ||
+      e.clientY<r.top ||
+      e.clientY>r.bottom
+    ){
+      modal.close();
+    }
+  }
+});
+
+$("cover").innerHTML=roomArt();
+$("studioArt").innerHTML=studioArt();
+
+artworks.forEach(p=>{
+  const b=document.createElement("button");
+
+  b.className="project";
+  b.dataset.category=p.type;
+  b.setAttribute("aria-label","查看 "+p.title);
+
+  b.innerHTML=p.art+
+    '<div class="caption"><span>'+p.title+
+    '<small>'+p.label+
+    '</small></span><span>↗</span></div>';
+
+  b.onclick=()=>{
+    openModal(
+      p.title,
+      p.label,
+      '<p id="projectText"></p>'+
+      '<div class="detailart">'+p.art+'</div>'+
+      '<p class="notice">这是围绕 The Next Chapter 新制作的延展提案，未标作已完成课程成果。</p>'
+    );
+
+    $("projectText").textContent=p.desc;
+  };
+
+  $("projects").appendChild(b);
+});
+
+document.querySelectorAll("[data-filter]").forEach(b=>{
+  b.onclick=()=>{
+    const value=b.dataset.filter;
+
+    document.querySelectorAll("[data-filter]").forEach(x=>{
+      x.classList.toggle("active",x===b);
+      x.setAttribute("aria-pressed",String(x===b));
+    });
+
+    let count=0;
+
+    document.querySelectorAll(".project,.feature").forEach(x=>{
+      x.hidden=value!=="all"&&x.dataset.category!==value;
+      if(!x.hidden)count++;
+    });
+
+    $("filterStatus").textContent="当前显示 "+count+" 个项目";
+  };
+});
+
+const albums={
+  hiking:{
+    title:"On the trail.",
+    desc:"登山杖、徒步鞋和走过的路。这里收录我的徒步照片与旅途片段。",
+    slots:["山野风景","行走中的我","旅途细节"]
+  },
+  cocktails:{
+    title:"After hours.",
+    desc:"风味、色彩、比例与耐心。用照片记录个人调酒与日常观察。",
+    slots:["成品与杯具","调制过程","配料细节"]
+  },
+  archive:{
+    title:"The UQT archive.",
+    desc:"从项目问题、制作过程，到最终交付与复盘。这里将收录我的历史课程作品。",
+    slots:["作业封面","制作过程","最终交付"]
+  }
+};
+
+function openAlbum(key){
+  const a=albums[key];
+
+  openModal(
+    a.title,
+    "CECELIA / PERSONAL COLLECTION",
+    '<p id="albumText"></p>'+
+    '<div class="gallery" id="gallery"></div>'+
+    '<p class="notice" id="albumNotice"></p>'
+  );
+
+  $("albumText").textContent=a.desc;
+
+  const photos=CONTENT[key];
+
+  if(photos.length){
+    photos.forEach(p=>{
+      const fig=document.createElement("figure");
+      const img=document.createElement("img");
+      const cap=document.createElement("figcaption");
+
+      img.src=p.src;
+      img.alt=p.caption||a.title;
+      img.loading="lazy";
+      cap.textContent=p.caption||"";
+
+      img.onerror=()=>{
+        img.hidden=true;
+        cap.textContent="图片无法加载，请检查文件路径。";
+      };
+
+      fig.append(img,cap);
+      $("gallery").appendChild(fig);
+    });
+
+    $("albumNotice").textContent="个人收藏 / "+photos.length+" 项";
+  }else{
+    a.slots.forEach((s,i)=>{
+      const el=document.createElement("div");
+
+      el.className="slot";
+      el.innerHTML="<b>0"+(i+1)+"</b><span>"+
+        s+"<br>真实素材待加入</span>";
+
+      $("gallery").appendChild(el);
+    });
+
+    $("albumNotice").textContent=
+      "已预留展示位置，当前没有使用虚构的个人照片或课程作品。";
+  }
+}
+
+/* The Next Chapter 游戏状态。 */
+let stage=0;
+let carry=false;
+let decided=false;
+let light=true;
+let selected="";
+
+const care=[new Set(),new Set()];
+
+const objects=[
+  [
+    {
+      id:"teddy",
+      name:"Teddy / 一直在这里",
+      x:32,y:58,
+      text:"泰迪安静地靠在婴儿床里。它可以陪她进入下一章，也可以留在这个房间。",
+      action:"安顿泰迪"
+    },
+    {
+      id:"blanket",
+      name:"Blanket / 被照料的日常",
+      x:18,y:68,
+      text:"铺好毯子，是最细小的 upkeep。照料空间，也照料生活在其中的人。",
+      action:"铺好毯子"
+    },
+    {
+      id:"globe",
+      name:"Snowglobe / 安静的片刻",
+      x:89,y:48,
+      text:"亮片慢慢落下。一个小小的物件，承载被陪伴的时光。",
+      action:"擦拭雪花球"
+    },
+    {
+      id:"books",
+      name:"Storybooks / 最初的故事",
+      x:17,y:22,
+      text:"故事书放在架子上，从睡前阅读延续到独自翻阅。",
+      action:"整理故事书"
+    },
+    {
+      id:"light",
+      name:"Night-light / 留在这一章",
+      x:48,y:54,
+      text:"有些东西会被带走，有些会被放下。这盏夜灯留在婴儿阶段。",
+      action:"切换夜灯"
+    }
+  ],
+  [
+    {
+      id:"teddy",
+      name:"Teddy / 茶会里的老朋友",
+      x:46,y:65,
+      text:"同一只泰迪从床边来到茶桌边。它参与生活的方式，随着她长大而改变。",
+      action:"安顿泰迪"
+    },
+    {
+      id:"tea",
+      name:"Tea party / 共同的日常",
+      x:57,y:75,
+      text:"茶杯和玩偶组成童年的茶会。成对的小物件暗示兄妹共同生活的痕迹。",
+      action:"摆好茶杯"
+    },
+    {
+      id:"drawing",
+      name:"Drawings / 开始表达自己",
+      x:30,y:41,
+      text:"保存、整理和展示这些儿童画，也是一种照料成长的方式。",
+      action:"收好画作"
+    },
+    {
+      id:"books",
+      name:"Storybooks / 再读一次",
+      x:17,y:22,
+      text:"从被读故事，到主动选择自己的故事。书依然留在熟悉的位置。",
+      action:"把书归位"
+    },
+    {
+      id:"siblings",
+      name:"Two traces / 兄妹的线索",
+      x:67,y:68,
+      text:"两件不同颜色的小物件，暗示另一个人的存在。这是对项目大纲的原型表达。",
+      action:"查看线索"
+    }
+  ]
+];
+
+function currentObjects(){
+  return objects[stage].filter(o=>
+    !(stage===1&&o.id==="teddy"&&!carry)
+  );
+}
+
+function openGame(){
+  openModal(
+    "The Next Chapter",
+    "385 A3 / UPKEEP / ROOM PROTOTYPE",
+    `
+      <p>
+        同一间房，慢慢长大的她。
+        探索物品、照料日常，决定什么会陪你走进下一章。
+      </p>
+
+      <div class="tabs">
+        <button id="tab0">01 / 婴儿房</button>
+        <button id="tab1">02 / 童年房</button>
+      </div>
+
+      <p id="memory" aria-live="polite"></p>
+
+      <div class="scene" id="scene"
+        aria-label="可探索的房间"></div>
+
+      <div class="objectinfo" aria-live="polite">
+        <h3 id="objectTitle"></h3>
+        <p id="objectText"></p>
+        <div class="actions" id="objectActions"></div>
+      </div>
+
+      <div class="status">
+        <span id="progress"></span>
+        <span id="chapter"></span>
+      </div>
+
+      <div class="actions">
+        <button class="action" id="next">下一章 →</button>
+        <button class="action" id="reset">重新探索 ↻</button>
+        <a class="action" id="original" hidden
+          target="_blank" rel="noopener noreferrer">
+          打开原 A3 游戏 ↗
+        </a>
+      </div>
+
+      <p class="notice">
+        这是根据项目大纲制作的两个阶段原型；
+        照料与携带操作为本网站的交互提案，
+        尚未接入原 p5.js 游戏、实拍照片和视频。
+      </p>
+    `,
+    true
+  );
+
+  $("tab0").onclick=()=>setStage(0);
+  $("tab1").onclick=()=>setStage(1);
+  $("next").onclick=()=>setStage(1-stage);
+  $("reset").onclick=resetGame;
+
+  if(/^https?:\/\//i.test(CONTENT.originalGameUrl)){
+    $("original").href=CONTENT.originalGameUrl;
+    $("original").hidden=false;
+  }
+
+  setStage(stage);
+}
+
+function renderRoom(){
+  $("scene").innerHTML=roomArt(stage,carry,light);
+
+  currentObjects().forEach((o,i)=>{
+    const b=document.createElement("button");
+
+    b.className="hotspot"+
+      (care[stage].has(o.id)?" done":"");
+
+    b.style.left=o.x+"%";
+    b.style.top=o.y+"%";
+    b.textContent=String(i+1).padStart(2,"0");
+    b.setAttribute("aria-label",o.name);
+    b.onclick=()=>selectObject(o.id);
+
+    $("scene").appendChild(b);
+  });
+
+  [0,1].forEach(i=>{
+    $("tab"+i).classList.toggle("active",stage===i);
+    $("tab"+i).setAttribute("aria-pressed",String(stage===i));
+  });
+
+  $("memory").textContent=carry
+    ?"随身记忆：泰迪熊 · 陪你走进下一章"
+    :stage===1||decided
+      ?"泰迪留在婴儿房；可以回去改变选择。"
+      :"点击泰迪，决定是否带它进入下一章。";
+
+  const tasks=stage===0
+    ?["teddy","blanket","globe","books"]
+    :["tea","drawing","books"].concat(carry?["teddy"]:[]);
+
+  $("progress").textContent=
+    "照料进度 "+
+    tasks.filter(x=>care[stage].has(x)).length+
+    " / "+tasks.length;
+
+  $("chapter").textContent=stage===0
+    ?"CHAPTER 01 / NURSERY"
+    :"CHAPTER 02 / CHILDHOOD";
+
+  $("next").textContent=stage===0
+    ?"走进童年房 →"
+    :"回看婴儿房 ←";
+}
+
+function action(label,fn){
+  const b=document.createElement("button");
+
+  b.className="action";
+  b.textContent=label;
+  b.onclick=fn;
+
+  $("objectActions").appendChild(b);
+}
+
+function selectObject(id){
+  const o=currentObjects().find(o=>o.id===id);
+  if(!o)return;
+
+  selected=id;
+
+  $("objectTitle").textContent=o.name;
+  $("objectText").textContent=o.text;
+  $("objectActions").innerHTML="";
+
+  action(
+    care[stage].has(id)&&id!=="light"
+      ?"已完成 ✓"
+      :o.action,
+    ()=>{
+      if(id==="light"){
+        light=!light;
+      }else{
+        care[stage].add(id);
+      }
+
+      renderRoom();
+      selectObject(id);
+
+      $("objectText").textContent=o.text+
+        (
+          id==="light"
+            ?light?" 夜灯亮起。":" 夜灯熄灭。"
+            :" 已完成："+o.action+"。"
+        );
+    }
+  );
+
+  if(stage===0&&id==="teddy"){
+    action(carry?"已决定带上 ✓":"带上泰迪 →",()=>{
+      carry=true;
+      decided=true;
+      renderRoom();
+      selectObject(id);
+    });
+
+    action(
+      decided&&!carry?"已决定留下 ✓":"让它留在这一章",
+      ()=>{
+        carry=false;
+        decided=true;
+        renderRoom();
+        selectObject(id);
+      }
+    );
+  }
+}
+
+function setStage(n){
+  stage=n;
+  selected="";
+
+  renderRoom();
+
+  $("objectTitle").textContent=n===0
+    ?"Before the next chapter."
+    :"Growing into her own world.";
+
+  $("objectText").textContent=n===0
+    ?"点击房间中的编号，发现物品的故事。"
+    :carry
+      ?"泰迪来到了茶会；夜灯留在上一章，新的画作出现在墙上。"
+      :"茶会与画作进入了生活。你也可以回去，决定是否带上泰迪。";
+
+  $("objectActions").innerHTML="";
+}
+
+function resetGame(){
+  carry=false;
+  decided=false;
+  light=true;
+
+  care[0].clear();
+  care[1].clear();
+
+  setStage(0);
+}
+
+function openTarget(key){
+  if(key==="game"){
+    openGame();
+  }else if(albums[key]){
+    openAlbum(key);
+  }
+}
+
+/* 房间插画与文字入口都支持点击和键盘操作。 */
+document.addEventListener("click",e=>{
+  const el=e.target.closest("[data-open]");
+  if(el)openTarget(el.dataset.open);
+});
+
+document.addEventListener("keydown",e=>{
+  const el=e.target.closest("g[data-open]");
+
+  if(el&&(e.key==="Enter"||e.key===" ")){
+    e.preventDefault();
+    openTarget(el.dataset.open);
+  }
+});
+
+/* 轻量空间视差；尊重“减少动态效果”设置。 */
+const roomBox=$("studioArt");
+
+roomBox.addEventListener("pointermove",e=>{
+  if(
+    e.pointerType!=="mouse"||
+    matchMedia("(prefers-reduced-motion: reduce)").matches
+  ){
+    return;
+  }
+
+  const r=roomBox.getBoundingClientRect();
+  const s=roomBox.querySelector("svg");
+
+  const ry=((e.clientX-r.left)/r.width-.5)*7;
+  const rx=-((e.clientY-r.top)/r.height-.5)*4;
+
+  s.style.transform=
+    "rotateY("+ry+"deg) rotateX("+rx+"deg)";
+});
+
+roomBox.addEventListener("pointerleave",()=>{
+  roomBox.querySelector("svg").style.transform="none";
+});
+
+/* 可选联系方式。 */
+if(
+  CONTENT.email&&
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(CONTENT.email)
+){
+  const a=document.createElement("a");
+
+  a.className="action";
+  a.href="mailto:"+CONTENT.email;
+  a.textContent="联系我 ↗";
+
+  document.querySelector(".about>div:last-child").appendChild(a);
+}
+</script>
+</body>
+</html>
