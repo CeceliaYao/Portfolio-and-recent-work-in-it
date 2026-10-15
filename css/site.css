@@ -420,3 +420,6 @@ main section,footer{scroll-margin-top:66px}
 @media (max-width:640px){.case .gallery.tall{columns:2;column-gap:12px}.case .gallery.tall a{margin-bottom:12px}}
 @media (max-width:620px){.story .x{z-index:2;right:22px;top:20px;background:var(--cream);box-shadow:0 0 0 3px var(--ink)}}
 .intro-top .facts span,.intro-top .links .btn{color:var(--ink)}
+.case .gallery{display:block;columns:2 420px;column-gap:22px}
+.case .gallery a{break-inside:avoid;margin:0 0 22px;background:transparent}
+@media (max-width:640px){.case .gallery{columns:1}.case .gallery.tall{columns:2}}

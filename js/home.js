@@ -285,11 +285,13 @@ function closePlayer() { player.hidden = true; player.querySelector('.pbox').inn
 player.querySelector('.pclose').onclick = closePlayer;
 player.addEventListener('click', e => { if (e.target === player) closePlayer(); });
 
-const PLAYABLE = [];
-WORKS.forEach(w => (w.play || []).forEach(g => PLAYABLE.push({ g, w })));
-const ext = WORKS.find(w => w.id === 'next-chapter');
+// same order as the work list; The Next Chapter's exhibition build sits next to its first pixel build
+const cards = [];
+WORKS.forEach(w => {
+  if (w.id === 'next-chapter') cards.push({ g: { label: 'The Next Chapter', href: w.links[0].href, external: true }, w });
+  (w.play || []).forEach(g => cards.push({ g, w }));
+});
 const grid = $('#arcade');
-const cards = [{ g: { label: 'The Next Chapter', href: ext.links[0].href, external: true }, w: ext }].concat(PLAYABLE);
 const sketchImg = { 'Echo Corridor': 'assets/work/echo-corridor/play.jpg' };
 cards.forEach(({ g, w }) => {
   const b = document.createElement(g.external ? 'a' : 'button');
