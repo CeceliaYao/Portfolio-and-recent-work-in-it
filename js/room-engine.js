@@ -368,7 +368,7 @@ const OBJECTS = [
   { id: 'computer', group: 'computer', name: 'Computer', x: 161, y: 104, art: 'monitor' },
   { id: 'ps5', group: 'play', name: 'Console', x: 208, y: 110, art: 'ps5' },
   { id: 'picasso', group: 'art', name: 'Picasso magnet', x: 246, y: 127, art: 'picasso' },
-  { id: 'beads', group: 'beads', name: 'Bead magnet', x: 262, y: 134, art: 'beads' },
+  { id: 'beads', group: 'beads', name: 'Shrimp cocktail magnet', x: 262, y: 134, art: 'beads' },
   { id: 'jade', group: 'jade', name: 'Jade dragon', x: 245, y: 163, art: 'jade' },
   { id: 'whisky', group: 'bar', name: 'Whisky', x: 287, y: 110, art: 'whisky' },
   { id: 'bourbon', group: 'bar', name: 'Bourbon', x: 297, y: 113, art: 'bourbon' },

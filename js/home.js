@@ -73,24 +73,44 @@ room.on('hover', o => {
   tip.classList.add('on');
 });
 room.on('select', o => act(o));
-// on a phone the room is wider than the screen: drift slowly across it, pause while touched
-let holdPan = 0;
-$('#stage').addEventListener('pointerdown', () => { holdPan = performance.now() + 6000; });
-room.drawOverlay = (x, t) => { if (!reduced && narrow() && performance.now() > holdPan) room.pan(250 + Math.sin(t / 7000) * 150); };
+// on a phone the room is wider than the screen: drift slowly across it, and let a finger drag it
+let holdPan = 0, panFx = 250, drag = null;
+const stageEl = $('#stage');
+const wide = () => room.base.offsetWidth > stageEl.clientWidth + 4;
+stageEl.addEventListener('pointerdown', e => {
+  holdPan = performance.now() + 8000;
+  const [ax] = room.toArt(stageEl.getBoundingClientRect().left + stageEl.clientWidth / 2, 0);
+  drag = { x: e.clientX, fx: ax, moved: 0 }; panFx = ax;
+});
+addEventListener('pointermove', e => {
+  if (!drag || !wide()) return;
+  const dx = e.clientX - drag.x; drag.moved = Math.max(drag.moved, Math.abs(dx));
+  panFx = drag.fx - dx / room.scale; holdPan = performance.now() + 8000;
+  if (drag.moved > 6) tip.classList.remove('on');
+}, { passive: true });
+let dragged = 0;
+addEventListener('pointerup', () => { dragged = drag ? drag.moved : 0; drag = null; });
+// a drag is not a click
+stageEl.addEventListener('click', e => { if (dragged > 8) { e.stopImmediatePropagation(); dragged = 0; } }, true);
+room.drawOverlay = (x, t) => {
+  if (!wide()) return;
+  if (performance.now() < holdPan) room.pan(panFx);
+  else if (!reduced && narrow()) room.pan(250 + Math.sin(t / 7000) * 150);
+};
 addEventListener('scroll', () => tip.classList.remove('on'), { passive: true });
 
 const dn = $('#daynight');
 const syncSun = () => { dn.textContent = room.night ? '☀' : '☾'; document.documentElement.dataset.night = room.night ? '1' : ''; };
 room.on('night', syncSun); syncSun();
-dn.addEventListener('click', () => { room.setNight(!room.night); mini && mini.setNight(room.night); });
+dn.addEventListener('click', () => setNight(!room.night));
+function setNight(n) { room.setNight(n); island && island.setNight(n); }
 
 function act(o) {
   if (o.work) return openCase(WORKS.findIndex(w => w.id === o.work));
   const st = STORIES[o.group];
   if (!st) return;
   if (st.open === 'os') return openOS();
-  if (st.open === 'photos') { closeStory(); document.getElementById('photography').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); return; }
-  if (st.toggle === 'night') { room.setNight(!room.night); mini && mini.setNight(room.night); }
+  if (st.toggle === 'night') setNight(!room.night);
   if (st.toggle === 'lamp') { room.lampOn = !room.lampOn; return; }
   if (st.toggle === 'door') { try { sessionStorage.removeItem('door'); } catch (e) {} location.hash = ''; location.reload(); return; }
   showStory(o, st);
@@ -105,7 +125,12 @@ function showStory(o, st) {
   $('#story-t').textContent = st.title;
   const b = $('#story-b'); b.innerHTML = '';
   const acts = $('#story-a'); acts.innerHTML = '';
-  if (st.toggle === 'night') { const btn = document.createElement('button'); btn.className = 'btn ghost'; btn.type = 'button'; btn.textContent = room.night ? 'Bring the sun back' : 'Wait for night'; btn.onclick = () => { room.setNight(!room.night); mini && mini.setNight(room.night); btn.textContent = room.night ? 'Bring the sun back' : 'Wait for night'; }; acts.append(btn); }
+  if (st.toggle === 'night') { const btn = document.createElement('button'); btn.className = 'btn ghost'; btn.type = 'button'; btn.textContent = room.night ? 'Bring the sun back' : 'Wait for night'; btn.onclick = () => { setNight(!room.night); btn.textContent = room.night ? 'Bring the sun back' : 'Wait for night'; }; acts.append(btn); }
+  if (o.group === 'photos') {
+    const strip = document.createElement('div'); strip.className = 'pins';
+    PHOTOS.slice(0, 6).forEach((src, k) => { const a = document.createElement('a'); a.href = src; a.target = '_blank'; a.rel = 'noopener'; a.style.setProperty('--r', ((k % 3) - 1) * 3 + 'deg'); const i = new Image(); i.src = src; i.alt = ''; i.loading = 'lazy'; a.append(i); strip.append(a); });
+    acts.append(strip);
+  }
   story.hidden = false;
   // type it out, one line at a time
   clearInterval(typer);
@@ -131,7 +156,6 @@ const APPS = [
   { id: 'work', label: 'Work', c: '#ffb86b' },
   { id: 'about', label: 'About', c: '#ff8fc8' },
   { id: 'arcade', label: 'Arcade', c: '#8fe3a8' },
-  { id: 'photos', label: 'Photos', c: '#ffd95a' },
   { id: 'contact', label: 'Contact', c: '#8fcfff' }
 ];
 let clockT;
@@ -170,16 +194,14 @@ function renderApp(id) {
       b.onclick = () => openCase(i); g.append(b);
     });
   } else if (id === 'about') {
-    body.innerHTML = `<div class="about" style="grid-template-columns:160px 1fr"><div class="me frame" style="padding:14px"></div><div>${$('#about .about > div:last-child').innerHTML}</div></div>`;
+    body.innerHTML = `<div class="about" style="grid-template-columns:160px 1fr"><div class="me frame" style="padding:14px"></div><div class="os-about">${[...document.querySelectorAll('.intro-text > p:not(.kicker), .intro-text .facts')].map(n => n.outerHTML).join('')}</div></div>`;
     const c = spriteGirl(0, 0); const big = scaleUp(c, 6); big.style.width = '70%'; body.querySelector('.me').append(big);
     body.querySelectorAll('.kicker').forEach(k => k.remove());
   } else if (id === 'arcade') {
     body.innerHTML = '<div class="arcade"></div>';
     $('#arcade').querySelectorAll('.cab').forEach(c => { const n = c.cloneNode(true); const src = c; n.querySelectorAll('.scr').forEach(sc => { sc.innerHTML = ''; if (sc.dataset.src) { const i = new Image(); i.src = sc.dataset.src; i.alt = ''; sc.append(i); } else sc.append(drawCover('myRoom')); }); n.onclick = e => { if (n.tagName === 'BUTTON') { e.preventDefault(); src.click(); } }; body.firstChild.append(n); });
-  } else if (id === 'photos') {
-    body.innerHTML = '<div class="photos" style="grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));overflow:visible">' + PHOTOS.map(src => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;image-rendering:auto"></a>`).join('') + '</div>';
   } else {
-    body.innerHTML = `<h2 style="font-family:var(--display);font-size:52px;margin:0 0 24px">Say hello.</h2><div class="links" style="display:flex;gap:18px;flex-wrap:wrap">${linksHTML()}</div>`;
+    body.innerHTML = `<h2 style="font-family:var(--display);font-size:52px;margin:0 0 24px">Find me.</h2><div class="links" style="display:flex;gap:18px;flex-wrap:wrap">${linksHTML()}</div>`;
   }
 }
 
@@ -237,7 +259,7 @@ function openCase(i) {
     <div class="nav2"><button class="btn ghost" type="button" data-go="${(i + WORKS.length - 1) % WORKS.length}">◂ ${esc(prev.title)}</button><button class="btn ghost" type="button" data-go="${(i + 1) % WORKS.length}">${esc(next.title)} ▸</button></div>
   </div>`;
   const cv = coverEl(w); cv.classList.add('cover'); caseEl.querySelector('.cv').append(cv);
-  caseEl.hidden = false; caseEl.scrollTop = 0; document.body.style.overflow = 'hidden';
+  caseEl.dataset.work = w.id; caseEl.hidden = false; caseEl.scrollTop = 0; document.body.style.overflow = 'hidden';
   caseEl.querySelector('.close').onclick = closeCase;
   caseEl.querySelectorAll('[data-go]').forEach(b => b.onclick = () => openCase(+b.dataset.go));
   caseEl.querySelectorAll('[data-play]').forEach(b => b.onclick = () => openPlayer(w.play[+b.dataset.play]));
@@ -268,7 +290,7 @@ WORKS.forEach(w => (w.play || []).forEach(g => PLAYABLE.push({ g, w })));
 const ext = WORKS.find(w => w.id === 'next-chapter');
 const grid = $('#arcade');
 const cards = [{ g: { label: 'The Next Chapter', href: ext.links[0].href, external: true }, w: ext }].concat(PLAYABLE);
-const sketchImg = { Ribbon: 'assets/work/sketches/ribbon.jpg', Painting: 'assets/work/sketches/painting.jpg', Snake: 'assets/work/sketches/snake.jpg', 'Echo Corridor': 'assets/work/echo-corridor/play.jpg' };
+const sketchImg = { 'Echo Corridor': 'assets/work/echo-corridor/play.jpg' };
 cards.forEach(({ g, w }) => {
   const b = document.createElement(g.external ? 'a' : 'button');
   b.className = 'cab';
@@ -284,13 +306,7 @@ cards.forEach(({ g, w }) => {
   if (!g.external) b.onclick = () => g.href === 'room/' ? window.open(g.href, '_blank', 'noopener') : openPlayer(g);
   grid.append(b);
 });
-const photos = $('#photos');
-PHOTOS.forEach((src, i) => {
-  const a = document.createElement('a'); a.href = src; a.target = '_blank'; a.rel = 'noopener'; a.setAttribute('aria-label', 'Photograph ' + (i + 1));
-  const c = FX.pixelImage(src, { start: 14 }); a.append(c); FX.hoverResolve(a, c, 14);
-  photos.append(a);
-});
-FX.dragScroll(photos);
+
 
 /* ======================= about, contact ======================= */
 const me = $('#me'); const big = scaleUp(spriteGirl(0, 0), 1); me.getContext('2d').drawImage(big, 0, 0);
@@ -301,23 +317,28 @@ function linksHTML() {
   return ls.map(l => `<a class="btn" href="${esc(l.href)}" ${/^http/.test(l.href) ? 'target="_blank" rel="noopener"' : ''}>${esc(l.label)} ▸</a>`).join('');
 }
 $('#links').innerHTML = linksHTML();
+$('#links-top').innerHTML = linksHTML();
 
-/* ======================= the little game preview ======================= */
-let mini = null;
-const miniHost = $('#mini');
-const io = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (!e.isIntersecting || mini) return;
-    mini = new Room(miniHost, { interactive: false, night: room.night, focusX: 250 });
-    mini.drawOverlay = (x, t) => { if (!reduced) mini.pan(240 + Math.sin(t / 6000) * 140); };
-  });
-}, { rootMargin: '200px' });
-io.observe(miniHost);
-
-/* top bar turns solid over the light sections */
-const bar = $('#top');
-const heroIO = new IntersectionObserver(([e]) => bar.classList.toggle('solid', !e.isIntersecting), { threshold: .05 });
-heroIO.observe($('#room'));
+/* ======================= What We Carry: the 3D island ======================= */
+let island = null;
+window.mountIsland = create => {
+  const host = $('#island'), wrap = host.parentElement;
+  const go = () => {
+    try { island = create(host, {
+      night: room.night,
+      onHover: (tag, x, y) => {
+        const o = tag && room.find(tag);
+        if (!o) { tip.classList.remove('on'); return; }
+        tip.textContent = o.name; tip.style.left = x + 'px'; tip.style.top = (y - 18) + 'px'; tip.classList.add('on');
+      },
+      onSelect: tag => { const o = room.find(tag); if (o) { coin(); tip.classList.remove('on'); act(o); } }
+    }); } catch (e) { wrap.querySelector('.island-fallback').hidden = false; host.remove(); return; }
+    wrap.querySelectorAll('[data-turn]').forEach(b => b.onclick = () => island.rotate(+b.dataset.turn * .4));
+  };
+  // build it only when it is about to be seen
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '300px' }).observe(host);
+};
+$('#carry-read').onclick = () => openCase(WORKS.findIndex(w => w.id === 'my-room'));
 
 /* ======================= portrait: pixels ↔ photo ======================= */
 const mePhoto = FX.pixelImage(PROFILE.photo, { start: 22 });
@@ -329,11 +350,11 @@ new IntersectionObserver(([e], o) => { if (!e.isIntersecting) return; o.disconne
 
 /* ======================= skills filter the work list ======================= */
 const SKILLMAP = {
-  'JavaScript': ['next-chapter', 'echo-corridor', 'sketches', 'my-room'], 'p5.js': ['next-chapter', 'echo-corridor', 'sketches'],
+  'JavaScript': ['next-chapter', 'echo-corridor', 'my-room'], 'p5.js': ['next-chapter', 'echo-corridor'], 'Three.js': ['my-room'],
   'Figma': ['hith-brick', 'shopmirror'], 'Pixel art': ['next-chapter', 'echo-corridor', 'my-room'],
   'Interaction design': ['hith-brick', 'shopmirror', 'next-chapter', 'my-room'], 'Storyboarding': ['shopmirror', 'hith-brick'],
-  'Game design': ['next-chapter', 'echo-corridor', 'my-room'], 'Photography': ['my-room', 'sketches'],
-  'Type design': ['astrobius'], 'Research': ['shopmirror', 'hith-brick'], 'Generative art': ['sketches'], 'Print & zine': ['astrobius']
+  'Game design': ['next-chapter', 'echo-corridor', 'my-room'], 'Photography': ['my-room', 'next-chapter'],
+  'Type design': ['astrobius'], 'Research': ['shopmirror', 'hith-brick'], 'Print & zine': ['astrobius']
 };
 const filterEl = $('#filter');
 function setFilter(k) {
@@ -359,8 +380,10 @@ function coin() {
 FX.cursors();
 FX.hpBar($('#hp'));
 document.querySelectorAll('.horizon').forEach(h => FX.horizon(h));
-FX.typeOnView($('#statement'));
-FX.hop($('#hello'));
+document.querySelectorAll('#hello .w').forEach((w, i) => { w.style.setProperty('--d', i); FX.hop(w); });
+FX.tilt($('#tilt'));
+document.querySelectorAll('.cab').forEach(c => FX.tilt(c, 8));
+FX.sparkles($('#intro'), $('#stars'));
 FX.reveal();
 
 setupDoor();

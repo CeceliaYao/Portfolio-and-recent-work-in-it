@@ -150,22 +150,28 @@ const ART = {
     '....jjJJjj....'
   ]),
   /* fuse-bead spritz I made myself */
+  /* the shrimp cocktail from Rusty Lake, in fuse beads */
   beads: () => grid([
-    '.......k...',
-    '......k....',
-    'wpppppkyy..',
-    'wrrrrkryyyw',
-    'wrRrrrrrYyw',
-    '.wrrRrrrrw.',
-    '.wrrrrrRrw.',
-    '..wrrrrrw..',
-    '...wrrrw...',
-    '....www....',
-    '.....w.....',
-    '.....w.....',
-    '.....w.....',
-    '....www....',
-    '...wwwww...'
+    '.....PP.....',
+    '....PpP..gg.',
+    '....pPp.gg..',
+    '...ppPpg....',
+    '...pPppg.yy.',
+    '..PpPpg.yyyY',
+    'wwPpppwwyyYw',
+    'wrRrprrryYrw',
+    'wrrRrrrrrrrw',
+    '.wrrrRrrRrw.',
+    '.wrRrrrrrrw.',
+    '..wrrrRrrw..',
+    '...wrrrrw...',
+    '....wwww....',
+    '.....hh.....',
+    '.....hh.....',
+    '.....hh.....',
+    '.....hh.....',
+    '....hhhh....',
+    '...NhhhhN...'
   ]),
   /* Islay single malt */
   whisky: () => grid([

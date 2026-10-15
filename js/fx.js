@@ -165,5 +165,61 @@ FX.horizon = function (host) {
   requestAnimationFrame(frame);
 };
 
+/* Tilt a card toward the pointer, like holding it in your hand. */
+FX.tilt = function (el, max) {
+  if (!el || reduced || !matchMedia('(pointer:fine)').matches) return;
+  max = max || 10;
+  el.classList.add('tilt');
+  el.addEventListener('pointermove', e => {
+    const r = el.getBoundingClientRect(), u = (e.clientX - r.left) / r.width - .5, v = (e.clientY - r.top) / r.height - .5;
+    el.style.transform = `perspective(700px) rotateY(${(u * max).toFixed(2)}deg) rotateX(${(-v * max).toFixed(2)}deg) translateY(-4px)`;
+    el.style.setProperty('--gx', (u + .5) * 100 + '%'); el.style.setProperty('--gy', (v + .5) * 100 + '%');
+  });
+  el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+};
+
+/* Pixel sparkles: twinkling stars in the background, and a trail behind the pointer. */
+FX.sparkles = function (host, cv) {
+  if (!host || !cv) return;
+  const x = cv.getContext('2d'), P = 4, stars = [], trail = [];
+  let w = 0, h = 0, raf = 0, on = false;
+  const COLS = ['#ffd95a', '#ff8fb1', '#8fe3d0', '#c3a6ff', '#ffffff'];
+  function size() {
+    const r = host.getBoundingClientRect(); w = Math.ceil(r.width / P); h = Math.ceil(r.height / P);
+    cv.width = w; cv.height = h; stars.length = 0;
+    const n = Math.round(w * h / 900);
+    for (let i = 0; i < n; i++) stars.push({ x: Math.random() * w | 0, y: Math.random() * h | 0, p: Math.random() * 6, s: .6 + Math.random() * 1.4, c: COLS[i % COLS.length] });
+  }
+  function star(px, py, k, c) {
+    x.fillStyle = c; x.fillRect(px, py, 1, 1);
+    if (k > .45) { x.fillRect(px - 1, py, 1, 1); x.fillRect(px + 1, py, 1, 1); x.fillRect(px, py - 1, 1, 1); x.fillRect(px, py + 1, 1, 1); }
+    if (k > .85) { x.fillRect(px - 2, py, 1, 1); x.fillRect(px + 2, py, 1, 1); x.fillRect(px, py - 2, 1, 1); x.fillRect(px, py + 2, 1, 1); }
+  }
+  function frame(t) {
+    raf = 0; x.clearRect(0, 0, w, h);
+    const night = document.documentElement.dataset.night === '1';
+    for (const s of stars) {
+      const k = (Math.sin(t / 1000 * s.s + s.p) + 1) / 2;
+      x.globalAlpha = night ? .35 + k * .65 : .12 + k * .35; star(s.x, s.y, k, night ? s.c : '#c9a46a');
+    }
+    for (let i = trail.length - 1; i >= 0; i--) {
+      const p = trail[i]; p.life -= .03; p.y += p.vy; p.x += p.vx; p.vy += .02;
+      if (p.life <= 0) { trail.splice(i, 1); continue; }
+      x.globalAlpha = Math.min(1, p.life * 1.5); star(Math.round(p.x), Math.round(p.y), p.life, p.c);
+    }
+    x.globalAlpha = 1;
+    if (on && !reduced) raf = requestAnimationFrame(frame);
+  }
+  let last = 0;
+  host.addEventListener('pointermove', e => {
+    const now = performance.now(); if (now - last < 40) return; last = now;
+    const r = host.getBoundingClientRect();
+    trail.push({ x: (e.clientX - r.left) / P, y: (e.clientY - r.top) / P, vx: (Math.random() - .5) * .5, vy: -.3 - Math.random() * .3, life: 1, c: COLS[Math.random() * COLS.length | 0] });
+  }, { passive: true });
+  new ResizeObserver(size).observe(host);
+  new IntersectionObserver(([e]) => { on = e.isIntersecting; if (on && !raf) raf = requestAnimationFrame(frame); }).observe(host);
+  size(); requestAnimationFrame(frame);
+};
+
 window.FX = FX;
 })();

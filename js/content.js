@@ -10,6 +10,8 @@ const PROFILE = {
   study: 'Interactive and Visual Design, QUT',
   photo: 'assets/me.jpg',
   links: [
+    { label: 'Instagram', href: 'https://www.instagram.com/ceceliayao.design/' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@ceceliayao.design' },
     { label: 'Behance', href: 'https://www.behance.net/qinxiyao' },
     { label: 'GitHub', href: 'https://github.com/CeceliaYao' }
   ],
@@ -22,8 +24,8 @@ const STORIES = {
   computer: { title: 'My desk', lines: ['Everything I have made lives in here.'], open: 'os' },
   trail: { title: 'Hiking', photo: ['backpack', 'visor', 'poles'],
     lines: ['I love hiking. My visor, my daypack and my trekking poles come on every walk.', 'A lot of my ideas show up somewhere on the trail.'] },
-  beads: { title: 'Made by hand', photo: ['beads'],
-    lines: ['I make some of my fridge magnets myself.', 'This spritz is fuse beads, placed one pixel at a time.'] },
+  beads: { title: 'Shrimp cocktail', photo: ['beads'],
+    lines: ['I make some of my fridge magnets myself. This shrimp cocktail is fuse beads, placed one pixel at a time.', 'It comes from Rusty Lake, a game I love. It gave me so many ideas, and it is the game that made me really think about games as art.'] },
   jade: { title: 'Hongshan jade dragon', photo: ['jade'],
     lines: ['A Hongshan jade dragon resting in an ancient Chinese wine cup.', 'A small piece of Chinese culture that I keep close.'] },
   art: { title: 'Picasso, next to the bottles', photo: ['picasso'],
@@ -40,7 +42,7 @@ const STORIES = {
     lines: ['Brisbane summers.'] },
   plush: { title: 'Roommates',
     lines: ['A Hello Kitty by the window and a penguin in a knitted beanie on the shelf.'] },
-  photos: { title: 'Photographs', lines: ['Things I have seen around Brisbane and the coast.'], open: 'photos' },
+  photos: { title: 'The cork board', lines: ['Photos I took around Brisbane and the coast, pinned up so I see them every day.'] },
   view: { title: 'Out the window',
     lines: ['The city first, then the hills.'], toggle: 'night' },
   lamp: { title: 'Desk lamp', lines: ['Click to switch it on or off.'], toggle: 'lamp' },
@@ -63,7 +65,7 @@ const WORKS = [
     ],
     tools: ['p5.js', 'JavaScript', 'Web Audio', 'Pixel art'],
     credits: 'Isabella Kiosses (film & didactic) · Lyebin Cho (film & photo) · Chloee Park (design) · Qinxi Yao (main coder)',
-    links: [{ label: 'Exhibition build', href: 'https://ceceliayao.github.io/The-Next-Chapter/' }, { label: 'Source', href: 'https://github.com/CeceliaYao/The-Next-Chapter' }]
+    links: [{ label: 'Exhibition build', href: 'https://ceceliayao.github.io/The-Next-Chapter/' }]
   },
   {
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'DXB211 · Creative Coding', year: '2026',
@@ -105,7 +107,7 @@ const WORKS = [
   {
     id: 'astrobius', title: 'Astrobius', unit: 'DVB201 · Experimental Type Design', year: '2026',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/astrobius/p01.jpg', tall: true,
-    gallery: ['poster', 'p01', 'p04', 'p05', 'p06', 'p07', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
+    gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
     body: [
       'The name is a portmanteau of Astro (the celestial) and Möbius (the infinite continuity). Inspired by the realisation that the laws of physics govern both the vastness of the cosmos and the precision of the microscopic world, the typeface serves as a visual bridge between two scales of existence.',
@@ -115,40 +117,23 @@ const WORKS = [
     links: []
   },
   {
-    id: 'sketches', title: 'Three Behaviours', unit: 'DXB211 · Creative Coding', year: '2026',
-    role: 'Solo', kind: 'Generative sketches', image: 'assets/work/sketches/ribbon.jpg',
-    gallery: ['assets/work/sketches/ribbon.jpg', 'assets/work/sketches/painting.jpg', 'assets/work/sketches/snake.jpg'],
-    play: [
-      { label: 'Ribbon', href: 'play/ribbon/', ratio: '1/1', hint: 'Hold the mouse and draw. F freezes the fade.' },
-      { label: 'Painting', href: 'play/painting/', ratio: '2/1', hint: 'Click the left side to move the brushes. P pauses, R resets.' },
-      { label: 'Snake', href: 'play/snake/', ratio: '7/5', hint: 'Just watch. It spells as it eats.' }
-    ],
-    summary: 'Across these three sketches, I began to see code less as a tool for displaying an idea and more as a way to shape behaviour.',
-    body: [
-      'Ribbon is a disobedient drawing partner. It follows the mouse with delay and drift: drawing fast makes the brush wilder and thicker, drawing slow keeps it calm and thin, and old strokes fade, so you must keep drawing to hold the image together.',
-      'Painting uses image data in a way that feels closer to painting than copying: wandering brushes sample colour and shrink over time, so the image moves from broad colour to finer detail. Here it paints my photo of Byron Bay lighthouse. Snake merges the classic game with text, turning eating into reading: a snake of letters finds the others in alphabetical order and forms a word.'
-    ],
-    tools: ['p5.js', 'Generative systems', 'Image sampling', 'Kinetic type'],
-    links: []
-  },
-  {
-    id: 'my-room', title: 'My Room: Objects I Carry', unit: 'KKB385 · Individual project', year: '2026',
-    role: 'Solo', kind: 'Web game', cover: 'myRoom', image: 'assets/work/my-room.jpg', pixel: true,
+    id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
+    role: 'Solo', kind: 'Interactive web & 3D study', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
-    summary: 'An interactive game based on my current room. Explore it and click the objects to learn more about me.',
+    summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study about upkeep and memory.',
     body: [
-      'The objects in the room reflect my real life: my experiences, interests and things that are personally meaningful to me. It connects to our A3 project, The Next Chapter, through the same idea of meaningful objects.',
-      'Every object is something I own, redrawn by hand as pixel art. Click one and the real thing appears, cut out from my photo. The light follows Brisbane time: sunbeams by day, fairy lights and a desk lamp at night.'
+      'Developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning. It carries on the keep-or-remove question from my first pitch, Shelf Life, and the upkeep theme of our exhibition game, The Next Chapter: what we look after, what we keep, and what we carry into the next room.',
+      'Here the room is mine. Every object is something I own and look after, redrawn by hand as pixel art; click one and the real thing appears, with the memory it holds. The same room floats at the top of this site as a small 3D island built in Three.js, extending my p5.js foundation into web 3D. I wanted a portfolio that feels like an explorable space rather than a static project grid, while the navigation stays clear.'
     ],
-    tools: ['JavaScript', 'Canvas', 'Pixel art', 'Photo cut-outs'],
-    links: [{ label: 'Play full screen', href: 'room/' }]
+    tools: ['JavaScript', 'Three.js', 'Canvas', 'Pixel art'],
+    links: [{ label: 'Play full screen', href: 'room/' }, { label: 'Instagram series', href: 'https://www.instagram.com/ceceliayao.design/' }]
   }
 ];
 
 const PHOTOS = ['Image_20250906184745_350_1', 'Image_20250906184752_351_1', 'Image_20250906184939_352_1', 'Image_20250906184955_353_1', 'Image_20250906185025_354_1', 'Image_20250906185056_355_1', 'Image_20250906185057_356_1', 'Image_20250906185149_357_1', 'Image_20250906185150_358_1', 'Image_20250906185520_359_1'].map(n => 'assets/photography/' + n + '.jpg');
 
 const SKILLS = [
-  { k: 'JavaScript', n: 'JS' }, { k: 'p5.js', n: 'p5' }, { k: 'Figma', n: 'Fg' }, { k: 'Generative art', n: '∿' },
+  { k: 'JavaScript', n: 'JS' }, { k: 'p5.js', n: 'p5' }, { k: 'Figma', n: 'Fg' }, { k: 'Three.js', n: '3D' },
   { k: 'Print & zine', n: 'Zn' }, { k: 'Pixel art', n: 'Px' }, { k: 'Interaction design', n: 'IxD' }, { k: 'Storyboarding', n: 'Sb' },
   { k: 'Game design', n: 'GD' }, { k: 'Photography', n: 'Ph' }, { k: 'Type design', n: 'Aa' }, { k: 'Research', n: 'Rs' }
 ];

@@ -2,6 +2,7 @@
    with a switch to its pixel version and small tabs for related objects. */
 (function () {
 'use strict';
+const PHOTO_ONLY = ['visor', 'whisky', 'gin', 'water'];
 function portrait(host, o, st, room, root) {
   host.innerHTML = '';
   host.classList.remove('real');
@@ -22,7 +23,9 @@ function portrait(host, o, st, room, root) {
     stage.innerHTML = '';
     host.classList.toggle('real', real);
     if (real) {
-      const im = new Image(); im.alt = ''; im.className = 'cut'; im.src = root + 'assets/cutouts/' + cur + '.webp';
+      // a few things photograph better as they are, so they show as a plain photo
+      const snap = PHOTO_ONLY.includes(cur);
+      const im = new Image(); im.alt = ''; im.className = snap ? 'snap' : 'cut'; im.src = root + 'assets/cutouts/' + cur + (snap ? '.jpg' : '.webp');
       stage.append(im);
     } else {
       const src = art(cur); const k = Math.max(2, Math.floor(130 / Math.max(src.width, src.height)));

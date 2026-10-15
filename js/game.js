@@ -1,4 +1,4 @@
-/* My Room: Objects I Carry — look around, click things, remember them. */
+/* My Room, from What We Carry: look around, click things, remember them. */
 (function () {
 'use strict';
 const { Room, canvas } = window.PixelRoom;
@@ -64,7 +64,6 @@ function look(o) {
   if (st.toggle === 'door') return showDoor();
   const acts = [];
   if (o.group === 'computer') acts.push(`<a class="btn" href="../#work">Open my work ▸</a>`);
-  if (o.group === 'photos') acts.push(`<a class="btn" href="../#photography">See the photos ▸</a>`);
   if (st.toggle === 'night') acts.push(`<button class="btn ghost" type="button" data-night>${room.night ? 'Bring the sun back' : 'Wait for night'}</button>`);
   openStory(o, st, st.title, st.lines.slice(), acts.join(''));
   discover(o);
