@@ -176,6 +176,12 @@ function paintRoom(x) {
     if (n === 0) R(x, i, j, 1, 1, C.rugDk); else if (n === 5 && j > 190) R(x, i, j, 1, 1, C.rugHi);
   }
   dither(x, 0, 236, W, 34, C.rugDk2, .3);
+  // soft contact shadows on the carpet
+  x.globalAlpha = .16;
+  for (const [sx, sy, sw, sh] of [[106, 192, 136, 8], [238, 194, 44, 6], [280, 192, 50, 6], [318, 252, 160, 12], [24, 166, 60, 6]]) ellipse(x, sx + sw / 2, sy + sh / 2, sw / 2, sh / 2, '#3a2a35');
+  x.globalAlpha = 1;
+  // fairy-light wire along the top of the wall
+  for (let i = 28; i < 330; i++) R(x, i, 15 + Math.round(Math.abs(Math.sin((i - 28) / 48 * Math.PI)) * 7), 1, 1, '#6b5a4a');
   // skirting board
   R(x, 26, 164, W - 45, 4, C.base); R(x, 26, 167, W - 45, 1, C.baseSh);
 
@@ -193,6 +199,10 @@ function paintRoom(x) {
   R(x, 120, 92, 66, 4, C.white); R(x, 120, 95, 66, 1, C.whiteSh);
   for (const bx of [128, 172]) { line(x, bx, 96, bx, 112, C.birchDk); line(x, bx + 1, 96, bx + 1, 112, C.birch); line(x, bx + 1, 97, bx + 9, 96, C.birch); line(x, bx + 1, 110, bx + 9, 97, C.birch); }
 
+  // books on the shelf
+  const bk = [['#d9534a', 9], ['#4fa3e0', 11], ['#f5d061', 8], ['#7cc36b', 10], ['#a78bdc', 9]];
+  let bx = 168; for (const [col, hgt] of bk) { R(x, bx, 92 - hgt, 3, hgt, col); R(x, bx, 92 - hgt, 3, 1, '#ffffff55'); R(x, bx + 2, 92 - hgt, 1, hgt, '#00000033'); bx += 3; }
+  R(x, bx, 83, 2, 9, '#c98a52'); R(x, bx + 1, 82, 6, 2, '#c98a52');
   // ---- desk ----
   R(x, 112, 142, 124, 14, C.birch); R(x, 112, 142, 124, 2, C.birchHi);
   dither(x, 112, 150, 124, 6, C.birchDk, .25);
@@ -315,36 +325,64 @@ function paintScreen(x, t, on) {
   for (let j = 0; j < h; j += 2) { x.globalAlpha = .12; R(x, X, Y + j, w, 1, '#000'); } x.globalAlpha = 1;
 }
 
+/* wall clock on Brisbane time */
+function paintClock(x) {
+  const cx = 132, cy = 50;
+  ellipse(x, cx, cy, 8, 8, C.ink); ellipse(x, cx, cy, 7, 7, '#c98a52'); ellipse(x, cx, cy, 6, 6, '#fbf7ef');
+  for (let k = 0; k < 12; k += 3) { const a = k / 12 * Math.PI * 2; R(x, Math.round(cx + Math.sin(a) * 5 - .5), Math.round(cy - Math.cos(a) * 5 - .5), 1, 1, '#7d7570'); }
+  const d = new Date(new Date().toLocaleString('en-US', { timeZone: 'Australia/Brisbane' }));
+  const hA = ((d.getHours() % 12) + d.getMinutes() / 60) / 12 * Math.PI * 2, mA = d.getMinutes() / 60 * Math.PI * 2;
+  line(x, cx, cy, Math.round(cx + Math.sin(hA) * 3), Math.round(cy - Math.cos(hA) * 3), C.ink);
+  line(x, cx, cy, Math.round(cx + Math.sin(mA) * 5), Math.round(cy - Math.cos(mA) * 5), '#d9534a');
+}
+/* fairy lights hanging along the wire */
+const BULBS = [];
+for (let i = 34; i < 330; i += 12) BULBS.push([i, 16 + Math.round(Math.abs(Math.sin((i - 28) / 48 * Math.PI)) * 7)]);
+const BULB_COL = ['#ffd95a', '#ff8fb1', '#8fe3d0', '#c3a6ff'];
+function paintBulbs(x, t, night) {
+  BULBS.forEach(([bx, by], i) => {
+    const on = night ? (Math.sin(t / 700 + i * 1.7) > -.6) : false;
+    R(x, bx, by + 1, 1, 1, '#6b5a4a');
+    R(x, bx - 1, by + 1, 3, 1, '#7d7570');
+    R(x, bx - 1, by + 2, 3, 3, on ? BULB_COL[i % 4] : ['#f7e7b4', '#f6d3dc', '#d4efe8', '#e3daf5'][i % 4]);
+    R(x, bx - 1, by + 2, 1, 1, '#ffffff');
+    R(x, bx, by + 5, 1, 1, on ? BULB_COL[i % 4] : '#c9bba2');
+  });
+}
+
 /* ---------- objects ---------- */
 // x,y = top-left in art pixels. group = what it tells you about.
 const OBJECTS = [
   { id: 'door', group: 'door', name: 'Door', x: 34, y: 78, art: 'door' },
-  { id: 'poster-next-chapter', work: 'next-chapter', name: 'The Next Chapter', x: 72, y: 36, art: 'poster:nextChapter' },
-  { id: 'poster-relax-and-make', work: 'relax-and-make', name: 'Relax & Make', x: 196, y: 44, art: 'poster:relaxMake', small: 1 },
+  { id: 'photos', group: 'photos', name: 'Photo board', x: 26, y: 30, art: 'cork' },
+  { id: 'poster-next-chapter', work: 'next-chapter', name: 'The Next Chapter', x: 72, y: 34, art: 'poster:nextChapter' },
+  { id: 'poster-astrobius', work: 'astrobius', name: 'Astrobius', x: 196, y: 42, art: 'poster:astrobius', small: 1, tall: 1 },
   { id: 'poster-echo-corridor', work: 'echo-corridor', name: 'Echo Corridor', x: 230, y: 38, art: 'poster:echoCorridor' },
   { id: 'poster-shopmirror', work: 'shopmirror', name: 'ShopMirror 2032', x: 276, y: 46, art: 'poster:shopMirror', small: 1 },
-  { id: 'visor', group: 'trail', name: 'Visor', x: 98, y: 86, src: 'visor' },
-  { id: 'backpack', group: 'trail', name: 'Daypack', x: 72, y: 94, src: 'backpack' },
-  { id: 'poles', group: 'trail', name: 'Trekking poles', x: 70, y: 136, src: 'poles' },
-  { id: 'perfume', group: 'scent', name: 'Perfume', x: 132, y: 76, src: 'perfume' },
+  { id: 'visor', group: 'trail', name: 'Hiking visor', x: 97, y: 85, art: 'visor' },
+  { id: 'backpack', group: 'trail', name: 'Daypack', x: 73, y: 96, art: 'backpack' },
+  { id: 'poles', group: 'trail', name: 'Trekking poles', x: 74, y: 134, art: 'poles' },
+  { id: 'perfume', group: 'scent', name: 'Perfume', x: 131, y: 78, art: 'perfume' },
   { id: 'penguin', group: 'plush', name: 'Penguin', x: 156, y: 77, art: 'penguin' },
   { id: 'lamp', group: 'lamp', name: 'Desk lamp', x: 116, y: 109, art: 'lamp' },
   { id: 'computer', group: 'computer', name: 'Computer', x: 161, y: 104, art: 'monitor' },
-  { id: 'ps5', group: 'play', name: 'Console', x: 211, y: 112, src: 'ps5' },
-  { id: 'picasso', group: 'fridge', name: 'Picasso magnet', x: 248, y: 128, src: 'picasso' },
-  { id: 'cocktail', group: 'cocktail', name: 'Bead cocktail', x: 262, y: 138, src: 'cocktail' },
-  { id: 'bangle', group: 'fridge', name: 'Jade bangle', x: 249, y: 166, src: 'bangle' },
-  { id: 'whisky', group: 'bar', name: 'Whisky', x: 293, y: 103, src: 'whisky' },
-  { id: 'gin', group: 'bar', name: 'Gin', x: 299, y: 139, src: 'gin' },
+  { id: 'ps5', group: 'play', name: 'Console', x: 208, y: 110, art: 'ps5' },
+  { id: 'picasso', group: 'art', name: 'Picasso magnet', x: 246, y: 127, art: 'picasso' },
+  { id: 'beads', group: 'beads', name: 'Bead magnet', x: 262, y: 134, art: 'beads' },
+  { id: 'jade', group: 'jade', name: 'Jade dragon', x: 245, y: 163, art: 'jade' },
+  { id: 'whisky', group: 'bar', name: 'Whisky', x: 287, y: 110, art: 'whisky' },
+  { id: 'bourbon', group: 'bar', name: 'Bourbon', x: 297, y: 113, art: 'bourbon' },
+  { id: 'gin', group: 'bar', name: 'Gin', x: 310, y: 109, art: 'gin' },
   { id: 'window', group: 'view', name: 'Window', x: 336, y: 18, art: 'window' },
-  { id: 'catpot', group: 'plants', name: 'Cat planter', x: 352, y: 97, src: 'catpot' },
-  { id: 'succulent', group: 'plants', name: 'Succulent', x: 398, y: 105, src: 'succulent' },
+  { id: 'catpot', group: 'plants', name: 'Cat planter', x: 350, y: 97, art: 'catpot' },
+  { id: 'succulent', group: 'plants', name: 'Succulent', x: 397, y: 103, art: 'succulent' },
   { id: 'kitty', group: 'plush', name: 'Hello Kitty', x: 437, y: 152, art: 'kitty' },
-  { id: 'water', group: 'water', name: 'Water', x: 119, y: 172, src: 'water' }
+  { id: 'water', group: 'water', name: 'Water', x: 118, y: 174, art: 'water' }
 ];
 
-function poster(name, small) {
-  const iw = small ? 30 : 40, ih = small ? 22 : 28;
+
+function poster(name, small, tall) {
+  const iw = tall ? 22 : small ? 30 : 40, ih = tall ? 30 : small ? 22 : 28;
   const [c, x] = canvas(iw + 4, ih + 4);
   R(x, 0, 0, iw + 4, ih + 4, C.birchDk); R(x, 1, 1, iw + 2, ih + 2, C.birch);
   if (window.PixelCovers) {
@@ -353,6 +391,24 @@ function poster(name, small) {
     const sw = cv.height * iw / ih;
     x.drawImage(cv, (cv.width - sw) / 2, 0, sw, cv.height, 2, 2, iw, ih);
   }
+  return outline(c);
+}
+/* a cork board pinned with tiny versions of my photographs */
+const PHOTO_PINS = ['Image_20250906185057_356_1', 'Image_20250906184745_350_1', 'Image_20250906185520_359_1', 'Image_20250906185025_354_1', 'Image_20250906184939_352_1', 'Image_20250906185149_357_1'];
+async function corkboard() {
+  const [c, x] = canvas(42, 34);
+  R(x, 0, 0, 42, 34, C.birchDk); R(x, 1, 1, 40, 32, '#c99a62'); dither(x, 1, 1, 40, 32, '#b5844f', .35);
+  const slots = [[3, 3, 10, 12], [15, 2, 11, 9], [28, 4, 10, 12], [4, 18, 12, 10], [18, 14, 9, 12], [29, 19, 10, 11]];
+  const imgs = await Promise.all(PHOTO_PINS.map(n => load(ROOT + 'assets/photography/' + n + '.jpg')));
+  imgs.forEach((im, i) => {
+    const [a, b, w, h] = slots[i];
+    R(x, a - 1, b - 1, w + 2, h + 3, '#fbf7ef');
+    if (im) {
+      const s = Math.min(im.width / w, im.height / h), sw = w * s, sh = h * s;
+      x.imageSmoothingEnabled = true; x.drawImage(im, (im.width - sw) / 2, (im.height - sh) / 2, sw, sh, a, b, w, h); x.imageSmoothingEnabled = false;
+    }
+    R(x, a + (w >> 1), b - 2, 1, 2, ['#e24b3c', '#4fa3e0', '#f5d061'][i % 3]);
+  });
   return outline(c);
 }
 function load(src) { return new Promise(res => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; }); }
@@ -384,9 +440,11 @@ class Room {
   on(ev, fn) { (this.listeners[ev] = this.listeners[ev] || []).push(fn); }
   emit(ev, a) { (this.listeners[ev] || []).forEach(f => f(a)); }
   async _load() {
-    const art = { penguin: spritePenguin(), kitty: spriteKitty(), monitor: spriteMonitor(), lamp: spriteLamp(), window: spriteWindow(), door: spriteDoor() };
+    const art = { penguin: spritePenguin(), kitty: spriteKitty(), monitor: spriteMonitor(), lamp: spriteLamp(), window: spriteWindow(), door: spriteDoor(), cork: await corkboard() };
+    const A = (window.PixelArt && window.PixelArt.ART) || {};
+    for (const k in A) if (typeof A[k] === 'function') art[k] = A[k]();
     await Promise.all(this.objects.map(async o => {
-      o.img = o.src ? await load(ROOT + 'assets/sprites/' + o.src + '.png') : (o.art.startsWith('poster:') ? poster(o.art.slice(7), o.small) : art[o.art]);
+      o.img = o.src ? await load(o.src) : (o.art.startsWith('poster:') ? poster(o.art.slice(7), o.small, o.tall) : art[o.art]);
       if (!o.img) return;
       o.w = o.img.width; o.h = o.img.height;
       if (o.id === 'window') { o.w = 96; o.h = 110; }
@@ -425,7 +483,7 @@ class Room {
     for (let i = this.objects.length - 1; i >= 0; i--) {
       const o = this.objects[i]; if (!o.img) continue;
       if (ax < o.x || ay < o.y || ax >= o.x + o.w || ay >= o.y + o.h) continue;
-      if (o.src) {               // pixel-accurate for photo sprites, with 2px slack
+      if (o.img && o.id !== 'window' && o.id !== 'door') {   // pixel-accurate, with 2px slack
         const ix = Math.floor(ax - o.x), iy = Math.floor(ay - o.y);
         if (!o._alpha) { const [c, x] = canvas(o.w, o.h); x.drawImage(o.img, 0, 0); o._alpha = x.getImageData(0, 0, o.w, o.h).data; }
         let hit = false;
@@ -461,6 +519,8 @@ class Room {
     const x = this.ctx;
     x.drawImage(this.staticLayer, 0, 0);
     paintWindow(x, t, this.night);
+    paintClock(x);
+    paintBulbs(x, t, this.night);
     // objects + actors sorted so the girl can walk in front of / behind the bed and chair
     const list = this.objects.filter(o => o.img && o.id !== 'window' && o.id !== 'door');
     const draws = list.map(o => ({ z: o.z != null ? o.z : 0, f: () => {
@@ -496,6 +556,9 @@ class Room {
       const g2 = L.createLinearGradient(380, 20, 300, 268);
       g2.addColorStop(0, 'rgba(255,250,225,.30)'); g2.addColorStop(1, 'rgba(255,250,225,0)');
       L.fillStyle = g2; P([[382, 22], [418, 22], [330, 268], [280, 268]]); L.fill();
+      // bloom around the window
+      const bl = L.createRadialGradient(380, 68, 10, 380, 68, 120); bl.addColorStop(0, 'rgba(255,250,230,.28)'); bl.addColorStop(1, 'rgba(255,250,230,0)');
+      L.fillStyle = bl; L.fillRect(250, 0, 230, 200);
       // dust motes in the beam
       L.fillStyle = 'rgba(255,250,230,.85)';
       for (const m of this.motes) {
@@ -503,14 +566,26 @@ class Room {
         if (xx > 214 && xx < 420) L.fillRect(Math.round(xx), Math.round(yy), 1, 1);
       }
     } else {
-      L.globalCompositeOperation = 'multiply'; L.fillStyle = 'rgba(44,48,104,1)'; L.globalAlpha = .7; L.fillRect(0, 0, W, H); L.globalAlpha = 1;
+      // darkness first, then light cut out of it: pixels stay crisp inside the pools
+      L.globalCompositeOperation = 'source-over';
+      L.fillStyle = 'rgba(14,16,46,.74)'; L.fillRect(0, 0, W, H);
+      const hole = (cx, cy, r, a) => { const g = L.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, 'rgba(0,0,0,' + a + ')'); g.addColorStop(.55, 'rgba(0,0,0,' + a * .55 + ')'); g.addColorStop(1, 'rgba(0,0,0,0)'); L.fillStyle = g; L.fillRect(cx - r, cy - r, r * 2, r * 2); };
+      L.globalCompositeOperation = 'destination-out';
+      if (this.lampOn) hole(128, 128, 120, .95);
+      if (this.screenOn) hole(185, 122, 60, .8);
+      hole(380, 70, 70, .7);
+      const lit = BULBS.map(([bx, by], i) => [bx, by, i, Math.sin(t / 700 + i * 1.7) > -.6]);
+      lit.forEach(([bx, by, i, on]) => { if (on) hole(bx, by + 3, 16, .55); });
+      L.beginPath(); P([[340, 22], [420, 22], [352, 268], [214, 268]]); L.fillStyle = 'rgba(0,0,0,.25)'; L.fill();
+      // coloured light on top
       L.globalCompositeOperation = 'screen';
       const glow = (cx, cy, r, col, a) => { const g = L.createRadialGradient(cx, cy, 0, cx, cy, r); g.addColorStop(0, col.replace('A', a)); g.addColorStop(1, col.replace('A', 0)); L.fillStyle = g; L.fillRect(cx - r, cy - r, r * 2, r * 2); };
-      if (this.lampOn) { glow(128, 118, 150, 'rgba(255,190,110,A)', .55); glow(128, 120, 40, 'rgba(255,230,170,A)', .6); }
-      if (this.screenOn) glow(185, 120, 70, 'rgba(120,200,255,A)', .38 + Math.sin(t / 300) * .02);
-      glow(380, 70, 90, 'rgba(120,140,255,A)', .22);
+      if (this.lampOn) { glow(128, 122, 110, 'rgba(255,170,80,A)', .28); glow(130, 118, 18, 'rgba(255,236,190,A)', .7); }
+      if (this.screenOn) glow(185, 120, 50, 'rgba(110,190,255,A)', .2 + Math.sin(t / 300) * .02);
+      glow(380, 60, 70, 'rgba(120,140,255,A)', .14);
+      lit.forEach(([bx, by, i, on]) => { if (on) glow(bx, by + 3, 8, ['rgba(255,217,90,A)', 'rgba(255,143,177,A)', 'rgba(143,227,208,A)', 'rgba(195,166,255,A)'][i % 4], .6); });
       const g = L.createLinearGradient(380, 20, 280, 268);
-      g.addColorStop(0, 'rgba(150,170,255,.18)'); g.addColorStop(1, 'rgba(150,170,255,0)');
+      g.addColorStop(0, 'rgba(150,170,255,.16)'); g.addColorStop(1, 'rgba(150,170,255,0)');
       L.fillStyle = g; P([[340, 22], [420, 22], [352, 268], [214, 268]]); L.fill();
     }
     // vignette
@@ -521,42 +596,5 @@ class Room {
   }
 }
 
-/* ---------- someone to walk around ---------- */
-// feet-space walk area and furniture footprints (art pixels)
-const FLOOR = { x0: 30, x1: 466, y0: 200, y1: 266 };
-const BLOCKS = [
-  { x0: 318, x1: 476, y0: 150, y1: 258 },   // bed
-  { x0: 144, x1: 190, y0: 150, y1: 212 },   // chair
-  { x0: 0, x1: 70, y0: 150, y1: 182 }       // poles
-];
-function blocked(x, y) {
-  if (x < FLOOR.x0 || x > FLOOR.x1 || y < FLOOR.y0 || y > FLOOR.y1) return true;
-  for (const b of BLOCKS) if (x > b.x0 && x < b.x1 && y > b.y0 && y < b.y1) return true;
-  return false;
-}
-class Walker {
-  constructor(x, y) {
-    this.x = x; this.y = y; this.dir = 0; this.f = 0; this.moving = false; this.t = 0;
-    this.frames = [0, 1, 2, 3].map(d => [0, 1, 2, 3].map(f => spriteGirl(d, f)));
-  }
-  get z() { return this.y; }
-  step(dx, dy, dt) {
-    const sp = .075 * dt;
-    this.moving = !!(dx || dy);
-    if (!this.moving) { this.f = 0; return; }
-    const len = Math.hypot(dx, dy); dx /= len; dy /= len;
-    if (Math.abs(dx) > Math.abs(dy)) this.dir = dx < 0 ? 2 : 3; else this.dir = dy < 0 ? 1 : 0;
-    const nx = this.x + dx * sp, ny = this.y + dy * sp;
-    if (!blocked(nx, this.y)) this.x = nx;
-    if (!blocked(this.x, ny)) this.y = ny;
-    this.t += dt; this.f = ((this.t / 140) | 0) % 4;
-  }
-  draw(x) {
-    const img = this.frames[this.dir][this.f];
-    x.fillStyle = 'rgba(42,31,26,.25)'; x.fillRect(Math.round(this.x) - 6, Math.round(this.y) - 1, 12, 2);
-    x.drawImage(img, Math.round(this.x) - 8, Math.round(this.y) - 28);
-  }
-}
-
-window.PixelRoom = { Walker, blocked, FLOOR, Room, W, H, C, spriteGirl, canvas, outline, R, dither, ellipse, line, OBJECTS };
+window.PixelRoom = { Room, W, H, C, spriteGirl, canvas, outline, R, dither, ellipse, line, OBJECTS };
 })();

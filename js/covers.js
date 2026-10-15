@@ -62,6 +62,19 @@ const COVERS = {
     for (const [cx, cy, c] of [[124, 74, '#fff4e6'], [138, 80, '#ffd0ea']]) { ellipse(x, cx, cy, 7, 4, c); ellipse(x, cx, cy, 3, 2, '#ff6478'); }
     R(x, 20, 70, 14, 14, '#ffffff'); for (let i = 0; i < 4; i++) for (let j = 0; j < 4; j++) if ((i * 3 + j * 5) % 3) R(x, 22 + i * 3, 72 + j * 3, 2, 2, '#2a1f1a');
   },
+  astrobius(x) {
+    // grey paper, a chrome loop letter and orbiting dots
+    R(x, 0, 0, CW, CH, '#d6d6d4'); dither(x, 0, 0, CW, CH, '#cbcbc8', .25);
+    for (let a = 0; a < Math.PI * 2; a += .02) {
+      const r = 26 + Math.sin(a * 3) * 8, px = 80 + Math.cos(a) * r * 1.3, py = 44 + Math.sin(a) * r * .9;
+      ellipse(x, px, py, 5, 5, '#1d1d1f');
+    }
+    for (let a = 0; a < Math.PI * 2; a += .03) {
+      const r = 26 + Math.sin(a * 3) * 8, px = 80 + Math.cos(a) * r * 1.3, py = 44 + Math.sin(a) * r * .9;
+      ellipse(x, px - 1, py - 1, 2.6, 2.6, a % 1 < .5 ? '#f4f4f6' : '#9a9aa2');
+    }
+    for (const [dx, dy, r] of [[24, 70, 4], [134, 18, 3], [140, 66, 5], [36, 16, 2]]) ellipse(x, dx, dy, r, r, '#1d1d1f');
+  },
   myRoom(x) {
     // drawn from the real room render if it exists
     const src = document.querySelector('.px-base');

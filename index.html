@@ -30,6 +30,7 @@
 
 <header class="topbar" id="top">
   <a class="brand" href="#room">Cecelia Yao</a>
+  <div class="hp" id="hp" aria-hidden="true"><b>HP</b><span><i></i></span></div>
   <nav class="nav" aria-label="Main">
     <a href="#work">Work</a>
     <a href="#arcade-sec" class="opt">Arcade</a>
@@ -43,62 +44,76 @@
 <main>
   <section class="hero" id="room" aria-label="My room">
     <div id="stage"></div>
-    <div class="nameplate">
-      <h1>Cecelia<br>Yao</h1>
-      <p>Interactive &amp; visual designer · Brisbane</p>
-    </div>
     <p class="hint">Everything in here is mine. Click around. The computer has my work.</p>
+    <a class="scrolldown" href="#intro" aria-label="Scroll down">▾</a>
   </section>
 
-  <section id="intro">
-    <p class="kicker">Hello</p>
-    <p class="statement">I build <em>small worlds</em> people can walk into: games, interfaces and spaces where <span class="u">objects carry stories</span>.</p>
+  <div class="horizon" aria-hidden="true"></div>
+
+  <section id="intro" class="intro">
+    <p class="kicker" data-reveal>Hello</p>
+    <p class="statement" id="statement">I build <em>small worlds</em> people can walk into: games, interfaces and rooms where <span class="u">objects carry stories</span>.</p>
+    <div class="quest" data-reveal>
+      <div><b>Now</b><span>Interactive &amp; Visual Design, QUT</span></div>
+      <div><b>Making</b><span>pixel games, speculative interfaces, typefaces</span></div>
+      <div><b>Away from the desk</b><span>hiking, tasting, photographs</span></div>
+    </div>
   </section>
 
-  <section id="work">
-    <p class="kicker">Selected work</p>
+  <section id="work" class="work-sec">
+    <div class="sechead" data-reveal><p class="kicker">Selected work</p><span class="filter" id="filter" hidden></span></div>
     <ol class="works" id="works"></ol>
   </section>
 
   <section id="arcade-sec" class="arcade-sec">
-    <p class="kicker">Arcade</p>
-    <h2 class="h2">Everything here is playable.</h2>
+    <p class="kicker" data-reveal>Arcade</p>
+    <h2 class="h2" data-reveal>Everything here is playable.</h2>
     <div class="arcade" id="arcade"></div>
   </section>
 
   <section id="photography" class="photo-sec">
-    <p class="kicker">Photographs</p>
+    <div class="sechead" data-reveal><p class="kicker">Photographs</p><span class="drag">drag ⟷</span></div>
     <div class="photos" id="photos"></div>
   </section>
 
   <section class="play" id="play">
-    <div>
+    <div data-reveal>
       <p class="kicker">Side quest</p>
       <h2>My Room: Objects&nbsp;I&nbsp;Carry</h2>
-      <p>Walk around my room, look at everything and find out who lives here. Arrow keys, WASD or just click.</p>
+      <p>My real room, redrawn in pixels. Click around, find the twelve things that tell you who lives here, and see each one as it really is.</p>
       <p><a class="btn" href="room/" target="_blank" rel="noopener">Play in a new window ▸</a></p>
     </div>
-    <div class="screen"><div id="mini"></div></div>
+    <div class="screen" data-reveal><div id="mini"></div></div>
   </section>
 
-  <section id="about">
+  <section id="about" class="about-sec">
     <div class="about">
-      <div class="me frame"><canvas id="me" width="16" height="28" aria-label="Pixel portrait of Cecelia"></canvas></div>
+      <div class="portraits" data-reveal>
+        <figure class="real frame">
+          <div class="photo" id="mephoto"></div>
+          <label class="px-range"><span>pixels</span><input type="range" id="pxslider" min="1" max="28" value="22" aria-label="Pixel size of the portrait"><span>photo</span></label>
+        </figure>
+        <div class="me frame"><canvas id="me" width="16" height="28" aria-label="Pixel portrait of Cecelia"></canvas></div>
+      </div>
       <div>
-        <p class="kicker">About</p>
-        <h2>Designer who writes the code.</h2>
-        <p>I'm Qinxi, though most people call me Cecelia. I study Interactive and Visual Design at QUT in Brisbane.</p>
-        <p>I design a bit like a director, with colour, light and rhythm, and then I build the thing so it moves. Lately that means pixel games, speculative interfaces and rooms full of memories.</p>
-        <p>Away from the desk I'm on a trail, mixing a drink or rearranging this room.</p>
-        <div class="facts"><span>QUT · Interactive &amp; Visual Design</span><span>Brisbane, AU</span><span>Open to collaborations</span></div>
-        <div class="inv" id="inv" aria-label="Skills"></div>
+        <p class="kicker" data-reveal>About</p>
+        <h2 data-reveal>Designer who writes the code.</h2>
+        <p data-reveal>I'm Qinxi, though most people call me Cecelia. I study Interactive and Visual Design at QUT in Brisbane.</p>
+        <p data-reveal>My design philosophy is rooted in visual storytelling and emotional resonance. I build an atmosphere much like a director, using colour, light and rhythm, and then I write the code that makes it move.</p>
+        <p data-reveal>Away from the desk I go hiking, taste whisky and gin, collect a little Chinese culture and a little Picasso, and keep something green by the window. They all end up in the work.</p>
+        <div class="facts" data-reveal><span>QUT · Interactive &amp; Visual Design</span><span>Brisbane, AU</span><span>Open to collaborations</span></div>
+        <p class="invhint" data-reveal>Click a skill to see where I used it.</p>
+        <div class="inv" id="inv" aria-label="Skills" data-reveal></div>
       </div>
     </div>
   </section>
 
+  <div class="horizon" aria-hidden="true"></div>
+
   <section class="contact" id="contact">
-    <p class="kicker">Contact</p>
-    <h2>Say<br>hello.</h2>
+    <p class="kicker" data-reveal>Contact</p>
+    <h2 id="hello">Say
+hello.</h2>
     <div class="links" id="links"></div>
   </section>
 </main>
@@ -142,9 +157,12 @@
   </div>
 </div>
 
+<script src="js/pixel-art.js"></script>
 <script src="js/room-engine.js" data-root="./"></script>
 <script src="js/content.js"></script>
+<script src="js/story.js"></script>
 <script src="js/covers.js"></script>
+<script src="js/fx.js"></script>
 <script src="js/home.js"></script>
 </body>
 </html>

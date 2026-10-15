@@ -1,6 +1,7 @@
 (function () {
 'use strict';
-const { Room, Walker, canvas, R, dither, ellipse, line, outline, spriteGirl } = window.PixelRoom;
+const { Room, canvas, R, dither, ellipse, line, outline, spriteGirl } = window.PixelRoom;
+const FX = window.FX;
 const { PROFILE, STORIES, WORKS, SKILLS, PHOTOS } = window.SITE;
 const { drawCover } = window.PixelCovers;
 const $ = s => document.querySelector(s);
@@ -88,6 +89,7 @@ function act(o) {
   const st = STORIES[o.group];
   if (!st) return;
   if (st.open === 'os') return openOS();
+  if (st.open === 'photos') { closeStory(); document.getElementById('photography').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); return; }
   if (st.toggle === 'night') { room.setNight(!room.night); mini && mini.setNight(room.night); }
   if (st.toggle === 'lamp') { room.lampOn = !room.lampOn; return; }
   if (st.toggle === 'door') { try { sessionStorage.removeItem('door'); } catch (e) {} location.hash = ''; location.reload(); return; }
@@ -99,25 +101,7 @@ const story = $('#story');
 let typer = null;
 function showStory(o, st) {
   room.focus = o;
-  const p = $('#story-p'); p.innerHTML = '';
-  const ids = st.photo || [];
-  const sprite = new Image(); sprite.alt = '';
-  if (ids.length) sprite.src = 'assets/sprites/' + (ids.includes(o.id) ? o.id : ids[0]) + '-big.png';
-  else {
-    // no photo: crop the live room around the object
-    const pad = 6, sw = o.w + pad * 2, sh = o.h + pad * 2;
-    const [c, x] = canvas(sw, sh); x.drawImage(room.base, o.x - pad, o.y - pad, sw, sh, 0, 0, sw, sh);
-    sprite.src = c.toDataURL(); const k = Math.max(1, Math.floor(150 / Math.max(sw, sh)));
-    sprite.style.width = sw * k + 'px'; sprite.style.maxWidth = 'none'; sprite.style.maxHeight = 'none';
-  }
-  p.append(sprite);
-  if (ids.length) {
-    const pid = ids.includes(o.id) ? o.id : ids[0];
-    const flip = document.createElement('button'); flip.className = 'flip'; flip.type = 'button'; flip.textContent = 'photo';
-    let photo = false;
-    flip.onclick = () => { photo = !photo; sprite.className = photo ? 'photo' : ''; sprite.src = photo ? 'assets/photos/' + pid + '.jpg' : 'assets/sprites/' + pid + '-big.png'; flip.textContent = photo ? 'pixels' : 'photo'; };
-    p.append(flip);
-  }
+  window.StoryPortrait($('#story-p'), o, st, room, '');
   $('#story-t').textContent = st.title;
   const b = $('#story-b'); b.innerHTML = '';
   const acts = $('#story-a'); acts.innerHTML = '';
@@ -191,9 +175,9 @@ function renderApp(id) {
     body.querySelectorAll('.kicker').forEach(k => k.remove());
   } else if (id === 'arcade') {
     body.innerHTML = '<div class="arcade"></div>';
-    $('#arcade').querySelectorAll('.cab').forEach(c => { const n = c.cloneNode(true); const src = c; n.querySelectorAll('canvas').forEach(cv => cv.replaceWith(drawCover('myRoom'))); n.onclick = e => { if (n.tagName === 'BUTTON') { e.preventDefault(); src.click(); } }; body.firstChild.append(n); });
+    $('#arcade').querySelectorAll('.cab').forEach(c => { const n = c.cloneNode(true); const src = c; n.querySelectorAll('.scr').forEach(sc => { sc.innerHTML = ''; if (sc.dataset.src) { const i = new Image(); i.src = sc.dataset.src; i.alt = ''; sc.append(i); } else sc.append(drawCover('myRoom')); }); n.onclick = e => { if (n.tagName === 'BUTTON') { e.preventDefault(); src.click(); } }; body.firstChild.append(n); });
   } else if (id === 'photos') {
-    body.innerHTML = '<div class="photos" style="grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));overflow:visible">' + $('#photos').innerHTML + '</div>';
+    body.innerHTML = '<div class="photos" style="grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));overflow:visible">' + PHOTOS.map(src => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;image-rendering:auto"></a>`).join('') + '</div>';
   } else {
     body.innerHTML = `<h2 style="font-family:var(--display);font-size:52px;margin:0 0 24px">Say hello.</h2><div class="links" style="display:flex;gap:18px;flex-wrap:wrap">${linksHTML()}</div>`;
   }
@@ -207,7 +191,7 @@ function coverEl(w) {
 function scaleUp(src, k) { const [c, x] = canvas(src.width * k, src.height * k); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0, c.width, c.height); return c; }
 const list = $('#works');
 WORKS.forEach((w, i) => {
-  const li = document.createElement('li'); li.className = 'work';
+  const li = document.createElement('li'); li.className = 'work'; li.dataset.id = w.id; li.dataset.reveal = '';
   li.innerHTML = `<button type="button"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span></button>`;
   const mc = coverEl(w); mc.classList.add('mcover'); li.querySelector('.s').after(mc);
   li.querySelector('button').addEventListener('click', () => openCase(i));
@@ -216,7 +200,14 @@ WORKS.forEach((w, i) => {
   list.append(li);
 });
 const peek = $('#peek');
-function showPeek(w) { peek.innerHTML = ''; peek.append(coverEl(w)); peek.classList.add('on'); }
+const peekCache = {};
+function showPeek(w) {
+  peek.innerHTML = '';
+  const src = w.image;
+  if (src) { const c = peekCache[w.id] || (peekCache[w.id] = FX.pixelImage(src, { start: 18 })); c.to(18); peek.append(c); requestAnimationFrame(() => { c.repaint(); c.to(1); }); }
+  else peek.append(coverEl(w));
+  peek.classList.add('on');
+}
 addEventListener('pointermove', e => { peek.style.left = (e.clientX + 200) + 'px'; peek.style.top = e.clientY + 'px'; }, { passive: true });
 
 const caseEl = $('#case');
@@ -283,14 +274,23 @@ cards.forEach(({ g, w }) => {
   b.className = 'cab';
   if (g.external) { b.href = g.href; b.target = '_blank'; b.rel = 'noopener'; } else b.type = 'button';
   const src = sketchImg[g.label] || w.image;
-  const scr = document.createElement('div'); scr.className = 'scr';
-  if (src) { const i = new Image(); i.src = src; i.alt = ''; i.loading = 'lazy'; scr.append(i); } else scr.append(drawCover(w.cover));
-  b.append(scr);
+  const scr = document.createElement('div'); scr.className = 'scr'; if (src) scr.dataset.src = src;
+  let pc = null;
+  if (src) { pc = FX.pixelImage(src, { start: 10 }); scr.append(pc); } else scr.append(drawCover(w.cover));
+  b.append(scr); b.dataset.reveal = '';
+  if (pc) FX.hoverResolve(b, pc, 10);
   b.insertAdjacentHTML('beforeend', `<b>${esc(g.label)}</b><span>${esc(w.unit.split(' · ')[0])} · ${esc(w.year)}</span><i>${g.external ? 'open ↗' : 'insert coin ▸'}</i>`);
+  b.addEventListener('click', () => coin());
   if (!g.external) b.onclick = () => g.href === 'room/' ? window.open(g.href, '_blank', 'noopener') : openPlayer(g);
   grid.append(b);
 });
-$('#photos').innerHTML = PHOTOS.map(src => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="" loading="lazy"></a>`).join('');
+const photos = $('#photos');
+PHOTOS.forEach((src, i) => {
+  const a = document.createElement('a'); a.href = src; a.target = '_blank'; a.rel = 'noopener'; a.setAttribute('aria-label', 'Photograph ' + (i + 1));
+  const c = FX.pixelImage(src, { start: 14 }); a.append(c); FX.hoverResolve(a, c, 14);
+  photos.append(a);
+});
+FX.dragScroll(photos);
 
 /* ======================= about, contact ======================= */
 const me = $('#me'); const big = scaleUp(spriteGirl(0, 0), 1); me.getContext('2d').drawImage(big, 0, 0);
@@ -309,14 +309,7 @@ const io = new IntersectionObserver(es => {
   es.forEach(e => {
     if (!e.isIntersecting || mini) return;
     mini = new Room(miniHost, { interactive: false, night: room.night, focusX: 250 });
-    const g = new Walker(110, 236); mini.actors.push(g);
-    const route = [[110, 236], [205, 240], [300, 214], [300, 262], [430, 264], [300, 262], [120, 206], [60, 250]];
-    let k = 1, last = 0;
-    mini.drawOverlay = (x, t) => {
-      const dt = Math.min(50, t - last || 16); last = t;
-      const [tx, ty] = route[k]; const dx = tx - g.x, dy = ty - g.y;
-      if (Math.hypot(dx, dy) < 2) { k = (k + 1) % route.length; g.step(0, 0, dt); } else g.step(dx, dy, dt);
-    };
+    mini.drawOverlay = (x, t) => { if (!reduced) mini.pan(240 + Math.sin(t / 6000) * 140); };
   });
 }, { rootMargin: '200px' });
 io.observe(miniHost);
@@ -326,13 +319,49 @@ const bar = $('#top');
 const heroIO = new IntersectionObserver(([e]) => bar.classList.toggle('solid', !e.isIntersecting), { threshold: .05 });
 heroIO.observe($('#room'));
 
-room.ready.then(() => {
-  // the cover for "My Room" is drawn from the live room once it exists
-  setTimeout(() => {
-    const w = WORKS.find(w => w.cover === 'myRoom');
-    document.querySelectorAll('.work').forEach((li, i) => { if (WORKS[i] === w) { const old = li.querySelector('.mcover'); const n = drawCover('myRoom'); n.classList.add('mcover'); old.replaceWith(n); } });
-  }, 300);
-});
+/* ======================= portrait: pixels ↔ photo ======================= */
+const mePhoto = FX.pixelImage(PROFILE.photo, { start: 22 });
+$('#mephoto').append(mePhoto);
+const slider = $('#pxslider');
+slider.addEventListener('input', () => mePhoto.to(29 - +slider.value));
+slider.value = 7; mePhoto.to(22);
+new IntersectionObserver(([e], o) => { if (!e.isIntersecting) return; o.disconnect(); setTimeout(() => { mePhoto.to(1); slider.value = 28; }, 400); }, { threshold: .4 }).observe($('#mephoto'));
+
+/* ======================= skills filter the work list ======================= */
+const SKILLMAP = {
+  'JavaScript': ['next-chapter', 'echo-corridor', 'sketches', 'my-room'], 'p5.js': ['next-chapter', 'echo-corridor', 'sketches'],
+  'Figma': ['hith-brick', 'shopmirror'], 'Pixel art': ['next-chapter', 'echo-corridor', 'my-room'],
+  'Interaction design': ['hith-brick', 'shopmirror', 'next-chapter', 'my-room'], 'Storyboarding': ['shopmirror', 'hith-brick'],
+  'Game design': ['next-chapter', 'echo-corridor', 'my-room'], 'Photography': ['my-room', 'sketches'],
+  'Type design': ['astrobius'], 'Research': ['shopmirror', 'hith-brick'], 'Generative art': ['sketches'], 'Print & zine': ['astrobius']
+};
+const filterEl = $('#filter');
+function setFilter(k) {
+  const ids = k ? SKILLMAP[k] || [] : null;
+  document.querySelectorAll('.work').forEach(li => li.classList.toggle('dim', !!ids && !ids.includes(li.dataset.id)));
+  document.querySelectorAll('#inv div').forEach(d => d.classList.toggle('sel', d.dataset.k === k));
+  filterEl.hidden = !k; filterEl.innerHTML = k ? `${esc(k)} <button type="button" aria-label="Clear filter">×</button>` : '';
+  if (k) { filterEl.querySelector('button').onclick = () => setFilter(null); $('#work').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' }); }
+}
+$('#inv').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (d) { coin(); setFilter(d.classList.contains('sel') ? null : d.dataset.k); } });
+$('#inv').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.k) { e.preventDefault(); e.target.click(); } });
+
+/* ======================= little sounds ======================= */
+let ac = null;
+function coin() {
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    [988, 1319].forEach((f, i) => { const t = ac.currentTime + i * .07, o = ac.createOscillator(), g = ac.createGain(); o.type = 'square'; o.frequency.value = f; g.gain.setValueAtTime(.04, t); g.gain.exponentialRampToValueAtTime(.0001, t + .12); o.connect(g).connect(ac.destination); o.start(t); o.stop(t + .14); });
+  } catch (e) {}
+}
+
+/* ======================= page-wide effects ======================= */
+FX.cursors();
+FX.hpBar($('#hp'));
+document.querySelectorAll('.horizon').forEach(h => FX.horizon(h));
+FX.typeOnView($('#statement'));
+FX.hop($('#hello'));
+FX.reveal();
 
 setupDoor();
 })();

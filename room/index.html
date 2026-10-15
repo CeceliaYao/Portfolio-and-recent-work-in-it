@@ -18,14 +18,13 @@
 
 <div class="hud">
   <a class="back" href="../">◂ cecelia yao</a>
-  <div class="count" id="count" aria-live="polite">0 / 11</div>
+  <div class="count" id="count" aria-live="polite">0 / 12</div>
   <div class="tools">
     <button type="button" id="sound" aria-label="Sound on or off">♪</button>
     <button type="button" id="night" aria-label="Day or night">☾</button>
   </div>
 </div>
 <div class="bag" id="bag" aria-label="Objects found"></div>
-<div class="prompt" id="prompt" aria-hidden="true"></div>
 <div class="tip" id="tip" aria-hidden="true"></div>
 
 <div class="story frame" id="story" role="dialog" aria-labelledby="story-t" hidden>
@@ -42,11 +41,11 @@
   <div class="frame in">
     <p class="kicker">a tiny game</p>
     <h1>My Room:<br>Objects I Carry</h1>
-    <p>This is my real room. Every object here is something I own, photographed and redrawn in pixels. Walk around and find out who lives here.</p>
+    <p>This is my real room. Every object here is something I own, redrawn in pixels. Click around and find out who lives here: twelve things to discover.</p>
     <ul class="keys">
-      <li><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> or <kbd>WASD</kbd> walk</li>
-      <li><kbd>E</kbd> or <kbd>Space</kbd> look</li>
-      <li>or just click where to go</li>
+      <li>Click anything that looks interesting</li>
+      <li>A sparkle hints at things you haven't found</li>
+      <li><kbd>N</kbd> night · <kbd>M</kbd> sound</li>
     </ul>
     <button class="btn" type="button" id="start">Start ▸</button>
   </div>
@@ -57,13 +56,15 @@
     <p class="kicker">all found</p>
     <h1>Objects I carry</h1>
     <div class="carry" id="carry"></div>
-    <p>A trail, a bar cart, two scents, a few plants and a desk where the work happens. Thanks for coming in.</p>
+    <p>Trails, a few bottles, magnets I made, something green, and a desk where the work happens. Thanks for coming in.</p>
     <p class="row"><a class="btn" href="../#work">See my work ▸</a><button class="btn ghost" type="button" id="stay">Stay a while</button></p>
   </div>
 </div>
 
+<script src="../js/pixel-art.js"></script>
 <script src="../js/room-engine.js" data-root="../"></script>
 <script src="../js/content.js"></script>
+<script src="../js/story.js"></script>
 <script src="../js/covers.js"></script>
 <script src="../js/game.js"></script>
 </body>
