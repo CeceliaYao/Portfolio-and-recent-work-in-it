@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>My Room: Objects I Carry</title>
+<meta name="description" content="A small pixel game: walk around Cecelia's room and find out who lives here.">
+<meta name="theme-color" content="#14122b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%232a1f1a'/%3E%3Crect x='3' y='2' width='10' height='13' fill='%23b8865a'/%3E%3Crect x='4' y='3' width='8' height='12' fill='%23dcb88c'/%3E%3Crect x='10' y='9' width='1' height='2' fill='%23ffd95a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/site.css">
+<link rel="stylesheet" href="../css/game.css">
+</head>
+<body class="game">
+<div id="stage" aria-label="Cecelia's room"></div>
+
+<div class="hud">
+  <a class="back" href="../">◂ cecelia yao</a>
+  <div class="count" id="count" aria-live="polite">0 / 11</div>
+  <div class="tools">
+    <button type="button" id="sound" aria-label="Sound on or off">♪</button>
+    <button type="button" id="night" aria-label="Day or night">☾</button>
+  </div>
+</div>
+<div class="bag" id="bag" aria-label="Objects found"></div>
+<div class="prompt" id="prompt" aria-hidden="true"></div>
+<div class="tip" id="tip" aria-hidden="true"></div>
+
+<div class="story frame" id="story" role="dialog" aria-labelledby="story-t" hidden>
+  <div class="portrait" id="story-p"></div>
+  <div>
+    <h3 id="story-t"></h3>
+    <div id="story-b"></div>
+    <div class="acts" id="story-a"></div>
+  </div>
+  <button class="x" type="button" aria-label="Close">×</button>
+</div>
+
+<div class="card" id="title">
+  <div class="frame in">
+    <p class="kicker">a tiny game</p>
+    <h1>My Room:<br>Objects I Carry</h1>
+    <p>This is my real room. Every object here is something I own, photographed and redrawn in pixels. Walk around and find out who lives here.</p>
+    <ul class="keys">
+      <li><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> or <kbd>WASD</kbd> walk</li>
+      <li><kbd>E</kbd> or <kbd>Space</kbd> look</li>
+      <li>or just click where to go</li>
+    </ul>
+    <button class="btn" type="button" id="start">Start ▸</button>
+  </div>
+</div>
+
+<div class="card" id="end" hidden>
+  <div class="frame in">
+    <p class="kicker">all found</p>
+    <h1>Objects I carry</h1>
+    <div class="carry" id="carry"></div>
+    <p>A trail, a bar cart, two scents, a few plants and a desk where the work happens. Thanks for coming in.</p>
+    <p class="row"><a class="btn" href="../#work">See my work ▸</a><button class="btn ghost" type="button" id="stay">Stay a while</button></p>
+  </div>
+</div>
+
+<script src="../js/room-engine.js" data-root="../"></script>
+<script src="../js/content.js"></script>
+<script src="../js/covers.js"></script>
+<script src="../js/game.js"></script>
+</body>
+</html>
