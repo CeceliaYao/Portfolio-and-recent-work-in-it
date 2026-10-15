@@ -1,7 +1,7 @@
 (function () {
 'use strict';
 const { Room, Walker, canvas, R, dither, ellipse, line, outline, spriteGirl } = window.PixelRoom;
-const { PROFILE, STORIES, WORKS, SKILLS } = window.SITE;
+const { PROFILE, STORIES, WORKS, SKILLS, PHOTOS } = window.SITE;
 const { drawCover } = window.PixelCovers;
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -138,7 +138,7 @@ function showStory(o, st) {
 function closeStory() { story.hidden = true; room.focus = null; clearInterval(typer); }
 story.querySelector('.x').addEventListener('click', closeStory);
 story.addEventListener('click', e => { if (typer && !e.target.closest('button')) story._finish(); });
-addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#case').hidden) closeCase(); else if (!$('#os').hidden) closeOS(); else closeStory(); } });
+addEventListener('keydown', e => { if (e.key === 'Escape') { if (!$('#player').hidden) closePlayer(); else if (!$('#case').hidden) closeCase(); else if (!$('#os').hidden) closeOS(); else closeStory(); } });
 $('#stage').addEventListener('click', e => { if (!room.pick(...room.toArt(e.clientX, e.clientY))) closeStory(); });
 
 /* ======================= the desk computer ======================= */
@@ -146,7 +146,8 @@ const os = $('#os');
 const APPS = [
   { id: 'work', label: 'Work', c: '#ffb86b' },
   { id: 'about', label: 'About', c: '#ff8fc8' },
-  { id: 'play', label: 'Room game', c: '#8fe3a8' },
+  { id: 'arcade', label: 'Arcade', c: '#8fe3a8' },
+  { id: 'photos', label: 'Photos', c: '#ffd95a' },
   { id: 'contact', label: 'Contact', c: '#8fcfff' }
 ];
 let clockT;
@@ -188,8 +189,11 @@ function renderApp(id) {
     body.innerHTML = `<div class="about" style="grid-template-columns:160px 1fr"><div class="me frame" style="padding:14px"></div><div>${$('#about .about > div:last-child').innerHTML}</div></div>`;
     const c = spriteGirl(0, 0); const big = scaleUp(c, 6); big.style.width = '70%'; body.querySelector('.me').append(big);
     body.querySelectorAll('.kicker').forEach(k => k.remove());
-  } else if (id === 'play') {
-    body.innerHTML = `<h2 style="font-family:var(--display);font-size:40px;margin:0 0 12px">My Room: Objects I Carry</h2><p style="font-size:24px;max-width:28em">The room you are standing in, as a small game. Walk with the arrow keys or WASD, press E or click to look at things.</p><p><a class="btn" href="room/" target="_blank" rel="noopener">Open the game ▸</a></p>`;
+  } else if (id === 'arcade') {
+    body.innerHTML = '<div class="arcade"></div>';
+    $('#arcade').querySelectorAll('.cab').forEach(c => { const n = c.cloneNode(true); const src = c; n.querySelectorAll('canvas').forEach(cv => cv.replaceWith(drawCover('myRoom'))); n.onclick = e => { if (n.tagName === 'BUTTON') { e.preventDefault(); src.click(); } }; body.firstChild.append(n); });
+  } else if (id === 'photos') {
+    body.innerHTML = '<div class="photos" style="grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));overflow:visible">' + $('#photos').innerHTML + '</div>';
   } else {
     body.innerHTML = `<h2 style="font-family:var(--display);font-size:52px;margin:0 0 24px">Say hello.</h2><div class="links" style="display:flex;gap:18px;flex-wrap:wrap">${linksHTML()}</div>`;
   }
@@ -204,7 +208,7 @@ function scaleUp(src, k) { const [c, x] = canvas(src.width * k, src.height * k);
 const list = $('#works');
 WORKS.forEach((w, i) => {
   const li = document.createElement('li'); li.className = 'work';
-  li.innerHTML = `<button type="button"><span class="n">0${i + 1}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span></button>`;
+  li.innerHTML = `<button type="button"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span></button>`;
   const mc = coverEl(w); mc.classList.add('mcover'); li.querySelector('.s').after(mc);
   li.querySelector('button').addEventListener('click', () => openCase(i));
   li.addEventListener('pointerenter', () => showPeek(w));
@@ -234,18 +238,59 @@ function openCase(i) {
         ${w.credits ? `<dt>Team</dt><dd>${esc(w.credits).replace(/ · /g, '<br>')}</dd>` : ''}
       </dl>
       <div class="body">${w.body.map(p => `<p>${esc(p)}</p>`).join('')}
+        ${w.play ? `<div class="plays">${w.play.map((g, k) => `<button class="btn" type="button" data-play="${k}">Play ${esc(g.label)} here ▸</button>`).join('')}</div>` : ''}
         ${w.links.length ? `<p style="display:flex;gap:18px;flex-wrap:wrap;margin-top:30px">${w.links.map(l => `<a class="btn" href="${esc(l.href)}" ${/^http/.test(l.href) ? 'target="_blank" rel="noopener"' : ''}>${esc(l.label)} ▸</a>`).join('')}</p>` : ''}
       </div>
     </div>
+    ${w.gallery && w.gallery.length ? `<div class="gallery${w.tall ? ' tall' : ''}">${w.gallery.map(src => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="" loading="lazy"></a>`).join('')}</div>` : ''}
     <div class="nav2"><button class="btn ghost" type="button" data-go="${(i + WORKS.length - 1) % WORKS.length}">◂ ${esc(prev.title)}</button><button class="btn ghost" type="button" data-go="${(i + 1) % WORKS.length}">${esc(next.title)} ▸</button></div>
   </div>`;
   const cv = coverEl(w); cv.classList.add('cover'); caseEl.querySelector('.cv').append(cv);
   caseEl.hidden = false; caseEl.scrollTop = 0; document.body.style.overflow = 'hidden';
   caseEl.querySelector('.close').onclick = closeCase;
   caseEl.querySelectorAll('[data-go]').forEach(b => b.onclick = () => openCase(+b.dataset.go));
+  caseEl.querySelectorAll('[data-play]').forEach(b => b.onclick = () => openPlayer(w.play[+b.dataset.play]));
   caseEl.querySelector('.close').focus();
 }
 function closeCase() { caseEl.hidden = true; if (os.hidden) document.body.style.overflow = ''; lastFocus && lastFocus.focus && lastFocus.focus(); }
+
+/* ======================= in-page player ======================= */
+const player = $('#player');
+function openPlayer(g) {
+  player.querySelector('.ptitle').textContent = g.label;
+  player.querySelector('.phint').textContent = g.hint || '';
+  player.querySelector('.popen').href = g.href;
+  const box = player.querySelector('.pbox');
+  const [rw, rh] = (g.ratio || '16/9').split('/').map(Number);
+  box.style.aspectRatio = rw + '/' + rh;
+  box.style.width = `min(100%, calc((100svh - 130px) * ${rw / rh}))`;
+  box.innerHTML = `<iframe src="${esc(g.href)}" title="${esc(g.label)}" allow="autoplay; fullscreen" loading="eager"></iframe>`;
+  player.hidden = false; document.body.style.overflow = 'hidden';
+  setTimeout(() => box.querySelector('iframe').focus(), 300);
+}
+function closePlayer() { player.hidden = true; player.querySelector('.pbox').innerHTML = ''; if (caseEl.hidden && os.hidden) document.body.style.overflow = ''; }
+player.querySelector('.pclose').onclick = closePlayer;
+player.addEventListener('click', e => { if (e.target === player) closePlayer(); });
+
+const PLAYABLE = [];
+WORKS.forEach(w => (w.play || []).forEach(g => PLAYABLE.push({ g, w })));
+const ext = WORKS.find(w => w.id === 'next-chapter');
+const grid = $('#arcade');
+const cards = [{ g: { label: 'The Next Chapter', href: ext.links[0].href, external: true }, w: ext }].concat(PLAYABLE);
+const sketchImg = { Ribbon: 'assets/work/sketches/ribbon.jpg', Painting: 'assets/work/sketches/painting.jpg', Snake: 'assets/work/sketches/snake.jpg', 'Echo Corridor': 'assets/work/echo-corridor/play.jpg' };
+cards.forEach(({ g, w }) => {
+  const b = document.createElement(g.external ? 'a' : 'button');
+  b.className = 'cab';
+  if (g.external) { b.href = g.href; b.target = '_blank'; b.rel = 'noopener'; } else b.type = 'button';
+  const src = sketchImg[g.label] || w.image;
+  const scr = document.createElement('div'); scr.className = 'scr';
+  if (src) { const i = new Image(); i.src = src; i.alt = ''; i.loading = 'lazy'; scr.append(i); } else scr.append(drawCover(w.cover));
+  b.append(scr);
+  b.insertAdjacentHTML('beforeend', `<b>${esc(g.label)}</b><span>${esc(w.unit.split(' · ')[0])} · ${esc(w.year)}</span><i>${g.external ? 'open ↗' : 'insert coin ▸'}</i>`);
+  if (!g.external) b.onclick = () => g.href === 'room/' ? window.open(g.href, '_blank', 'noopener') : openPlayer(g);
+  grid.append(b);
+});
+$('#photos').innerHTML = PHOTOS.map(src => `<a href="${esc(src)}" target="_blank" rel="noopener"><img src="${esc(src)}" alt="" loading="lazy"></a>`).join('');
 
 /* ======================= about, contact ======================= */
 const me = $('#me'); const big = scaleUp(spriteGirl(0, 0), 1); me.getContext('2d').drawImage(big, 0, 0);

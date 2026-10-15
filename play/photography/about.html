@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Yao Photography Portfolio</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header with navigation - using semantic header tag for main site navigation -->
+    <header class="main-header">
+        <!-- Brand logo/name using div since h1 should only be used once per page -->
+        <div class="brand-logo">
+            <a href="index.html">Yao</a>
+        </div>
+        
+        <!-- Navigation menu using semantic nav tag -->
+        <nav class="main-nav" role="navigation" aria-label="Main navigation">
+            <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">
+                    <span class="nav-icon home-icon"></span>Home
+                </a></li>
+                <li><a href="about.html" class="nav-link active" aria-current="page">
+                    <span class="nav-icon about-icon"></span>About Me
+                </a></li>
+                <li><a href="work.html" class="nav-link">
+                    <span class="nav-icon work-icon"></span>Work
+                </a></li>
+                <li><a href="contact.html" class="nav-link">
+                    <span class="nav-icon contact-icon"></span>Contact
+                </a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main content area using semantic main tag -->
+    <main class="main-content">
+        <!-- Page header section -->
+        <section class="page-header" aria-labelledby="about-heading">
+            <div class="section-content">
+                <div class="about-header">
+                    <div class="section-accent"></div>
+                    <h1 id="about-heading">About Qinxi Yao</h1>
+                    <div class="section-accent"></div>
+                </div>
+                <p class="page-description">Interaction Designer & Visual Storyteller</p>
+            </div>
+        </section>
+
+        <!-- Introduction section -->
+        <section class="intro-section" aria-labelledby="intro-heading">
+            <div class="section-content">
+                <div class="intro-content">
+                    <h2 id="intro-heading" class="visually-hidden">Introduction</h2>
+                    <p class="intro-text">My name is <strong>Qinxi Yao!</strong></p>
+                    <p class="intro-description">An undergraduate in interaction and visual design with a passion for creating meaningful digital experiences through the lens of both technology and artistry.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education & Background section -->
+        <section class="education-section" aria-labelledby="education-heading">
+            <div class="section-content">
+                <div class="about-header">
+                    <div class="section-accent"></div>
+                    <h2 id="education-heading">Education & Background</h2>
+                    <div class="section-accent"></div>
+                </div>
+                <div class="education-content">
+                    <div class="education-item">
+                        <h3>Bachelor of Creative Industries (Interactive Design)</h3>
+                        <p class="institution">QUT, Brisbane, Australia</p>
+                        <p class="description">My studies focus on interaction design, combining user experience principles with creative problem-solving to craft meaningful digital experiences.</p>
+                    </div>
+                    
+                    <div class="background-story">
+                        <p>I was born and raised in southern China. When I was a child, I was always attracted to visual arts and photography.</p>
+                        
+                        <p>Since beginning my studies at QUT, I've developed a passion for interaction design, learning to think creatively about engaging digital interactions. I've come to realise that we must consider the user needs, aesthetics and technical feasibility to provide.</p>
+                        
+                        <p>As I am halfway through my learning journey, I'm excited to explore the possibilities and can't wait to start a career in the design industry!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills & Interests section -->
+        <section class="skills-section" aria-labelledby="skills-heading">
+            <div class="section-content">
+                <div class="about-header">
+                    <div class="section-accent"></div>
+                    <h2 id="skills-heading">Skills & Interests</h2>
+                    <div class="section-accent"></div>
+                </div>
+                <div class="skills-content">
+                    <div class="skills-grid">
+                        <div class="skill-category">
+                            <h3>Design</h3>
+                            <ul>
+                                <li>Interaction Design</li>
+                                <li>User Experience (UX)</li>
+                                <li>Visual Design</li>
+                                <li>Digital Experiences</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3>Creative Arts</h3>
+                            <ul>
+                                <li>Photography</li>
+                                <li>Visual Arts</li>
+                                <li>Gaming</li>
+                                <li>Creative Problem-Solving</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="interests-note">
+                        <p>I enjoy a range of interests, including design, visual arts, photography, and gaming, and I am eager to apply my skills to help anyone who needs them. For more information about my practice and how to reach me, see my portfolio and contact page.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact CTA section -->
+        <section class="cta-section">
+            <div class="section-content">
+                <h2>Let's Connect!</h2>
+                <p>Interested in my work, or need help on a project? Let me know!</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="cta-button">Get In Touch</a>
+                    <a href="work.html" class="cta-button secondary">View My Work</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer using semantic footer tag -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2025 Yao Photography. All rights reserved.</p>
+            <div class="footer-nav">
+                <a href="index.html">Home</a>
+                <a href="about.html">About Me</a>
+                <a href="work.html">Work</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
