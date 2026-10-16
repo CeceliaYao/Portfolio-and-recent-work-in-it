@@ -753,3 +753,5 @@ main{overflow-x:clip}
 #island{position:relative;inset:auto;width:100%;aspect-ratio:4/3}
 .island-panel{min-height:34px}
 @media (max-width:860px){#island{aspect-ratio:1/1}}
+/* round 13: the work thumbnails are cut to 16:9 around the key idea, so show them whole */
+.wc-cv{aspect-ratio:16/9}

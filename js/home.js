@@ -190,7 +190,7 @@ function renderApp(id) {
     const g = body.firstChild;
     WORKS.forEach((w, i) => {
       const b = document.createElement('button'); b.type = 'button'; b.className = 'os-card';
-      b.append(coverEl(w)); b.insertAdjacentHTML('beforeend', `<b>${esc(w.title)}</b><span>${esc(w.kind)} · ${esc(w.year)}</span>`);
+      b.append(coverEl(thumbOf(w))); b.insertAdjacentHTML('beforeend', `<b>${esc(w.title)}</b><span>${esc(w.kind)} · ${esc(w.year)}</span>`);
       b.onclick = () => openCase(i); g.append(b);
     });
   } else if (id === 'about') {
@@ -206,6 +206,8 @@ function renderApp(id) {
 }
 
 /* ======================= work list + case studies ======================= */
+// the work list shows a tighter crop on the strongest image; the case page keeps the full cover
+const thumbOf = w => w.thumb ? Object.assign({}, w, { image: w.thumb }) : w;
 function coverEl(w) {
   if (w.image) { const i = new Image(); i.src = w.image; i.alt = ''; i.style.objectFit = 'cover'; i.style.imageRendering = 'auto'; return i; }
   const c = drawCover(w.cover); return c;
@@ -226,7 +228,7 @@ WORKS.forEach((w, i) => {
       <div class="t-face"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m"><b>${esc(w.unit.split(' · ')[0])}</b>${esc(w.kind)} · ${esc(w.year)}</span><span class="pull">peel ⟶</span></div>
     </div>
     <div class="curl" aria-hidden="true"></div>`;
-  const cv = coverEl(w); li.querySelector('.u-cv').append(cv);
+  const cv = coverEl(thumbOf(w)); li.querySelector('.u-cv').append(cv);
   li.querySelector('.u-open').onclick = () => openCase(i);
   li.querySelector('.under').addEventListener('click', e => { if (li.classList.contains('peeled') && !e.target.closest('button')) openCase(i); });
   peelable(li);
@@ -294,7 +296,7 @@ WORKS.forEach((w, i) => {
   const c = document.createElement('button'); c.type = 'button'; c.className = 'wcard'; c.dataset.id = w.id;
   c.style.setProperty('--ac', w.accent || 'var(--gold)'); c.style.setProperty('--i', i);
   const scr = document.createElement('div'); scr.className = 'wc-cv';
-  if (w.image) { const pc = FX.pixelImage(w.image, { start: 12 }); scr.append(pc); FX.hoverResolve(c, pc, 12); if (!canHover) sharpenOnView(c, pc); } else scr.append(drawCover(w.cover));
+  if (w.image) { const pc = FX.pixelImage(w.thumb || w.image, { start: 12 }); scr.append(pc); FX.hoverResolve(c, pc, 12); if (!canHover) sharpenOnView(c, pc); } else scr.append(drawCover(w.cover));
   c.append(scr);
   c.insertAdjacentHTML('beforeend', `<span class="wc-n">${String(i + 1).padStart(2, '0')}</span><b>${esc(w.title)}</b><span class="wc-k">${esc(w.kind)} · ${esc(w.year)}</span><span class="sk">${chips(w)}</span><span class="wc-go">open ▸</span>`);
   c.onclick = () => openCase(i);
@@ -320,7 +322,7 @@ const peekCache = {};
 function showPeek(w) {
   peek.innerHTML = '';
   peek.style.setProperty('--ac', w.accent || 'var(--gold)');
-  const src = w.image;
+  const src = w.thumb || w.image;
   if (src) { const c = peekCache[w.id] || (peekCache[w.id] = FX.pixelImage(src, { start: 18 })); c.to(18); peek.append(c); requestAnimationFrame(() => { c.repaint(); c.to(1); }); }
   else peek.append(coverEl(w));
   peek.insertAdjacentHTML('beforeend', '<span class="badge">open ▸</span>');
