@@ -23,7 +23,7 @@ const PROFILE = {
 const STORIES = {
   computer: { title: 'My desk', lines: ['Everything I have made lives in here.'], open: 'os' },
   trail: { title: 'Hiking', photo: ['backpack', 'visor', 'poles'],
-    lines: ['I love hiking. My visor, my daypack and my trekking poles come on every walk.', 'A lot of my ideas show up somewhere on the trail.'] },
+    lines: ['I love hiking. My visor, my daypack and my trekking poles come on every walk.', 'It is one of the hobbies that gives me ideas.'] },
   beads: { title: 'Shrimp cocktail', photo: ['beads'],
     lines: ['I make some of my fridge magnets myself. This shrimp cocktail is fuse beads, placed one pixel at a time.', 'It comes from Rusty Lake, a game I love. It gave me so many ideas, and it is the game that made me really think about games as art.'] },
   jade: { title: 'Hongshan jade dragon', photo: ['jade'],
@@ -35,7 +35,7 @@ const STORIES = {
   scent: { title: 'Two scents', photo: ['perfume'],
     lines: ['松月茶馆, a teahouse of pine and moonlight, and Hermès Rose Ikebana.'] },
   play: { title: 'Games', photo: ['ps5'],
-    lines: ['Games are where I first learned that a room can tell a story without a single line of text.'] },
+    lines: ['Room games like Unpacking and Whisper of the House were some of my references for The Next Chapter.'] },
   plants: { title: 'Something green', photo: ['catpot', 'succulent'],
     lines: ['I bought these two because I like having something green to look at.'] },
   water: { title: 'Ten litres at a time', photo: ['water'],
@@ -53,20 +53,21 @@ const STORIES = {
 const WORKS = [
   {
     id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
-    skills: ['Creative coding', 'Web 3D', 'Pixel art', 'Interaction design'], accent: '#ffb46b',
+    skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#f1d9b5',
     role: 'Solo', kind: 'Interactive web & 3D study', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
-    summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study about upkeep and memory.',
+    summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study.',
     body: [
-      'Developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning. It carries on the keep-or-remove question from my first pitch, Shelf Life, and the upkeep theme of our exhibition game, The Next Chapter: what we look after, what we keep, and what we carry into the next room.',
-      'Here the room is mine. Every object is something I own and look after, redrawn by hand as pixel art; click one and the real thing appears, with the memory it holds. The same room floats at the top of this site as a small 3D island built in Three.js, extending my p5.js foundation into web 3D. I wanted a portfolio that feels like an explorable space rather than a static project grid, while the navigation stays clear.'
+      'Developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning. It is an interactive game based on my current room. The objects in the room reflect my real life, including my experiences, interests and things that are personally meaningful to me. Players can explore the room and interact with different objects to learn more about me. It connects to our A3 group project through the idea of meaningful objects.',
+      'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.',
+      'One of my two-year goals is to expand creative coding into interactive 3D web experiences. The first step was a small Three.js scene for What We Carry: the floating room on the homepage. It builds on my p5.js foundation and is documented as research and precedents, interaction flow, prototype, testing, iteration and final playable outcome.'
     ],
     tools: ['JavaScript', 'Three.js', 'Canvas', 'Pixel art'],
     links: [{ label: 'Play full screen', href: 'room/' }, { label: 'Instagram series', href: 'https://www.instagram.com/ceceliayao.design/' }]
   },
   {
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'DXB211 · Creative Coding', year: '2026',
-    skills: ['Game design', 'Enemy AI', 'Playtesting', 'p5.js'], accent: '#5fe0ff',
+    skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#cfe4ee',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/echo-corridor/p01.jpg',
     gallery: ['assets/work/echo-corridor/play.jpg', 'assets/work/echo-corridor/p02.jpg', 'assets/work/echo-corridor/p04.jpg', 'assets/work/echo-corridor/p05.jpg'],
     play: [{ label: 'Echo Corridor', href: 'play/echo-corridor/', ratio: '16/9', hint: 'Arrows or WASD to move. 1 pick up, 2 decoy, 3 mute.' }],
@@ -80,7 +81,7 @@ const WORKS = [
   },
   {
     id: 'next-chapter', title: 'The Next Chapter', unit: 'KKB385 · Creative Enterprise Studio 3', year: '2026',
-    skills: ['Lead coding', 'Teamwork', 'Interaction design', 'Exhibition'], accent: '#ff8fb1',
+    skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#f3d5dd',
     role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title.png', pixel: true,
     gallery: ['assets/work/next-chapter/title.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
     play: [
@@ -88,8 +89,9 @@ const WORKS = [
     ],
     summary: 'One room, from nursery to moving out: what we keep up, carry on, and leave behind.',
     body: [
-      'An interactive game display about upkeep: the slow, never-finished job of looking after a room, and the things in it, while you grow up. The visitor tends one bedroom across six chapters of a girl\'s life. Each chapter she unpacks, tidies and decides what to carry into the next one. Teddy comes along every time. Mess comes back, Mum nags, and the memory box only has room for so much.',
-      'My main contribution is coding and interaction design: translating a shared concept into playable interactions within a team. The first build here is fully pixel art, drawn at 320 × 180 and scaled up with no blur. The exhibition build that followed moved to an early-2000s desktop look.'
+      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The first build here is fully pixel art; the exhibition build that followed moved to an early-2000s desktop look.',
+      'Our team uses a studio-role model with collaborative co-authorship: I am main coder; Chloee Park leads design and supports coding; Isabella Kiosses leads documentation and film; Lyebin Cho leads film and photo. Decisions are discussed collectively, while role holders make specialist calls; as primary coder, I make final technical decisions.',
+      'I can claim the core interaction system, player input/state logic, asset integration, technical problem-solving and testing, while crediting teammates for visual and film contributions. The exhibition develops reliable interactive systems because it must run repeatedly on a public computer and withstand real visitor use.'
     ],
     tools: ['p5.js', 'JavaScript', 'Web Audio', 'Pixel art'],
     credits: 'Isabella Kiosses (film & didactic) · Lyebin Cho (film & photo) · Chloee Park (design) · Qinxi Yao (main coder)',
@@ -97,7 +99,7 @@ const WORKS = [
   },
   {
     id: 'astrobius', title: 'Astrobius', unit: 'DVB201 · Experimental Type Design', year: '2026',
-    skills: ['Type design', 'Editorial layout', '3D render', 'Print'], accent: '#b8c4d6',
+    skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#dfdde8',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/astrobius/p01.jpg', tall: true,
     gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
@@ -110,7 +112,7 @@ const WORKS = [
   },
   {
     id: 'hith-brick', title: 'HITH Brick', unit: 'DYB223 · Queensland Health', year: '2026',
-    skills: ['UX research', 'Clinical workflow', 'Figma', 'Accessibility'], accent: '#7cc36b',
+    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#d7e5cc',
     role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/hith-brick/p01.jpg',
     gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
@@ -123,16 +125,16 @@ const WORKS = [
   },
   {
     id: 'shopmirror', title: 'ShopMirror 2032', unit: 'DXB210 · Interaction Design', year: '2026',
-    skills: ['Speculative design', 'Ethical UX', 'Storyboarding', 'Figma'], accent: '#ff6478',
+    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#e6d5e6',
     role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/shopmirror/personas.jpg',
     gallery: ['modes', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
-    summary: 'One shopping app, built twice: once to pressure you, once to explain itself.',
-    quote: 'Consent and explanation must come before persuasion, not after commitment.',
+    summary: 'The recommendation that reveals what it knows about you.',
+    quote: 'Can personalisation still create revenue when explanation appears before persuasion, not after commitment?',
     body: [
-      'The brief came from my first assignment: purchase history and recommendations in shopping apps. ShopMirror is set in Brisbane in 2032. An AI recommends sleep products to Mia, a late-night shopper, from her purchase history, browsing rhythm and saved preferences. The question I cared about was not whether the AI should recommend, but when it should tell her why.',
-      'I drew twelve directions by hand, from a privacy nutrition label and a consent receipt to an opt-out maze and a data marketplace. I chose the one that puts both sides next to each other: a mode switch. Deceptive Mode hides the recommendation logic, adds urgency, shows fees late and makes privacy settings tiring. Ethical Mode shows a reason for every recommendation, a data-use card, editable permissions and the full price before payment. Same product, same task, different timing.',
-      'I gave the recommendation engine its own persona, RecSys-32, so I could design for it as a stakeholder that can either push conversion or support trust. A hand-drawn storyboard and eight Figma screens follow Mia through both versions.',
-      'What I learned is that dark patterns are rarely a single trick. Urgency, hidden fees, sharing defaults and opt-out friction work together as one system, so fixing one screen is not enough. The ethical version still has to keep the business going, through transparent membership or voluntary data exchange, rather than pretending money does not matter.'
+      'This concept continues my A1 challenge on purchase history and recommendations in shopping apps. ShopMirror 2032 is a speculative shopping app for late-night everyday purchases. It recommends products using purchase history, browsing rhythm and saved preferences.',
+      'I started with twelve hand-drawn directions comparing manipulative and privacy-centred possibilities. The main interaction became a mode switch: Deceptive Mode hides recommendation logic, delays fees and makes privacy control tiring; Ethical Mode shows why an item appears, what data is used, what is excluded and the full price before payment.',
+      'Mia and RecSys-32 operate as design constraints. Mia needs fast checkout, fair price and understandable data use. RecSys-32, the recommendation engine, can either optimise conversion or support trust. Eight hand-drawn storyboard frames and eight wireframes follow the same shopping task in both modes.',
+      'I learned that dark patterns are not single tricks. In ShopMirror, urgency, hidden fees, sharing defaults and opt-out friction work as one system. The ethical version gives users explanation and reversible control, while the business still earns through transparent membership or voluntary data exchange.'
     ],
     tools: ['Figma', 'Hand sketching', 'Storyboarding', 'Speculative design'],
     links: []
