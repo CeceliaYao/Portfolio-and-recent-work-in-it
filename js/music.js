@@ -5,7 +5,7 @@
 (function () {
 'use strict';
 
-const BPM = 116, BEAT = 60 / BPM, BAR = 4;
+const BPM = 108, BEAT = 60 / BPM, BAR = 4;
 const CH = {
   G: [43, [67, 71, 74]], Em: [40, [67, 71, 76]], C: [48, [67, 72, 76]], D: [50, [66, 69, 74]], Bm: [47, [66, 71, 74]]
 };
