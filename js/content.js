@@ -53,7 +53,7 @@ const STORIES = {
 const WORKS = [
   {
     id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
-    skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#f8dd8c',
+    skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#fde69b',
     role: 'Solo', kind: 'Interactive web & 3D study', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
     summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study.',
@@ -67,7 +67,7 @@ const WORKS = [
   },
   {
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'DXB211 · Creative Coding', year: '2026',
-    skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#a3d2ea',
+    skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#b7dce8',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/echo-corridor/p01.jpg',
     gallery: ['assets/work/echo-corridor/play.jpg', 'assets/work/echo-corridor/p02.jpg', 'assets/work/echo-corridor/p04.jpg', 'assets/work/echo-corridor/p05.jpg'],
     play: [{ label: 'Echo Corridor', href: 'play/echo-corridor/', ratio: '16/9', hint: 'Arrows or WASD to move. 1 pick up, 2 decoy, 3 mute.' }],
@@ -81,7 +81,7 @@ const WORKS = [
   },
   {
     id: 'next-chapter', title: 'The Next Chapter', unit: 'KKB385 · Creative Enterprise Studio 3', year: '2026',
-    skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#f6b6c8',
+    skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#fdbdcb',
     role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title.png', pixel: true,
     gallery: ['assets/work/next-chapter/title.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
     play: [
@@ -99,7 +99,7 @@ const WORKS = [
   },
   {
     id: 'astrobius', title: 'Astrobius', unit: 'DVB201 · Experimental Type Design', year: '2026',
-    skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#c4bbe4',
+    skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#cdbbe2',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/astrobius/p01.jpg', tall: true,
     gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
@@ -112,7 +112,7 @@ const WORKS = [
   },
   {
     id: 'hith-brick', title: 'HITH Brick', unit: 'DYB223 · Queensland Health', year: '2026',
-    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#b4d69c',
+    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#aed19b',
     role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/hith-brick/p01.jpg',
     gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
@@ -125,7 +125,7 @@ const WORKS = [
   },
   {
     id: 'shopmirror', title: 'ShopMirror 2032', unit: 'DXB210 · Interaction Design', year: '2026',
-    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#f8c391',
+    skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#fdd2a4',
     role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/shopmirror/personas.jpg',
     gallery: ['modes', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
     summary: 'The recommendation that reveals what it knows about you.',

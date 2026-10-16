@@ -308,10 +308,11 @@ function setView(v) {
   list.hidden = v === 'cards'; deck.hidden = v !== 'cards';
   views.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
   if (v === 'cards') deck.querySelectorAll('.wcard').forEach(c => { c.classList.remove('deal'); void c.offsetWidth; c.classList.add('deal'); });
-  try { localStorage.setItem('view', v); } catch (e) {}
+  try { sessionStorage.setItem('view', v); } catch (e) {}
 }
 views.addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) { coin(); setView(b.dataset.view); } });
-let v0 = 'list'; try { v0 = localStorage.getItem('view') || 'list'; } catch (e) {}
+// always open on the tape; the choice is remembered only for this visit
+let v0 = 'list'; try { v0 = sessionStorage.getItem('view') || 'list'; } catch (e) {}
 setView(v0);
 
 const peek = $('#peek');

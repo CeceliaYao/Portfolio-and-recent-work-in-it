@@ -2,7 +2,7 @@
 
 Personal site of Qinxi (Cecelia) Yao, interactive and visual designer, Brisbane.
 
-The page opens with a short introduction, then steps into my room. You open the door, walk in, and everything you can click is a real object I own, redrawn by hand as pixel art; click it and the real thing appears. The desk computer opens my work and the posters on the wall are projects. In Selected work each project is held down with a strip of washi tape in the room's colours: drag it sideways to peel it off. Further down, the same room floats as a small 3D island (What We Carry).
+The page opens with a short introduction, then steps into my room. You open the door, walk in, and everything you can click is a real object I own, redrawn by hand as pixel art; click it and the real thing appears. The desk computer opens my work and the posters on the wall are projects. In Selected work each project is held down with a strip of pixel tape in the site's own colours: drag it sideways to peel it off. Further down, the same room floats as a small 3D island (What We Carry).
 
 - `index.html`: the homepage (intro, room, work, What We Carry in 3D, arcade, contact)
 - `room/`: **My Room**, the same room as a small click-around game
