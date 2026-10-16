@@ -703,3 +703,5 @@ main{overflow-x:clip}
 .island-ui .lbl{font-size:13px;padding:0 4px;white-space:nowrap}
 @media (max-width:640px){.island-ui .lbl{display:none}.island-ui button{width:34px;height:30px}}
 @media (max-width:640px){.island-ui .sep{display:none}}
+/* the 3D room takes every touch gesture: drag to orbit, pinch to zoom */
+#island,#island .island-cv{touch-action:none}
