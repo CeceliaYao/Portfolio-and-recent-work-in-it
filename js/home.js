@@ -453,7 +453,9 @@ window.mountIsland = create => {
       },
       onSelect: tag => { const o = room.find(tag); if (o) { coin(); tip.classList.remove('on'); act(o); } }
     }); } catch (e) { wrap.querySelector('.island-fallback').hidden = false; host.remove(); return; }
-    wrap.querySelectorAll('[data-turn]').forEach(b => b.onclick = () => island.rotate(+b.dataset.turn * .4));
+    wrap.querySelectorAll('[data-orbit]').forEach(b => b.onclick = () => { const [t, p] = b.dataset.orbit.split(',').map(Number); island.orbit(t, p); });
+    wrap.querySelectorAll('[data-zoom]').forEach(b => b.onclick = () => island.zoom(+b.dataset.zoom));
+    wrap.querySelector('[data-reset]').onclick = () => island.reset();
   };
   // build it only when it is about to be seen
   new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '300px' }).observe(host);

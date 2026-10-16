@@ -698,3 +698,8 @@ main{overflow-x:clip}
 @media (max-width:760px){.t-face .n{min-width:44px;font-size:17px;margin:14px 0 12px}.t-face .t{font-size:clamp(26px,8vw,40px)}}
 .tapework .under{box-shadow:0 0 0 4px var(--ink),8px 8px 0 4px rgba(42,31,26,.14)}
 @media (max-width:760px){.tapework:nth-child(n) .t-face{grid-template-columns:auto 1fr}.t-face .m{display:none}.t-face .t{white-space:normal;line-height:1}}
+.island-ui{gap:6px;flex-wrap:wrap;justify-content:center;max-width:calc(100% - 16px)}
+.island-ui .sep{width:2px;height:20px;background:var(--ink);opacity:.25;margin:0 2px}
+.island-ui .lbl{font-size:13px;padding:0 4px;white-space:nowrap}
+@media (max-width:640px){.island-ui .lbl{display:none}.island-ui button{width:34px;height:30px}}
+@media (max-width:640px){.island-ui .sep{display:none}}

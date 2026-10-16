@@ -24,7 +24,16 @@ export function createIsland(host, opts) {
 
   /* ---------- camera: orthographic, three-quarter view ---------- */
   const cam = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 400);
-  cam.position.set(46, 38, 46); cam.lookAt(0, 1.5, 0);
+  // the camera orbits a target: theta goes all the way round, phi tilts from overhead to below the island
+  const target = new THREE.Vector3(0, 1.5, 0), DIST = 75;
+  const HOME = { theta: Math.PI / 4 - .2, phi: 1.02, zoom: 1 };
+  const PHI_MIN = .12, PHI_MAX = 2.2;
+  let theta = HOME.theta, phi = HOME.phi, vT = 0, vP = 0;
+  function placeCamera() {
+    cam.position.set(target.x + DIST * Math.sin(phi) * Math.sin(theta), target.y + DIST * Math.cos(phi), target.z + DIST * Math.sin(phi) * Math.cos(theta));
+    cam.up.set(0, 1, 0); cam.lookAt(target);
+  }
+  placeCamera();
 
   /* ---------- lights ---------- */
   const hemi = new THREE.HemisphereLight('#cfe9ff', '#e6cfa8', 1.05); scene.add(hemi);
@@ -51,6 +60,10 @@ export function createIsland(host, opts) {
     if (tag) { m.userData.tag = tag; m.userData.em = new THREE.Color(em || '#000000'); pickables.push(m); }
     island.add(m); return m;
   }
+
+  // walls get their own materials so a wall between the camera and the room can fade away (cutaway view)
+  const wallMats = { back: new THREE.MeshLambertMaterial({ color: COL.wall, transparent: true }), left: new THREE.MeshLambertMaterial({ color: COL.wall, transparent: true }) };
+  function Wall(side, x, y, z, w, h, d) { const m = B(x, y, z, w, h, d, COL.wall); m.material = wallMats[side]; return m; }
 
   /* ---------- the floating island: instanced voxel columns ---------- */
   const R = 13.2, cells = [];
@@ -80,14 +93,14 @@ export function createIsland(host, opts) {
   B(-9, -1, -9, 17, 1, 17, COL.carpet);                         // floor
   B(-3, 0, 0, 8, .15, 4, COL.pink);                            // rug
   // back wall with a window
-  B(-9, 0, -9, 11, 11, 1, COL.wall); B(7, 0, -9, 2, 11, 1, COL.wall);
-  B(2, 0, -9, 5, 4, 1, COL.wall); B(2, 9, -9, 5, 2, 1, COL.wall);
+  Wall('back', -9, 0, -9, 11, 11, 1); Wall('back', 7, 0, -9, 2, 11, 1);
+  Wall('back', 2, 0, -9, 5, 4, 1); Wall('back', 2, 9, -9, 5, 2, 1);
   const glass = B(2, 4, -8.8, 5, 5, .2, '#a8d6f0', 'window', '#3a6a88');
   B(1.6, 3.7, -8.3, 5.8, .35, .9, COL.white);                  // sill
   B(4.4, 4, -8.7, .2, 5, .2, COL.white); B(2, 6.4, -8.7, 5, .2, .2, COL.white);
   B(.9, 3, -8.2, .7, 8, .5, COL.plum); B(7.4, 3, -8.2, .5, 8, .4, '#fbf7ef');   // curtains
   // left wall with a door
-  B(-9, 0, -8, 1, 11, 13.5, COL.wall); B(-9, 6.5, 5.5, 1, 4.5, 2.5, COL.wall); B(-9, 0, 8, 1, 11, 1, COL.wall);
+  Wall('left', -9, 0, -8, 1, 11, 13.5); Wall('left', -9, 6.5, 5.5, 1, 4.5, 2.5); Wall('left', -9, 0, 8, 1, 11, 1);
   B(-8.9, 0, 5.5, .2, 6.5, 2.5, '#6f6253', 'door');
   B(-8.2, 0, 5.2, .3, 6.8, .3, COL.white); B(-8.2, 0, 7.9, .3, 6.8, .3, COL.white); B(-8.2, 6.5, 5.2, .3, .3, 3, COL.white);
   // skirting
@@ -202,8 +215,7 @@ export function createIsland(host, opts) {
 
   /* ---------- interaction: drag to turn, hover, click ---------- */
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  const MIN = -0.8, MAX = 0.7, HOME = -0.2;
-  let rotY = HOME, vel = 0, dragging = false, startX = 0, lastX = 0, moved = 0, hoverTag = null, idle = 0, mx = 0, my = 0;
+  let dragging = false, lastX = 0, lastY = 0, moved = 0, hoverTag = null, idle = 0, touch = false, goHome = false;
   function pick(e) {
     const r = cv.getBoundingClientRect();
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
@@ -219,12 +231,19 @@ export function createIsland(host, opts) {
     opts.onHover(tag, e && e.clientX, e && e.clientY);
     request();
   }
-  cv.addEventListener('pointerdown', e => { dragging = true; startX = lastX = e.clientX; moved = 0; vel = 0; idle = 0; cv.setPointerCapture(e.pointerId); });
+  // any drag takes over at once: inertia, auto-orbit and the trip home all stop
+  cv.addEventListener('pointerdown', e => { dragging = true; goHome = false; touch = e.pointerType === 'touch'; lastX = e.clientX; lastY = e.clientY; moved = 0; vT = vP = 0; idle = 0; cv.setPointerCapture(e.pointerId); });
   cv.addEventListener('pointermove', e => {
-    mx = e.clientX; my = e.clientY;
-    if (dragging) { const dx = e.clientX - lastX; lastX = e.clientX; moved += Math.abs(dx); const out = rotY < MIN || rotY > MAX; rotY += dx * .008 * (out ? .3 : 1); vel = dx * .008; if (moved > 6) setHover(null); request(); return; }
+    if (dragging) {
+      const dx = e.clientX - lastX, dy = e.clientY - lastY; lastX = e.clientX; lastY = e.clientY; moved += Math.abs(dx) + Math.abs(dy);
+      vT = -dx * .009; theta += vT;
+      // on a touch screen vertical swipes scroll the page; the arrows tilt instead
+      if (!touch) { vP = -dy * .007; phi = Math.max(PHI_MIN, Math.min(PHI_MAX, phi + vP)); }
+      if (moved > 6) setHover(null); request(); return;
+    }
     setHover(pick(e), e);
   });
+  cv.addEventListener('dblclick', () => { goHome = true; idle = 0; request(); });
   cv.addEventListener('pointerup', e => {
     dragging = false;
     if (moved < 6) { const t = pick(e); if (t) { pop(t); opts.onSelect(t); } }
@@ -241,12 +260,19 @@ export function createIsland(host, opts) {
     raf = 0;
     const dt = Math.min(50, now - last) / 1000; last = now;
     if (!dragging) {
-      rotY += vel; vel *= .9; idle += dt;
-      // the room is open on two sides only, so it swings rather than spins
-      if (rotY > MAX) rotY += (MAX - rotY) * .15; if (rotY < MIN) rotY += (MIN - rotY) * .15;
-      if (!reduced && idle > 3) rotY += (HOME + Math.sin(now / 4200) * .45 - rotY) * Math.min(1, dt * .8);
+      theta += vT; phi = Math.max(PHI_MIN, Math.min(PHI_MAX, phi + vP)); vT *= .92; vP *= .88; idle += dt;
+      if (goHome) {
+        // take the short way round back to the home view
+        const dT = Math.atan2(Math.sin(HOME.theta - theta), Math.cos(HOME.theta - theta));
+        theta += dT * Math.min(1, dt * 5); phi += (HOME.phi - phi) * Math.min(1, dt * 5); cam.zoom += (HOME.zoom - cam.zoom) * Math.min(1, dt * 5); cam.updateProjectionMatrix();
+        if (Math.abs(dT) < .002 && Math.abs(HOME.phi - phi) < .002) goHome = false;
+      } else if (!reduced && idle > 4) theta += dt * .12;   // a slow orbit while nobody is touching it
     }
-    world.rotation.y = rotY;
+    placeCamera();
+    // cutaway: a wall between the camera and the room fades to glass
+    const fade = (m, outside) => { const to = outside ? .12 : 1; m.opacity += (to - m.opacity) * Math.min(1, dt * 8); m.depthWrite = m.opacity > .9; };
+    const cx = cam.position.x - target.x, cz = cam.position.z - target.z;
+    fade(wallMats.back, cz < -2); fade(wallMats.left, cx < -2);
     island.position.y = reduced ? 0 : Math.sin(now / 1400) * .35;
     clouds.forEach(c => { const u = c.userData; u.a += dt * u.s * (reduced ? 0 : 1); c.position.set(Math.cos(u.a) * u.r, u.y, Math.sin(u.a) * u.r); c.rotation.y = -u.a; });
     if (night) bulbs.forEach((b, i) => b.material.emissive.set(Math.sin(now / 700 + i * 1.7) > -.5 ? bulbCols[i % 4] : '#000000'));
@@ -254,10 +280,16 @@ export function createIsland(host, opts) {
     screen.material.emissive.set(night ? '#4f8fe0' : '#2c5aa0');
     for (let i = hops.length - 1; i >= 0; i--) { const h = hops[i]; h.t += dt; h.m.position.y = h.y + Math.sin(Math.min(1, h.t / .35) * Math.PI) * .8; if (h.t > .35) { h.m.position.y = h.y; hops.splice(i, 1); } }
     renderer.render(scene, cam);
-    if (visible && (!reduced || dragging || hops.length || Math.abs(vel) > .0005)) raf = requestAnimationFrame(frame);
+    if (visible && (!reduced || dragging || goHome || hops.length || Math.abs(vT) + Math.abs(vP) > .0005)) raf = requestAnimationFrame(frame);
   }
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) request(); }).observe(host);
   size(); setNight(!!opts.night);
 
-  return { setNight, rotate: (a) => { idle = 0; rotY = Math.max(MIN, Math.min(MAX, rotY + a)); request(); } };
+  return {
+    setNight,
+    // buttons: turn round, tilt up or down, zoom, and go back to the home view
+    orbit: (dT, dP) => { idle = 0; goHome = false; vT = dT * .08; vP = dP * .08; request(); },
+    zoom: k => { idle = 0; cam.zoom = Math.max(.7, Math.min(2.2, cam.zoom * k)); cam.updateProjectionMatrix(); request(); },
+    reset: () => { goHome = true; idle = 0; request(); }
+  };
 }

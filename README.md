@@ -34,7 +34,7 @@ No build step. Plain HTML, CSS and JavaScript; open `index.html` through any sta
 - Day or night follows the time in Brisbane. The window and the moon/sun button switch it.
 - Every object is drawn by hand as a small pixel grid in `js/pixel-art.js`; the real photos, cut out, are in `assets/cutouts/`.
 - At night, darkness is laid over the room and light is cut out of it (desk lamp, screen, fairy lights, moon), so the pixels stay crisp inside the light.
-- The 3D island is built from boxes in Three.js, rendered at a third of the screen resolution and scaled up without smoothing, so it reads as pixel art. It swings rather than spins because the room is open on two sides.
+- The 3D island is built from boxes in Three.js, rendered at a third of the screen resolution and scaled up without smoothing, so it reads as pixel art. You can orbit it all the way round and tilt from overhead to underneath; whichever wall comes between you and the room fades to glass, like a dollhouse cutaway.
 - The background music, Late Desk, is a slow downtempo piece in A minor written for this site (`js/music.js`): warm synth chords, a deep round bass, a sparse plucked melody with a soft echo and a quiet half-time beat. Everything is played live by the browser with Web Audio. No recordings or samples, so there are no rights to clear. It only starts when the music button is pressed.
 - Fonts: Pixelify Sans, VT323 and DotGothic16 (Google Fonts, SIL OFL), and Astrobius, my own typeface, on the Astrobius page. p5.js is bundled in `play/lib/` (LGPL-2.1); Three.js in `lib/` (MIT).
 
