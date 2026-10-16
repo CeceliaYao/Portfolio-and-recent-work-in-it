@@ -247,7 +247,7 @@ function peelable(li) {
   };
   const settle = to => {
     cancelAnimationFrame(raf);
-    const x0 = x, t0 = performance.now(), dur = to > x0 ? 380 : 320;
+    const x0 = x, t0 = performance.now(), dur = to > x0 ? 520 : 440;
     const go = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); draw(x0 + (to - x0) * e); if (k < 1) raf = requestAnimationFrame(go); else done(to); };
     if (reduced) { draw(to); done(to); } else raf = requestAnimationFrame(go);
   };
