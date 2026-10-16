@@ -213,16 +213,78 @@ function coverEl(w) {
 function scaleUp(src, k) { const [c, x] = canvas(src.width * k, src.height * k); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0, c.width, c.height); return c; }
 const list = $('#works');
 const chips = w => (w.skills || []).map(k => `<i>${esc(k)}</i>`).join('');
+/* Each project sits under a strip of washi tape. Drag the tape sideways to peel it off. */
 WORKS.forEach((w, i) => {
-  const li = document.createElement('li'); li.className = 'work'; li.dataset.id = w.id; li.dataset.reveal = '';
+  const li = document.createElement('li'); li.className = 'work tapework'; li.dataset.id = w.id; li.dataset.reveal = '';
   li.style.setProperty('--ac', w.accent || 'var(--gold)'); li.style.setProperty('--i', i);
-  li.innerHTML = `<button type="button"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span><span class="sk">${chips(w)}</span></button>`;
-  const mc = coverEl(w); mc.classList.add('mcover'); li.querySelector('.s').after(mc);
-  li.querySelector('button').addEventListener('click', () => openCase(i));
-  li.addEventListener('pointerenter', () => { showPeek(w); FX.scramble(li.querySelector('.t')); tick(); });
-  li.addEventListener('pointerleave', () => peek.classList.remove('on'));
+  li.innerHTML = `<div class="under">
+      <div class="u-cv"></div>
+      <div class="u-tx"><span class="n">${String(i + 1).padStart(2, '0')}</span><b>${esc(w.title)}</b><span class="s">${esc(w.summary)}</span><span class="sk">${chips(w)}</span></div>
+      <button type="button" class="btn u-open">Open ▸</button>
+    </div>
+    <div class="tape" tabindex="0" role="button" aria-label="Peel the tape off ${esc(w.title)}">
+      <div class="t-face"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)} · ${esc(w.year)}</span><span class="pull">⟵ peel</span></div>
+    </div>
+    <div class="curl" aria-hidden="true"></div>`;
+  const cv = coverEl(w); li.querySelector('.u-cv').append(cv);
+  li.querySelector('.u-open').onclick = () => openCase(i);
+  li.querySelector('.under').addEventListener('click', e => { if (li.classList.contains('peeled') && !e.target.closest('button')) openCase(i); });
+  peelable(li);
   list.append(li);
 });
+function peelable(li) {
+  const tape = li.querySelector('.tape'), curl = li.querySelector('.curl');
+  let x = 0, start = 0, from = 0, down = false, raf = 0, moved = 0, lastSnd = 0;
+  const W = () => li.clientWidth;
+  // the tape is cut away left of the peel line; the peeled part folds back over it as the curl
+  const draw = v => {
+    x = Math.max(0, Math.min(W(), v));
+    const fold = Math.min(x * .55, 160);
+    tape.style.clipPath = `inset(0 0 0 ${x}px)`;
+    curl.style.left = x + 'px'; curl.style.width = fold + 'px';
+    curl.style.opacity = x > 2 && x < W() - 2 ? 1 : 0;
+    li.style.setProperty('--peel', (x / W()).toFixed(3));
+  };
+  const settle = to => {
+    cancelAnimationFrame(raf);
+    const x0 = x, t0 = performance.now(), dur = to > x0 ? 380 : 320;
+    const go = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); draw(x0 + (to - x0) * e); if (k < 1) raf = requestAnimationFrame(go); else done(to); };
+    if (reduced) { draw(to); done(to); } else raf = requestAnimationFrame(go);
+  };
+  const done = to => {
+    const off = to >= W();
+    li.classList.toggle('peeled', off);
+    tape.setAttribute('aria-hidden', String(off)); tape.tabIndex = off ? -1 : 0;
+    if (off) { tape.style.visibility = 'hidden'; curl.style.opacity = 0; li.querySelector('.u-open').focus({ preventScroll: true }); }
+  };
+  const peelOff = () => { rip(.6); settle(W()); };
+  tape.addEventListener('pointerdown', e => { down = true; moved = 0; start = e.clientX; from = x; cancelAnimationFrame(raf); tape.setPointerCapture(e.pointerId); li.classList.add('grab'); });
+  tape.addEventListener('pointermove', e => {
+    if (!down) { if (!x) li.classList.add('lift'); return; }
+    const dx = e.clientX - start; moved = Math.max(moved, Math.abs(dx));
+    // pulled from either end, the tape comes away from the left
+    draw(from + Math.abs(dx));
+    const now = performance.now(); if (now - lastSnd > 70 && moved > 6) { lastSnd = now; rip(.25); }
+  });
+  const up = () => {
+    if (!down) return; down = false; li.classList.remove('grab');
+    if (moved < 6) return peelOff();            // a click peels it too
+    if (x > W() * .45) peelOff(); else settle(0);
+  };
+  tape.addEventListener('pointerup', up); tape.addEventListener('pointercancel', up);
+  tape.addEventListener('pointerleave', () => li.classList.remove('lift'));
+  tape.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); peelOff(); } });
+  li.restick = () => { tape.style.visibility = ''; li.classList.remove('peeled'); tape.tabIndex = 0; tape.removeAttribute('aria-hidden'); settle(0); };
+  draw(0);
+  addEventListener('resize', () => { if (li.classList.contains('peeled')) draw(W()); });
+}
+// stick everything back down
+$('#restick').onclick = () => { document.querySelectorAll('.tapework').forEach((li, k) => setTimeout(() => li.restick(), k * 80)); coin(); };
+// a dry little rip, only while sound is on
+function rip(len) {
+  if (!window.Music || !window.Music.on) return;
+  window.Music.rip(len);
+}
 // on touch screens there is no hover, so pictures sharpen as they scroll into view
 const canHover = matchMedia('(hover:hover)').matches;
 function sharpenOnView(el, pc) { new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(() => pc.to(1), 250); } }, { threshold: .5 }).observe(el); }

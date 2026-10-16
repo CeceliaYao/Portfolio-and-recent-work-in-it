@@ -501,3 +501,71 @@ main section,footer{scroll-margin-top:66px}
 .deck,.works{max-width:100%}
 main{overflow-x:clip}
 .music[aria-pressed="false"] .eq{display:none}.music[aria-pressed="false"]::before{content:"♪";font-size:18px;line-height:1}
+
+/* ---------- round 6: peel-off tape ---------- */
+.works{border-top:0}
+.tapework{border:0;margin:0 0 30px;overflow:visible;position:relative}
+.tapework::before{display:none}
+.tapework .under{position:relative;display:grid;grid-template-columns:minmax(160px,30%) 1fr auto;gap:clamp(16px,3vw,34px);align-items:center;padding:16px;min-height:clamp(150px,15vw,190px);
+  background:var(--cream) radial-gradient(rgba(42,31,26,.08) 1px,transparent 1.5px) 0 0/8px 8px;box-shadow:0 0 0 4px var(--ink),8px 8px 0 4px var(--ac)}
+.tapework.peeled .under{cursor:pointer}
+.u-cv{aspect-ratio:16/9;overflow:hidden;box-shadow:0 0 0 3px var(--ink);background:#000}
+.u-cv img,.u-cv canvas{width:100%;height:100%;object-fit:cover;display:block}
+.u-tx{display:flex;flex-direction:column;gap:6px;min-width:0}
+.u-tx .n{font-family:var(--display);font-size:15px;color:var(--ink2)}
+.u-tx b{font-family:var(--display);font-size:clamp(26px,3vw,40px);line-height:1}
+.u-tx .s{font-size:21px;color:var(--ink2);max-width:34em}
+.tapework.peeled .u-cv{animation:popin .4s steps(5)}
+.tape{position:absolute;inset:-8px -14px;z-index:2;cursor:grab;touch-action:pan-y;filter:drop-shadow(0 3px 0 rgba(42,31,26,.25))}
+.tapework:nth-child(odd) .tape{transform:rotate(-.6deg)}
+.tapework:nth-child(even) .tape{transform:rotate(.5deg)}
+.grab .tape{cursor:grabbing}
+.t-face{position:absolute;inset:0;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(14px,3vw,30px);padding:0 clamp(26px,4vw,48px);
+  background:
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.22) 0 10px,transparent 10px 20px),
+    linear-gradient(rgba(255,255,255,.18),transparent 30% 70%,rgba(0,0,0,.06)),
+    var(--ac);
+  clip-path:polygon(0 0,2% 8%,0 16%,2% 25%,0 33%,2% 42%,0 50%,2% 58%,0 66%,2% 75%,0 83%,2% 92%,0 100%,100% 100%,98% 92%,100% 83%,98% 75%,100% 66%,98% 58%,100% 50%,98% 42%,100% 33%,98% 25%,100% 16%,98% 8%,100% 0)}
+.t-face .n{font-family:var(--display);font-size:18px;opacity:.8}
+.t-face .t{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,84px);line-height:.95;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-face .m{font-size:20px;text-align:right;line-height:1.1}
+.t-face .pull{position:absolute;right:clamp(30px,5vw,60px);bottom:8px;font-family:var(--display);font-size:14px;letter-spacing:.06em;opacity:.75;animation:nudge 1.6s steps(4) infinite}
+@keyframes nudge{50%{transform:translateX(-8px)}}
+.t-face .m{padding-right:0}
+/* the corner lifts a little when you hover, to say it can be peeled */
+.tape::after{content:"";position:absolute;left:-2px;top:-2px;width:0;height:0;border-style:solid;border-width:0 0 0 0;border-color:transparent transparent rgba(255,255,255,.75) transparent;transition:border-width .15s steps(3);filter:drop-shadow(2px 2px 0 rgba(42,31,26,.25))}
+.tapework.lift .tape::after,.tape:focus-visible::after{border-width:0 0 26px 26px}
+.curl{position:absolute;top:-8px;bottom:-8px;z-index:3;pointer-events:none;opacity:0;
+  background:
+    linear-gradient(to right,rgba(42,31,26,.28),rgba(255,255,255,.0) 22%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.35) 0 10px,transparent 10px 20px),
+    color-mix(in srgb,var(--ac) 45%,#fff);
+  border-radius:0 40% 40% 0/0 50% 50% 0;
+  box-shadow:8px 6px 0 rgba(42,31,26,.2);
+  transform:rotate(calc(var(--peel,0) * -3deg)) skewY(-1deg);transform-origin:0 50%}
+.peelhint{font-size:20px;color:var(--ink2);margin:-6px 0 18px}
+.restick{font-family:var(--display);font-size:15px;padding:6px 10px 8px;background:var(--cream);box-shadow:0 0 0 3px var(--ink);margin-left:auto;margin-right:12px}
+.restick + .views{margin-left:0}
+.work.tapework.dim{opacity:.25}
+@media (max-width:760px){
+  .tapework .under{grid-template-columns:96px 1fr;gap:12px;padding:12px}
+  .tapework .u-open{grid-column:1/3;justify-self:start}
+  .u-tx b{font-size:24px}
+  .u-tx .s{font-size:18px}
+  .u-tx .sk{display:none}
+  .t-face{grid-template-columns:auto 1fr;padding:0 22px}
+  .t-face .m{display:none}
+  .t-face .t{font-size:clamp(28px,9vw,44px);white-space:normal}
+  .tape{inset:-6px -8px}
+}
+
+.tapework .u-open{width:auto;display:inline-flex;grid-template-columns:none;padding:10px 18px 12px;align-items:center}
+.tapework .t-face .m{color:var(--ink)}
+.tapework .t-face .n{color:var(--ink)}
+.tapework .under{grid-template-columns:minmax(150px,22%) 1fr auto;min-height:0;padding:14px}
+.t-face{background:
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.22) 0 10px,transparent 10px 20px),
+    linear-gradient(rgba(255,255,255,.18),transparent 30% 70%,rgba(0,0,0,.06)),
+    var(--ac)}
+.t-face .t{text-shadow:0 0 0 transparent}
+@media (max-width:760px){.u-tx .s{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.tapework .under{grid-template-columns:110px 1fr}}
