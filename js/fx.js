@@ -221,5 +221,18 @@ FX.sparkles = function (host, cv) {
   size(); requestAnimationFrame(frame);
 };
 
+/* Letters shuffle through pixel blocks and settle, left to right. */
+FX.scramble = function (el) {
+  if (!el || reduced || el._scr) return;
+  const text = el.dataset.text || (el.dataset.text = el.textContent), G = '▚▞▖▗▘▝█▓▒░#*+';
+  let f = 0; el._scr = true;
+  const step = () => {
+    const done = f / 2;
+    el.textContent = [...text].map((ch, i) => ch === ' ' || i < done ? ch : G[Math.random() * G.length | 0]).join('');
+    if (done < text.length) { f++; setTimeout(step, 28); } else { el.textContent = text; el._scr = false; }
+  };
+  step();
+};
+
 window.FX = FX;
 })();

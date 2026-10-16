@@ -37,6 +37,7 @@
     <a href="#carry" class="opt">3D</a>
     <a href="#arcade-sec" class="opt">Arcade</a>
     <a href="#contact">Contact</a>
+    <button class="sun music" type="button" id="music" aria-label="Play music" aria-pressed="false"><span class="eq"><i></i><i></i><i></i></span></button>
     <button class="sun" type="button" id="daynight" aria-label="Switch day and night">☾</button>
   </nav>
 </header>
@@ -74,7 +75,7 @@
   <div class="horizon" aria-hidden="true"></div>
 
   <section id="work" class="work-sec">
-    <div class="sechead" data-reveal><p class="kicker">Selected work</p><span class="filter" id="filter" hidden></span></div>
+    <div class="sechead" data-reveal><p class="kicker">Selected work</p><span class="filter" id="filter" hidden></span><div class="views" id="views" role="group" aria-label="View"><button type="button" data-view="list" aria-pressed="true">▤ List</button><button type="button" data-view="cards" aria-pressed="false">▦ Cards</button></div></div>
     <div class="skillbar" data-reveal><span class="invhint">Filter by skill</span><div class="inv" id="inv" aria-label="Skills"></div></div>
     <ol class="works" id="works"></ol>
   </section>
@@ -153,6 +154,7 @@
 <script src="js/story.js"></script>
 <script src="js/covers.js"></script>
 <script src="js/fx.js"></script>
+<script src="js/music.js"></script>
 <script src="js/home.js"></script>
 <script type="module">
 import { createIsland } from './js/island.js';

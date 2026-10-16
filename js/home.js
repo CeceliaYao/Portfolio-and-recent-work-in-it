@@ -212,36 +212,90 @@ function coverEl(w) {
 }
 function scaleUp(src, k) { const [c, x] = canvas(src.width * k, src.height * k); x.imageSmoothingEnabled = false; x.drawImage(src, 0, 0, c.width, c.height); return c; }
 const list = $('#works');
+const chips = w => (w.skills || []).map(k => `<i>${esc(k)}</i>`).join('');
 WORKS.forEach((w, i) => {
   const li = document.createElement('li'); li.className = 'work'; li.dataset.id = w.id; li.dataset.reveal = '';
-  li.innerHTML = `<button type="button"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span></button>`;
+  li.style.setProperty('--ac', w.accent || 'var(--gold)'); li.style.setProperty('--i', i);
+  li.innerHTML = `<button type="button"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)}<br>${esc(w.year)}</span><span class="s">${esc(w.summary)}</span><span class="sk">${chips(w)}</span></button>`;
   const mc = coverEl(w); mc.classList.add('mcover'); li.querySelector('.s').after(mc);
   li.querySelector('button').addEventListener('click', () => openCase(i));
-  li.addEventListener('pointerenter', () => showPeek(w));
+  li.addEventListener('pointerenter', () => { showPeek(w); FX.scramble(li.querySelector('.t')); tick(); });
   li.addEventListener('pointerleave', () => peek.classList.remove('on'));
   list.append(li);
 });
+// on touch screens there is no hover, so pictures sharpen as they scroll into view
+const canHover = matchMedia('(hover:hover)').matches;
+function sharpenOnView(el, pc) { new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); setTimeout(() => pc.to(1), 250); } }, { threshold: .5 }).observe(el); }
+// the same work as a deck of cards
+const deck = document.createElement('div'); deck.className = 'deck'; deck.id = 'deck'; deck.hidden = true;
+WORKS.forEach((w, i) => {
+  const c = document.createElement('button'); c.type = 'button'; c.className = 'wcard'; c.dataset.id = w.id;
+  c.style.setProperty('--ac', w.accent || 'var(--gold)'); c.style.setProperty('--i', i);
+  const scr = document.createElement('div'); scr.className = 'wc-cv';
+  if (w.image) { const pc = FX.pixelImage(w.image, { start: 12 }); scr.append(pc); FX.hoverResolve(c, pc, 12); if (!canHover) sharpenOnView(c, pc); } else scr.append(drawCover(w.cover));
+  c.append(scr);
+  c.insertAdjacentHTML('beforeend', `<span class="wc-n">${String(i + 1).padStart(2, '0')}</span><b>${esc(w.title)}</b><span class="wc-k">${esc(w.kind)} · ${esc(w.year)}</span><span class="sk">${chips(w)}</span><span class="wc-go">open ▸</span>`);
+  c.onclick = () => openCase(i);
+  c.addEventListener('pointerenter', () => tick());
+  FX.tilt(c, 9);
+  deck.append(c);
+});
+list.after(deck);
+const views = $('#views');
+function setView(v) {
+  list.hidden = v === 'cards'; deck.hidden = v !== 'cards';
+  views.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+  if (v === 'cards') deck.querySelectorAll('.wcard').forEach(c => { c.classList.remove('deal'); void c.offsetWidth; c.classList.add('deal'); });
+  try { localStorage.setItem('view', v); } catch (e) {}
+}
+views.addEventListener('click', e => { const b = e.target.closest('[data-view]'); if (b) { coin(); setView(b.dataset.view); } });
+let v0 = 'list'; try { v0 = localStorage.getItem('view') || 'list'; } catch (e) {}
+setView(v0);
+
 const peek = $('#peek');
 const peekCache = {};
 function showPeek(w) {
   peek.innerHTML = '';
+  peek.style.setProperty('--ac', w.accent || 'var(--gold)');
   const src = w.image;
   if (src) { const c = peekCache[w.id] || (peekCache[w.id] = FX.pixelImage(src, { start: 18 })); c.to(18); peek.append(c); requestAnimationFrame(() => { c.repaint(); c.to(1); }); }
   else peek.append(coverEl(w));
+  peek.insertAdjacentHTML('beforeend', '<span class="badge">open ▸</span>');
   peek.classList.add('on');
 }
-addEventListener('pointermove', e => { peek.style.left = (e.clientX + 200) + 'px'; peek.style.top = e.clientY + 'px'; }, { passive: true });
+// the preview trails the pointer and leans into the direction it moves
+let px = 0, py = 0, pvx = 0, ptx = 0, pty = 0, praf = 0;
+addEventListener('pointermove', e => { ptx = e.clientX + Math.min(300, innerWidth * .22); pty = e.clientY; if (!praf) praf = requestAnimationFrame(trail); }, { passive: true });
+function trail() {
+  praf = 0;
+  const dx = ptx - px; px += dx * .2; py += (pty - py) * .2; pvx = pvx * .8 + dx * .02;
+  peek.style.left = px + 'px'; peek.style.top = py + 'px'; peek.style.setProperty('--lean', Math.max(-8, Math.min(8, pvx)) - 2 + 'deg');
+  if (Math.abs(dx) > .5 || Math.abs(pty - py) > .5) praf = requestAnimationFrame(trail);
+}
 
 const caseEl = $('#case');
-let lastFocus = null;
+let lastFocus = null, caseIndex = 0;
+// reading progress and a slow drift on the cover
+caseEl.addEventListener('scroll', () => {
+  const k = caseEl.scrollTop / Math.max(1, caseEl.scrollHeight - caseEl.clientHeight);
+  const bar = caseEl.querySelector('.cprog i'); if (bar) bar.style.width = (k * 100).toFixed(1) + '%';
+  const cv = caseEl.querySelector('.cover'); if (cv && !reduced) cv.style.transform = `translateY(${Math.min(120, caseEl.scrollTop * .15)}px) scale(${1 + Math.min(.06, caseEl.scrollTop / 8000)})`;
+}, { passive: true });
+addEventListener('keydown', e => {
+  if (caseEl.hidden || !player.hidden) return;
+  if (e.key === 'ArrowRight') openCase((caseIndex + 1) % WORKS.length);
+  if (e.key === 'ArrowLeft') openCase((caseIndex + WORKS.length - 1) % WORKS.length);
+});
 function openCase(i) {
   const w = WORKS[i]; lastFocus = document.activeElement;
   const next = WORKS[(i + 1) % WORKS.length], prev = WORKS[(i + WORKS.length - 1) % WORKS.length];
-  caseEl.innerHTML = `<button class="btn ghost close" type="button">Close ×</button>
+  caseEl.style.setProperty('--ac', w.accent || 'var(--gold)'); caseIndex = i;
+  caseEl.innerHTML = `<div class="cprog"><i></i></div><button class="btn ghost close" type="button">Close ×</button>
   <div class="in">
     <div class="cv"></div>
     <h2>${esc(w.title)}</h2>
     <p class="lede">${esc(w.summary)}</p>
+    ${w.skills ? `<div class="shows"><span>What this shows</span>${chips(w)}</div>` : ''}
     <div class="cols">
       <dl>
         <dt>Unit</dt><dd>${esc(w.unit)}</dd>
@@ -250,7 +304,7 @@ function openCase(i) {
         <dt>Tools</dt><dd>${w.tools.map(esc).join('<br>')}</dd>
         ${w.credits ? `<dt>Team</dt><dd>${esc(w.credits).replace(/ · /g, '<br>')}</dd>` : ''}
       </dl>
-      <div class="body">${w.body.map(p => `<p>${esc(p)}</p>`).join('')}
+      <div class="body">${w.body.map((p, k) => `<p>${esc(p)}</p>` + (k === 1 && w.quote ? `<blockquote>${esc(w.quote)}</blockquote>` : '')).join('')}
         ${w.play ? `<div class="plays">${w.play.map((g, k) => `<button class="btn" type="button" data-play="${k}">Play ${esc(g.label)} here ▸</button>`).join('')}</div>` : ''}
         ${w.links.length ? `<p style="display:flex;gap:18px;flex-wrap:wrap;margin-top:30px">${w.links.map(l => `<a class="btn" href="${esc(l.href)}" ${/^http/.test(l.href) ? 'target="_blank" rel="noopener"' : ''}>${esc(l.label)} ▸</a>`).join('')}</p>` : ''}
       </div>
@@ -264,6 +318,7 @@ function openCase(i) {
   caseEl.querySelectorAll('[data-go]').forEach(b => b.onclick = () => openCase(+b.dataset.go));
   caseEl.querySelectorAll('[data-play]').forEach(b => b.onclick = () => openPlayer(w.play[+b.dataset.play]));
   caseEl.querySelector('.close').focus();
+  caseEl.querySelectorAll('.body p, .body blockquote, .gallery a, .shows').forEach((n, k) => { n.style.setProperty('--k', k); n.classList.add('rise'); });
 }
 function closeCase() { caseEl.hidden = true; if (os.hidden) document.body.style.overflow = ''; lastFocus && lastFocus.focus && lastFocus.focus(); }
 
@@ -302,7 +357,7 @@ cards.forEach(({ g, w }) => {
   let pc = null;
   if (src) { pc = FX.pixelImage(src, { start: 10 }); scr.append(pc); } else scr.append(drawCover(w.cover));
   b.append(scr); b.dataset.reveal = '';
-  if (pc) FX.hoverResolve(b, pc, 10);
+  if (pc) { FX.hoverResolve(b, pc, 10); if (!canHover) sharpenOnView(b, pc); }
   b.insertAdjacentHTML('beforeend', `<b>${esc(g.label)}</b><span>${esc(w.unit.split(' · ')[0])} · ${esc(w.year)}</span><i>${g.external ? 'open ↗' : 'insert coin ▸'}</i>`);
   b.addEventListener('click', () => coin());
   if (!g.external) b.onclick = () => g.href === 'room/' ? window.open(g.href, '_blank', 'noopener') : openPlayer(g);
@@ -370,6 +425,7 @@ $('#inv').addEventListener('click', e => { const d = e.target.closest('[data-k]'
 $('#inv').addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset.k) { e.preventDefault(); e.target.click(); } });
 
 /* ======================= little sounds ======================= */
+function tick() { window.Music && window.Music.tick(); }
 let ac = null;
 function coin() {
   try {

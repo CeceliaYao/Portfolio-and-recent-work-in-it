@@ -423,3 +423,81 @@ main section,footer{scroll-margin-top:66px}
 .case .gallery{display:block;columns:2 420px;column-gap:22px}
 .case .gallery a{break-inside:avoid;margin:0 0 22px;background:transparent}
 @media (max-width:640px){.case .gallery{columns:1}.case .gallery.tall{columns:2}}
+
+/* ---------- round 5: work section ---------- */
+.sechead{flex-wrap:wrap}
+.views{display:flex;gap:0;margin-left:auto;box-shadow:0 0 0 3px var(--ink)}
+.views button{font-family:var(--display);font-size:16px;padding:6px 12px 8px;background:var(--cream)}
+.views button[aria-pressed="true"]{background:var(--ink);color:var(--cream)}
+.work{position:relative;overflow:hidden}
+.work button{position:relative;z-index:1}
+.work::before{content:"";position:absolute;inset:0;background:var(--ac);transform:scaleX(0);transform-origin:left;transition:transform .35s steps(8);z-index:0}
+.work:hover::before,.work:focus-within::before{transform:scaleX(1)}
+.work:hover .n,.work:hover .m,.work:hover .s{color:var(--ink)}
+.work button:hover .t{color:var(--ink)}
+.work button:hover .t::before{color:var(--ink)}
+.work .t{font-variant-ligatures:none}
+.work .sk,.wcard .sk,.shows{display:flex;flex-wrap:wrap;gap:6px}
+.work .sk{grid-column:2/4;margin-top:2px}
+.sk i,.shows i{font-style:normal;font-family:var(--display);font-size:13px;letter-spacing:.04em;padding:2px 8px 4px;background:var(--cream);box-shadow:0 0 0 2px var(--ink)}
+.work:hover .sk i{background:#fff}
+@media (max-width:760px){.work .sk{grid-column:auto}}
+.peek{transform:translate(-50%,-50%) scale(.85) rotate(var(--lean,-2deg));transition:opacity .15s}
+.peek.on{transform:translate(-50%,-50%) scale(1) rotate(var(--lean,-2deg))}
+.peek{box-shadow:0 0 0 4px var(--ink),10px 10px 0 4px var(--ac,rgba(42,31,26,.25))}
+.peek .badge{position:absolute;right:-10px;bottom:-14px;font-family:var(--display);font-size:16px;background:var(--ac,var(--gold));color:var(--ink);padding:4px 10px 6px;box-shadow:0 0 0 3px var(--ink);animation:bob 1s steps(2) infinite}
+
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:30px;padding-top:10px}
+.wcard{position:relative;display:flex;flex-direction:column;gap:6px;text-align:left;padding:12px 12px 18px;background:var(--cream);box-shadow:0 0 0 4px var(--ink),8px 8px 0 4px var(--ac);transition:transform .15s ease-out,box-shadow .15s steps(2)}
+.wcard:hover{box-shadow:0 0 0 4px var(--ink),12px 12px 0 4px var(--ac)}
+.wcard::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.45),transparent 45%);opacity:0;transition:opacity .2s}
+.wcard:hover::after{opacity:1}
+.wc-cv{aspect-ratio:16/10;overflow:hidden;background:#000;box-shadow:0 0 0 3px var(--ink);margin-bottom:8px}
+.wc-cv canvas,.wc-cv img{width:100%;height:100%;object-fit:cover;display:block}
+.wc-n{position:absolute;left:0;top:0;font-family:var(--display);font-size:15px;background:var(--ac);padding:2px 8px 4px;box-shadow:0 0 0 3px var(--ink)}
+.wcard b{font-family:var(--display);font-size:28px;font-weight:700;line-height:1}
+.wc-k{font-size:19px;color:var(--ink2)}
+.wc-go{position:absolute;right:12px;bottom:12px;font-family:var(--display);font-size:15px;opacity:0;transform:translateX(-6px);transition:opacity .15s,transform .15s steps(3)}
+.wcard:hover .wc-go{opacity:1;transform:none}
+.wcard .sk{margin-top:6px;padding-right:56px}
+.wcard.deal{animation:deal .5s steps(6) both;animation-delay:calc(var(--i) * 70ms)}
+@keyframes deal{from{transform:translateY(-60px) rotate(calc((var(--i) - 2.5) * 4deg));opacity:0}}
+
+/* case extras */
+.case .cprog{position:sticky;top:0;height:8px;z-index:3;background:rgba(42,31,26,.12)}
+.case .cprog i{display:block;height:100%;width:0;background:var(--ac);box-shadow:inset 0 -2px 0 rgba(0,0,0,.2)}
+.case .cv{overflow:hidden;box-shadow:0 0 0 4px var(--ink)}
+.case .cv .cover{box-shadow:none;transform-origin:50% 0}
+.case h2{text-decoration:underline;text-decoration-color:var(--ac);text-decoration-thickness:.12em;text-underline-offset:.12em}
+.case .shows{align-items:center;margin:-6px 0 30px}
+.case .shows span{font-family:var(--display);font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);margin-right:6px}
+.case .shows i{background:var(--ac)}
+.case blockquote{margin:30px 0 34px;padding:18px 22px 20px;font-family:var(--display);font-size:clamp(24px,2.6vw,34px);line-height:1.15;background:var(--ac);box-shadow:0 0 0 4px var(--ink),8px 8px 0 4px var(--ink);max-width:24em;position:relative}
+.case blockquote::before{content:"“";position:absolute;left:-14px;top:-30px;font-size:70px;color:var(--ink)}
+.case .rise{animation:risein .5s steps(5) both;animation-delay:calc(var(--k) * 60ms + .15s)}
+@keyframes risein{from{opacity:0;transform:translateY(16px)}}
+.case .nav2 .btn:hover{background:var(--ac)}
+@media (max-width:640px){.views button{font-size:14px;padding:5px 8px 7px}.deck{grid-template-columns:1fr;gap:24px}.case blockquote{font-size:22px}}
+
+/* music button */
+.nav .music{width:40px}
+.music .eq{display:flex;align-items:flex-end;gap:2px;height:14px}
+.music .eq i{display:block;width:3px;height:4px;background:var(--ink)}
+.music[aria-pressed="true"] .eq i{animation:eq .8s steps(4) infinite}
+.music[aria-pressed="true"] .eq i:nth-child(2){animation-delay:-.3s}
+.music[aria-pressed="true"] .eq i:nth-child(3){animation-delay:-.55s}
+@keyframes eq{0%,100%{height:4px}50%{height:14px}}
+.music-hint{position:fixed;z-index:41;top:62px;right:clamp(16px,3vw,36px);font-family:var(--display);font-size:15px;background:var(--ink);color:var(--cream);padding:5px 10px 7px;pointer-events:none;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s steps(3)}
+.music-hint.on{opacity:1;transform:none}
+.music-hint::before{content:"";position:absolute;right:62px;top:-6px;border:6px solid transparent;border-bottom-color:var(--ink);border-top:0}
+@media (max-width:640px){
+  .brand{font-size:17px}
+  .nav{gap:3px}
+  .nav a,.nav button{font-size:14px;padding:5px 7px 7px}
+  .nav .sun,.nav .music{width:32px}
+  .music-hint{top:52px;right:12px}
+  .music-hint::before{right:48px}
+}
+.deck,.works{max-width:100%}
+main{overflow-x:clip}
+.music[aria-pressed="false"] .eq{display:none}.music[aria-pressed="false"]::before{content:"♪";font-size:18px;line-height:1}

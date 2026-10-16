@@ -53,6 +53,7 @@ const STORIES = {
 const WORKS = [
   {
     id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
+    skills: ['Creative coding', 'Web 3D', 'Pixel art', 'Interaction design'], accent: '#ffb46b',
     role: 'Solo', kind: 'Interactive web & 3D study', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
     summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study about upkeep and memory.',
@@ -65,6 +66,7 @@ const WORKS = [
   },
   {
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'DXB211 · Creative Coding', year: '2026',
+    skills: ['Game design', 'Enemy AI', 'Playtesting', 'p5.js'], accent: '#5fe0ff',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/echo-corridor/p01.jpg',
     gallery: ['assets/work/echo-corridor/play.jpg', 'assets/work/echo-corridor/p02.jpg', 'assets/work/echo-corridor/p04.jpg', 'assets/work/echo-corridor/p05.jpg'],
     play: [{ label: 'Echo Corridor', href: 'play/echo-corridor/', ratio: '16/9', hint: 'Arrows or WASD to move. 1 pick up, 2 decoy, 3 mute.' }],
@@ -78,6 +80,7 @@ const WORKS = [
   },
   {
     id: 'next-chapter', title: 'The Next Chapter', unit: 'KKB385 · Creative Enterprise Studio 3', year: '2026',
+    skills: ['Lead coding', 'Teamwork', 'Interaction design', 'Exhibition'], accent: '#ff8fb1',
     role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title.png', pixel: true,
     gallery: ['assets/work/next-chapter/title.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
     play: [
@@ -94,6 +97,7 @@ const WORKS = [
   },
   {
     id: 'astrobius', title: 'Astrobius', unit: 'DVB201 · Experimental Type Design', year: '2026',
+    skills: ['Type design', 'Editorial layout', '3D render', 'Print'], accent: '#b8c4d6',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/astrobius/p01.jpg', tall: true,
     gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
@@ -106,6 +110,7 @@ const WORKS = [
   },
   {
     id: 'hith-brick', title: 'HITH Brick', unit: 'DYB223 · Queensland Health', year: '2026',
+    skills: ['UX research', 'Clinical workflow', 'Figma', 'Accessibility'], accent: '#7cc36b',
     role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/hith-brick/p01.jpg',
     gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
@@ -118,13 +123,16 @@ const WORKS = [
   },
   {
     id: 'shopmirror', title: 'ShopMirror 2032', unit: 'DXB210 · Interaction Design', year: '2026',
+    skills: ['Speculative design', 'Ethical UX', 'Storyboarding', 'Figma'], accent: '#ff6478',
     role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/shopmirror/personas.jpg',
     gallery: ['modes', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
-    summary: 'The recommendation that reveals what it knows about you.',
+    summary: 'One shopping app, built twice: once to pressure you, once to explain itself.',
+    quote: 'Consent and explanation must come before persuasion, not after commitment.',
     body: [
-      'ShopMirror 2032 is a speculative AI shopping app set in Brisbane in 2032. The core interaction is a mode switch that lets users compare the same purchase task under two interface ethics. Deceptive Mode hides recommendation logic, uses urgency prompts, reveals service fees late and makes privacy control tiring. Ethical Mode shows reason cards, a privacy label, editable permissions and full cost before payment.',
-      'The key interaction principle is timing: consent and explanation must appear before persuasion, not after commitment. I drew twelve directions by hand before selecting the mode switch, then built the same purchase task twice in Figma, with Mia, a late-night shopper, and RecSys-32, the recommendation engine, as personas.',
-      'What I learned is that dark patterns are not single tricks. Urgency, hidden fees, sharing defaults and opt-out friction work together as one system, and the ethical version still lets the business earn, through transparent membership or voluntary data exchange. ShopMirror does not solve the future; it stages a direct comparison between commercial pressure and privacy-centred service design.'
+      'The brief came from my first assignment: purchase history and recommendations in shopping apps. ShopMirror is set in Brisbane in 2032. An AI recommends sleep products to Mia, a late-night shopper, from her purchase history, browsing rhythm and saved preferences. The question I cared about was not whether the AI should recommend, but when it should tell her why.',
+      'I drew twelve directions by hand, from a privacy nutrition label and a consent receipt to an opt-out maze and a data marketplace. I chose the one that puts both sides next to each other: a mode switch. Deceptive Mode hides the recommendation logic, adds urgency, shows fees late and makes privacy settings tiring. Ethical Mode shows a reason for every recommendation, a data-use card, editable permissions and the full price before payment. Same product, same task, different timing.',
+      'I gave the recommendation engine its own persona, RecSys-32, so I could design for it as a stakeholder that can either push conversion or support trust. A hand-drawn storyboard and eight Figma screens follow Mia through both versions.',
+      'What I learned is that dark patterns are rarely a single trick. Urgency, hidden fees, sharing defaults and opt-out friction work together as one system, so fixing one screen is not enough. The ethical version still has to keep the business going, through transparent membership or voluntary data exchange, rather than pretending money does not matter.'
     ],
     tools: ['Figma', 'Hand sketching', 'Storyboarding', 'Speculative design'],
     links: []
