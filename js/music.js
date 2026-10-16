@@ -1,11 +1,11 @@
 /* "Little Room", written for this site.
-   A light, easy tune in G major: plucked violin and a music box carry the melody
-   over off-beat harp chords, a round bass and a soft shaker.
+   A light, bouncy tune in G major: plucked violin and a music box carry the melody
+   over off-beat harp chords, a round bass, a soft kick and a shaker.
    Played live by the browser (Web Audio). No recordings, no samples. */
 (function () {
 'use strict';
 
-const BPM = 100, BEAT = 60 / BPM, BAR = 4;
+const BPM = 116, BEAT = 60 / BPM, BAR = 4;
 const CH = {
   G: [43, [67, 71, 74]], Em: [40, [67, 71, 76]], C: [48, [67, 72, 76]], D: [50, [66, 69, 74]], Bm: [47, [66, 71, 74]]
 };
@@ -62,7 +62,7 @@ function pizz(m, t, vel) {
   const g2 = ac.createGain(); g2.gain.value = .18; o2.connect(g2);
   body.type = 'peaking'; body.frequency.value = 600; body.gain.value = 4; body.Q.value = 1;
   lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(900, t + .3);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.075 * vel, t + .005); g.gain.exponentialRampToValueAtTime(.0005, t + .7);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.075 * vel, t + .005); g.gain.exponentialRampToValueAtTime(.0005, t + .55);
   o.connect(body); g2.connect(body); body.connect(lp).connect(g); out(g, .3);
   [o, o2].forEach(x => { x.start(t); x.stop(t + .75); });
 }
@@ -95,10 +95,16 @@ function bass(m, t) {
   o.connect(lp).connect(g); out(g, .1);
   o.start(t); o.stop(t + .6);
 }
+function kick(t) {
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(50, t + .1);
+  g.gain.setValueAtTime(.07, t); g.gain.exponentialRampToValueAtTime(.001, t + .15);
+  o.connect(g); out(g, 0); o.start(t); o.stop(t + .17);
+}
 function shaker(t, vel) {
   const n = ac.createBufferSource(), hp = ac.createBiquadFilter(), g = ac.createGain();
   n.buffer = noiseBuf(); hp.type = 'highpass'; hp.frequency.value = 7000;
-  g.gain.setValueAtTime(.009 * vel, t); g.gain.exponentialRampToValueAtTime(.0002, t + .05);
+  g.gain.setValueAtTime(.012 * vel, t); g.gain.exponentialRampToValueAtTime(.0002, t + .05);
   n.connect(hp).connect(g); out(g, .1); n.start(t); n.stop(t + .07);
 }
 function noiseBuf() { if (noise) return noise; noise = ac.createBuffer(1, ac.sampleRate * .4, ac.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return noise; }
@@ -122,7 +128,8 @@ function eventsAt(step) {
   if (!off && (inBar === 0 || inBar === 2)) ev.push(t => bass(inBar === 0 ? root : root + 7, t));
   // light harp chords on the off-beats keep it moving
   if (off) ev.push(t => chord.forEach((m, i) => harp(m, t + i * .012, .8)));
-  if (off) ev.push(t => shaker(t, 1));
+  ev.push(t => shaker(t, off ? 1 : .55));
+  if (!off && (inBar === 0 || inBar === 2)) ev.push(t => kick(t));
   let at = 0;
   for (const [m, d] of TUNE) {
     if (m && at >= b && at < b + .5) {
