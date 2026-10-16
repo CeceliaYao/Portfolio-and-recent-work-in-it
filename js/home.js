@@ -223,7 +223,7 @@ WORKS.forEach((w, i) => {
       <button type="button" class="btn u-open">Open ▸</button>
     </div>
     <div class="tape" tabindex="0" role="button" aria-label="Peel the tape off ${esc(w.title)}">
-      <div class="t-face"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m">${esc(w.kind)} · ${esc(w.year)}</span><span class="pull">⟵ peel</span></div>
+      <div class="t-face"><span class="n">${String(i + 1).padStart(2, '0')}</span><span class="t">${esc(w.title)}</span><span class="m"><b>${esc(w.unit.split(' · ')[0])}</b>${esc(w.kind)} · ${esc(w.year)}</span><span class="pull">peel ⟶</span></div>
     </div>
     <div class="curl" aria-hidden="true"></div>`;
   const cv = coverEl(w); li.querySelector('.u-cv').append(cv);

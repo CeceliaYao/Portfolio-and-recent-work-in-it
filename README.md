@@ -2,7 +2,7 @@
 
 Personal site of Qinxi (Cecelia) Yao, interactive and visual designer, Brisbane.
 
-The page opens with a short introduction, then steps into my room. You open the door, walk in, and everything you can click is a real object I own, redrawn by hand as pixel art; click it and the real thing appears. The desk computer opens my work and the posters on the wall are projects. In Selected work each project is held down with a strip of pixel tape in the site's own colours: drag it sideways to peel it off. Further down, the same room floats as a small 3D island (What We Carry).
+The page opens with a short introduction, then steps into my room. You open the door, walk in, and everything you can click is a real object I own, redrawn by hand as pixel art; click it and the real thing appears. The desk computer opens my work and the posters on the wall are projects. In Selected work each project is held down with a strip of masking tape with a colour-coded index tab: drag it sideways to peel it off. Further down, the same room floats as a small 3D island (What We Carry).
 
 - `index.html`: the homepage (intro, room, work, What We Carry in 3D, arcade, contact)
 - `room/`: **My Room**, the same room as a small click-around game
@@ -35,7 +35,7 @@ No build step. Plain HTML, CSS and JavaScript; open `index.html` through any sta
 - Every object is drawn by hand as a small pixel grid in `js/pixel-art.js`; the real photos, cut out, are in `assets/cutouts/`.
 - At night, darkness is laid over the room and light is cut out of it (desk lamp, screen, fairy lights, moon), so the pixels stay crisp inside the light.
 - The 3D island is built from boxes in Three.js, rendered at a third of the screen resolution and scaled up without smoothing, so it reads as pixel art. It swings rather than spins because the room is open on two sides.
-- The background music, Little Room, is a light tune in G major written for this site (`js/music.js`): plucked violin and a music box over off-beat harp chords, a round bass, a soft kick and a shaker. Everything is played live by the browser with Web Audio. No recordings or samples, so there are no rights to clear. It only starts when the music button is pressed.
+- The background music, Little Room, is a light tune in G major written for this site (`js/music.js`): a mellow keys melody over soft electric-piano seventh chords, a round bass and brushes, with a vibraphone on the second pass. Everything is played live by the browser with Web Audio. No recordings or samples, so there are no rights to clear. It only starts when the music button is pressed.
 - Fonts: Pixelify Sans, VT323 and DotGothic16 (Google Fonts, SIL OFL), and Astrobius, my own typeface, on the Astrobius page. p5.js is bundled in `play/lib/` (LGPL-2.1); Three.js in `lib/` (MIT).
 
 ## Credits

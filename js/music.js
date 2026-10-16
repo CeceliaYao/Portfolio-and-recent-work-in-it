@@ -1,13 +1,15 @@
 /* "Little Room", written for this site.
-   A light, bouncy tune in G major: plucked violin and a music box carry the melody
-   over off-beat harp chords, a round bass, a soft kick and a shaker.
+   A light, easy tune in G major for a studio afternoon: a mellow keys melody
+   over soft electric-piano seventh chords, a round bass and brushes,
+   with a vibraphone joining the second time round.
    Played live by the browser (Web Audio). No recordings, no samples. */
 (function () {
 'use strict';
 
-const BPM = 100, BEAT = 60 / BPM, BAR = 4;
+const BPM = 96, BEAT = 60 / BPM, BAR = 4;
+// seventh chords: [bass note, electric piano voicing]
 const CH = {
-  G: [43, [67, 71, 74]], Em: [40, [67, 71, 76]], C: [48, [67, 72, 76]], D: [50, [66, 69, 74]], Bm: [47, [66, 71, 74]]
+  G: [43, [59, 62, 66, 69]], Em: [40, [59, 62, 66, 67]], C: [48, [59, 62, 64, 67]], D: [50, [60, 64, 66, 69]], Bm: [47, [57, 62, 64, 66]]
 };
 // two chords per bar, half a bar each
 const HALVES = [
@@ -55,36 +57,41 @@ function build() {
 }
 function out(node, send) { node.connect(dry); const s = ac.createGain(); s.gain.value = send; node.connect(s).connect(verb); }
 
-/* plucked violin: a quick, round pluck with a little body resonance */
-function pizz(m, t, vel) {
-  const f = hz(m), o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), body = ac.createBiquadFilter(), lp = ac.createBiquadFilter();
-  o.type = 'triangle'; o.frequency.value = f; o2.type = 'sawtooth'; o2.frequency.value = f;
-  const g2 = ac.createGain(); g2.gain.value = .18; o2.connect(g2);
-  body.type = 'peaking'; body.frequency.value = 600; body.gain.value = 4; body.Q.value = 1;
-  lp.type = 'lowpass'; lp.frequency.setValueAtTime(3200, t); lp.frequency.exponentialRampToValueAtTime(900, t + .3);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.075 * vel, t + .005); g.gain.exponentialRampToValueAtTime(.0005, t + .55);
-  o.connect(body); g2.connect(body); body.connect(lp).connect(g); out(g, .3);
-  [o, o2].forEach(x => { x.start(t); x.stop(t + .75); });
+/* mellow keys for the melody: a warm fundamental with a soft hammer */
+function keys(m, t, vel) {
+  const f = hz(m), o = ac.createOscillator(), o2 = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
+  o.type = 'triangle'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 2;
+  const g2 = ac.createGain(); g2.gain.setValueAtTime(.35, t); g2.gain.exponentialRampToValueAtTime(.02, t + .25); o2.connect(g2);
+  lp.type = 'lowpass'; lp.frequency.setValueAtTime(2600, t); lp.frequency.exponentialRampToValueAtTime(1100, t + .6);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.06 * vel, t + .008); g.gain.exponentialRampToValueAtTime(.0005, t + 1.1);
+  o.connect(lp); g2.connect(lp); lp.connect(g); out(g, .3);
+  [o, o2].forEach(x => { x.start(t); x.stop(t + 1.15); });
 }
-/* music box / celesta: a bright fundamental with a faint high partial, ringing out */
-function celesta(m, t, vel) {
-  const f = hz(m), g = ac.createGain();
-  const o = ac.createOscillator(), o2 = ac.createOscillator(), o3 = ac.createOscillator();
-  o.type = 'sine'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 4.01; o3.type = 'sine'; o3.frequency.value = f * 2;
-  const g2 = ac.createGain(); g2.gain.setValueAtTime(.18, t); g2.gain.exponentialRampToValueAtTime(.001, t + .35); o2.connect(g2);
-  const g3 = ac.createGain(); g3.gain.value = .12; o3.connect(g3);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.05 * vel, t + .004); g.gain.exponentialRampToValueAtTime(.0004, t + 2.2);
-  o.connect(g); g2.connect(g); g3.connect(g); out(g, .85);
-  [o, o2, o3].forEach(x => { x.start(t); x.stop(t + 2.3); });
+/* electric piano: sine body plus a short bell-like tine, gently swaying */
+function rhodes(notes, t, dur, vel) {
+  const g = ac.createGain(), sway = ac.createGain(), trem = ac.createOscillator(), td = ac.createGain();
+  // tremolo on its own stage: the level sways between about 0.6 and 1
+  sway.gain.value = .8; trem.frequency.value = 4.2; td.gain.value = .2; trem.connect(td).connect(sway.gain);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.022 * vel, t + .01); g.gain.exponentialRampToValueAtTime(.006 * vel, t + dur * .7); g.gain.linearRampToValueAtTime(0, t + dur + .25);
+  g.connect(sway); out(sway, .35);
+  notes.forEach(m => {
+    const f = hz(m), o = ac.createOscillator(), tine = ac.createOscillator(), tg = ac.createGain();
+    o.type = 'sine'; o.frequency.value = f; tine.type = 'sine'; tine.frequency.value = f * 7.1;
+    tg.gain.setValueAtTime(.18, t); tg.gain.exponentialRampToValueAtTime(.001, t + .12);
+    o.connect(g); tine.connect(tg).connect(g);
+    [o, tine].forEach(x => { x.start(t); x.stop(t + dur + .3); });
+  });
+  trem.start(t); trem.stop(t + dur + .3);
 }
-/* harp: a soft pluck */
-function harp(m, t, vel) {
-  const o = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
-  o.type = 'triangle'; o.frequency.value = hz(m);
-  lp.type = 'lowpass'; lp.frequency.setValueAtTime(2600, t); lp.frequency.exponentialRampToValueAtTime(700, t + .5);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.03 * vel, t + .006); g.gain.exponentialRampToValueAtTime(.0004, t + .8);
-  o.connect(lp).connect(g); out(g, .35);
-  o.start(t); o.stop(t + .85);
+/* vibraphone: pure tone with a slow shimmer */
+function vibe(m, t, vel) {
+  const o = ac.createOscillator(), g = ac.createGain(), trem = ac.createOscillator(), td = ac.createGain();
+  o.type = 'sine'; o.frequency.value = hz(m);
+  const sway = ac.createGain(); sway.gain.value = .75;
+  trem.frequency.value = 5.5; td.gain.value = .25; trem.connect(td).connect(sway.gain);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.03 * vel, t + .005); g.gain.exponentialRampToValueAtTime(.0004, t + 1.6);
+  o.connect(g).connect(sway); out(sway, .5);
+  [o, trem].forEach(x => { x.start(t); x.stop(t + 1.65); });
 }
 /* round plucked bass */
 function bass(m, t) {
@@ -95,17 +102,12 @@ function bass(m, t) {
   o.connect(lp).connect(g); out(g, .1);
   o.start(t); o.stop(t + .6);
 }
-function kick(t) {
-  const o = ac.createOscillator(), g = ac.createGain();
-  o.frequency.setValueAtTime(120, t); o.frequency.exponentialRampToValueAtTime(50, t + .1);
-  g.gain.setValueAtTime(.07, t); g.gain.exponentialRampToValueAtTime(.001, t + .15);
-  o.connect(g); out(g, 0); o.start(t); o.stop(t + .17);
-}
-function shaker(t, vel) {
-  const n = ac.createBufferSource(), hp = ac.createBiquadFilter(), g = ac.createGain();
-  n.buffer = noiseBuf(); hp.type = 'highpass'; hp.frequency.value = 7000;
-  g.gain.setValueAtTime(.012 * vel, t); g.gain.exponentialRampToValueAtTime(.0002, t + .05);
-  n.connect(hp).connect(g); out(g, .1); n.start(t); n.stop(t + .07);
+/* brushes: a soft swish on 2 and 4, light taps in between */
+function brush(t, vel, len) {
+  const n = ac.createBufferSource(), bp = ac.createBiquadFilter(), g = ac.createGain();
+  n.buffer = noiseBuf(); bp.type = 'bandpass'; bp.frequency.value = 5200; bp.Q.value = .6;
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.014 * vel, t + .015); g.gain.exponentialRampToValueAtTime(.0003, t + len);
+  n.connect(bp).connect(g); out(g, .15); n.start(t); n.stop(t + len + .02);
 }
 function noiseBuf() { if (noise) return noise; noise = ac.createBuffer(1, ac.sampleRate * .4, ac.sampleRate); const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; return noise; }
 /* the sound of tape coming off: soft, short, filtered */
@@ -126,17 +128,17 @@ function eventsAt(step) {
   const ev = [], beat = step / 2, b = beat % LOOP, pass = Math.floor(beat / LOOP);
   const [root, chord] = CH[HALVES[Math.floor(b / 2)]], inBar = b % BAR, off = step % 2 === 1;
   if (!off && (inBar === 0 || inBar === 2)) ev.push(t => bass(inBar === 0 ? root : root + 7, t));
-  // light harp chords on the off-beats keep it moving
-  if (off) ev.push(t => chord.forEach((m, i) => harp(m, t + i * .012, .8)));
-  ev.push(t => shaker(t, off ? 1 : .55));
-  if (!off && (inBar === 0 || inBar === 2)) ev.push(t => kick(t));
+  // electric piano: a held chord on 1 and 3, a lighter push on the and of 2 and 4
+  if (!off && (inBar === 0 || inBar === 2)) ev.push(t => rhodes(chord, t, BEAT * 1.4, 1));
+  if (off && (inBar === 1.5 || inBar === 3.5)) ev.push(t => rhodes(chord, t, BEAT * .45, .6));
+  if (!off && (inBar === 1 || inBar === 3)) ev.push(t => brush(t, 1, .22));
+  else ev.push(t => brush(t, .35, .05));
   let at = 0;
   for (const [m, d] of TUNE) {
     if (m && at >= b && at < b + .5) {
       const o = (at - b) * BEAT;
-      ev.push(t => pizz(m, t + o, 1));
-      // the music box joins an octave up the second time round
-      if (pass % 2 === 1) ev.push(t => celesta(m + 12, t + o, .5));
+      ev.push(t => keys(m, t + o, 1));
+      if (pass % 2 === 1) ev.push(t => vibe(m - 12, t + o, .7));
     }
     at += d;
   }
@@ -158,7 +160,7 @@ function play() {
   startAt = ac.currentTime + .15; nextStep = 0;
   master.gain.cancelScheduledValues(ac.currentTime);
   master.gain.setValueAtTime(master.gain.value, ac.currentTime);
-  master.gain.linearRampToValueAtTime(1.2, ac.currentTime + 1.5);
+  master.gain.linearRampToValueAtTime(1.5, ac.currentTime + 1.5);
   clearInterval(timer); timer = setInterval(schedule, 150); schedule();
   sync();
 }
@@ -177,12 +179,12 @@ function sync() {
   try { localStorage.setItem('music', on ? '1' : '0'); } catch (e) {}
 }
 // a soft music-box note in the same key when hovering things, only while the music plays
-const NOTES = [79, 81, 83, 86, 88, 91];
+const NOTES = [74, 76, 79, 81, 83, 86];
 let lastTick = 0;
 function tick() {
   if (!on || !ac) return;
   const now = ac.currentTime; if (now - lastTick < .12) return; lastTick = now;
-  celesta(NOTES[Math.random() * NOTES.length | 0], now + .01, .4);
+  vibe(NOTES[Math.random() * NOTES.length | 0], now + .01, .45);
 }
 
 document.addEventListener('visibilitychange', () => { if (!ac || !on) return; document.hidden ? ac.suspend() : ac.resume(); });
