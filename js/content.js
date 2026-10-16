@@ -113,7 +113,7 @@ const WORKS = [
   {
     id: 'hith-brick', title: 'HITH Brick', unit: 'DYB223 · Queensland Health', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#9cc584',
-    role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/hith-brick/p01.jpg',
+    role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/hith-brick/cover.jpg',
     gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
     body: [
@@ -126,8 +126,8 @@ const WORKS = [
   {
     id: 'shopmirror', title: 'ShopMirror 2032', unit: 'DXB210 · Interaction Design', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#eeb17d',
-    role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/shopmirror/personas.jpg',
-    gallery: ['modes', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
+    role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/shopmirror/cover.jpg',
+    gallery: ['modes', 'personas', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
     summary: 'The recommendation that reveals what it knows about you.',
     quote: 'Can personalisation still create revenue when explanation appears before persuasion, not after commitment?',
     body: [

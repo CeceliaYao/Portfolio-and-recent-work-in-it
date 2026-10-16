@@ -705,3 +705,21 @@ main{overflow-x:clip}
 @media (max-width:640px){.island-ui .sep{display:none}}
 /* the 3D room takes every touch gesture: drag to orbit, pinch to zoom */
 #island,#island .island-cv{touch-action:none}
+
+/* ---------- round 11: a clear dog-ear on every strip ---------- */
+/* the top-left corner is lifted: the page shows where it came up, the folded flap shows the tape's underside */
+.t-face{z-index:1}
+.tape::before,.tape::after{content:"";position:absolute;left:0;top:0;width:var(--ear,46px);height:var(--ear,46px);z-index:2;pointer-events:none;
+  transition:width .18s steps(3),height .18s steps(3);border:0;filter:none;box-shadow:none}
+.tape::before{background:var(--paper);clip-path:polygon(0 0,100% 0,0 100%)}
+.tape::after{background:linear-gradient(135deg,#fffaf0 0%,#efe3c6 55%,#d9c7a2 100%);
+  clip-path:polygon(100% 0,100% 100%,0 100%);filter:drop-shadow(4px 4px 0 rgba(42,31,26,.28))}
+.tapework.lift .tape,.tape:focus-visible{--ear:66px}
+.tapework.grab .tape::before,.tapework.grab .tape::after{opacity:0}
+@media (max-width:760px){.tape{--ear:36px}}
+.tape{--ear:60px}
+.tape::before{background:linear-gradient(135deg,var(--paper) 30%,#d8c9ab 100%)}
+.tape::after{background:linear-gradient(135deg,transparent 49%,#8a7457 49% 52%,#fffdf6 52%,#f6eedb 80%,#e6d8b8 100%);
+  filter:drop-shadow(5px 5px 0 rgba(42,31,26,.32))}
+.tapework.lift .tape,.tape:focus-visible{--ear:84px}
+@media (max-width:760px){.tape{--ear:44px}}
