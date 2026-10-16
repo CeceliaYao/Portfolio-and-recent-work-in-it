@@ -54,11 +54,11 @@ const WORKS = [
   {
     id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#e9c46a',
-    role: 'Solo', kind: 'Interactive web & 3D study', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
+    role: 'Solo · my own new game', kind: 'Personal game · web & 3D', cover: 'myRoom', image: 'assets/work/my-room-cover.png', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
-    summary: 'The Next Chapter: What We Carry. An individual interactive web and 3D prototyping study.',
+    summary: 'A new personal game I created, about my own room, connected to my A1 and A3 work.',
     body: [
-      'Developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning. It is an interactive game based on my current room. The objects in the room reflect my real life, including my experiences, interests and things that are personally meaningful to me. Players can explore the room and interact with different objects to learn more about me. It connects to our A3 group project through the idea of meaningful objects.',
+      'What We Carry is a new little game I created on my own. Its subject is my own room, and it grows out of my A1 and our A3: it was developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning, and it carries on the keep-or-remove question from my A1. It is an interactive game based on my current room. The objects in the room reflect my real life, including my experiences, interests and things that are personally meaningful to me. Players can explore the room and interact with different objects to learn more about me. It connects to our A3 group project through the idea of meaningful objects.',
       'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.',
       'One of my two-year goals is to expand creative coding into interactive 3D web experiences. The first step was a small Three.js scene for What We Carry: the floating room on the homepage. It builds on my p5.js foundation and is documented as research and precedents, interaction flow, prototype, testing, iteration and final playable outcome.'
     ],
@@ -89,7 +89,7 @@ const WORKS = [
     ],
     summary: 'One room, from nursery to moving out: what we keep up, carry on, and leave behind.',
     body: [
-      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The first build here is fully pixel art; the exhibition build that followed moved to an early-2000s desktop look.',
+      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The first version shown here is one I built for our A3 as the main coder. It is fully pixel art, and the game will keep changing as we revise it; the exhibition build that followed moved to an early-2000s desktop look.',
       'Our team uses a studio-role model with collaborative co-authorship: I am main coder; Chloee Park leads design and supports coding; Isabella Kiosses leads documentation and film; Lyebin Cho leads film and photo. Decisions are discussed collectively, while role holders make specialist calls; as primary coder, I make final technical decisions.',
       'I can claim the core interaction system, player input/state logic, asset integration, technical problem-solving and testing, while crediting teammates for visual and film contributions. The exhibition develops reliable interactive systems because it must run repeatedly on a public computer and withstand real visitor use.'
     ],

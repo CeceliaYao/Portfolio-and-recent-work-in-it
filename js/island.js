@@ -9,7 +9,7 @@ const COL = {
 };
 
 export function createIsland(host, opts) {
-  opts = Object.assign({ onSelect: () => {}, onHover: () => {}, onCarry: () => {}, onFocus: () => {}, pixel: 3 }, opts || {});
+  opts = Object.assign({ onSelect: () => {}, onHover: () => {}, onCarry: () => {}, onFocus: () => {}, pixel: 2 }, opts || {});
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(1);
@@ -367,7 +367,7 @@ export function createIsland(host, opts) {
   /* ---------- size: render small, scale up crisp ---------- */
   function size() {
     const r = host.getBoundingClientRect();
-    const pf = opts.pixel * (r.width < 520 ? .85 : 1);
+    const pf = opts.pixel * (r.width < 520 ? .8 : 1);
     const w = Math.max(80, Math.round(r.width / pf)), h = Math.max(80, Math.round(r.height / pf));
     renderer.setSize(w, h, false);
     const aspect = r.width / Math.max(1, r.height), view = r.width < 520 ? 17.5 : 15.5;

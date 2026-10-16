@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=20261016l">
+<link rel="stylesheet" href="css/site.css?v=20261016m">
 </head>
 <body>
 
@@ -86,7 +86,7 @@
       <p class="kicker">Current project</p>
       <h2>What We Carry</h2>
       <p>My room as a small Three.js scene. Drag to look at it from any side, above or below, and click the objects to find out what they mean to me.</p>
-      <p class="sub">An individual interactive web and 3D prototyping study, developed from our A3 team discussions about the objects that recur, disappear or change meaning across life stages.</p>
+      <p class="sub">A new personal game I created about my own room. It connects to my A1 and to our A3, The Next Chapter: the objects we keep, lose or carry into the next room.</p>
       <p class="btns"><button class="btn" type="button" id="carry-read">Read the project ▸</button><a class="btn ghost" href="room/" target="_blank" rel="noopener">Play the room ↗</a></p>
     </div>
     <div class="island-wrap" data-reveal>
@@ -120,6 +120,7 @@
         <button type="button" data-reset aria-label="Back to the start view">⟲</button>
         <span class="lbl">drag to look around · pinch to zoom</span>
       </div>
+      
       <p class="island-fallback" hidden>The 3D room needs WebGL. The pixel room above has everything in it.</p>
     </div>
   </section>
@@ -177,16 +178,16 @@
   </div>
 </div>
 
-<script src="js/pixel-art.js?v=20261016l"></script>
-<script src="js/room-engine.js?v=20261016l" data-root="./"></script>
-<script src="js/content.js?v=20261016l"></script>
-<script src="js/story.js?v=20261016l"></script>
-<script src="js/covers.js?v=20261016l"></script>
-<script src="js/fx.js?v=20261016l"></script>
-<script src="js/music.js?v=20261016l"></script>
-<script src="js/home.js?v=20261016l"></script>
+<script src="js/pixel-art.js?v=20261016m"></script>
+<script src="js/room-engine.js?v=20261016m" data-root="./"></script>
+<script src="js/content.js?v=20261016m"></script>
+<script src="js/story.js?v=20261016m"></script>
+<script src="js/covers.js?v=20261016m"></script>
+<script src="js/fx.js?v=20261016m"></script>
+<script src="js/music.js?v=20261016m"></script>
+<script src="js/home.js?v=20261016m"></script>
 <script type="module">
-import { createIsland } from './js/island.js?v=20261016l';
+import { createIsland } from './js/island.js?v=20261016m';
 window.mountIsland && window.mountIsland(createIsland);
 </script>
 </body>

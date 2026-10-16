@@ -742,3 +742,14 @@ main{overflow-x:clip}
 .carry-card .note{font-size:17px;color:var(--ink2);margin:0 0 14px}
 @media (max-width:640px){.island-modes button{font-size:13px;padding:5px 8px 7px}.island-panel{top:46px;font-size:12px}}
 .island-modes button,.island-panel,.carry-card{color:var(--ink)}
+
+/* ---------- round 12 ---------- */
+/* covers in Selected work sit without a black frame, like What We Carry and Echo Corridor */
+.u-cv,.wc-cv,.work .mcover{box-shadow:none!important;background:transparent}
+.u-cv img,.u-cv canvas,.wc-cv img,.wc-cv canvas{border-radius:2px}
+/* the 3D room: tabs and the mode panel above it, controls below it, so nothing covers the model */
+.island-wrap{aspect-ratio:auto;min-height:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.island-modes,.island-panel,.island-ui{position:relative;top:auto;left:auto;bottom:auto;transform:none;max-width:100%}
+#island{position:relative;inset:auto;width:100%;aspect-ratio:4/3}
+.island-panel{min-height:34px}
+@media (max-width:860px){#island{aspect-ratio:1/1}}
