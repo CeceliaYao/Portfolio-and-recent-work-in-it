@@ -481,7 +481,7 @@ class Room {
   toScreen(ax, ay) { const r = this.host.getBoundingClientRect(); return [r.left + this.offX + ax * this.scale, r.top + this.offY + ay * this.scale]; }
   pick(ax, ay) {
     for (let i = this.objects.length - 1; i >= 0; i--) {
-      const o = this.objects[i]; if (!o.img) continue;
+      const o = this.objects[i]; if (!o.img || o.hidden) continue;
       if (ax < o.x || ay < o.y || ax >= o.x + o.w || ay >= o.y + o.h) continue;
       if (o.img && o.id !== 'window' && o.id !== 'door') {   // pixel-accurate, with 2px slack
         const ix = Math.floor(ax - o.x), iy = Math.floor(ay - o.y);
@@ -522,7 +522,7 @@ class Room {
     paintClock(x);
     paintBulbs(x, t, this.night);
     // objects + actors sorted so the girl can walk in front of / behind the bed and chair
-    const list = this.objects.filter(o => o.img && o.id !== 'window' && o.id !== 'door');
+    const list = this.objects.filter(o => o.img && !o.hidden && o.id !== 'window' && o.id !== 'door');
     const draws = list.map(o => ({ z: o.z != null ? o.z : 0, f: () => {
       const lift = (o === this.hover || o === this.focus) && !this.reduced ? -1 : 0;
       if ((o === this.hover || o === this.focus) && o.halo) x.drawImage(o.halo, o.x - 1, o.y - 1 + lift);

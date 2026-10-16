@@ -5,7 +5,7 @@ Personal site of Qinxi (Cecelia) Yao, interactive and visual designer, Brisbane.
 The page opens with a short introduction, then steps into my room. You open the door, walk in, and everything you can click is a real object I own, redrawn by hand as pixel art; click it and the real thing appears. The desk computer opens my work and the posters on the wall are projects. In Selected work each project is held down with a strip of masking tape with a colour-coded index tab: drag it sideways to peel it off. Further down, the same room floats as a small 3D island (What We Carry).
 
 - `index.html`: the homepage (intro, room, work, What We Carry in 3D, arcade, contact)
-- `room/`: **My Room**, the same room as a small click-around game
+- `room/`: **My Room**, the same room as three tiny games: Find twelve things, What's missing? (look, the lights blink, pick what vanished; five rounds) and Pack five (the box only fits five things: what do you carry?)
 - `play/`: work that runs in the browser: the first pixel build of The Next Chapter (KKB385) and Echo Corridor (DXB211)
 
 QUT work on the site: The Next Chapter (KKB385), Echo Corridor (DXB211), HITH Brick (DYB223), ShopMirror 2032 (DXB210), Astrobius (DVB201), What We Carry (KKB385).

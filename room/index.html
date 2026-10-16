@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/site.css?v=20261016m">
-<link rel="stylesheet" href="../css/game.css?v=20261016m">
+<link rel="stylesheet" href="../css/site.css?v=20261016n">
+<link rel="stylesheet" href="../css/game.css?v=20261016n">
 </head>
 <body class="game">
 <div id="stage" aria-label="Cecelia's room"></div>
@@ -22,10 +22,15 @@
   <div class="tools">
     <button type="button" id="sound" aria-label="Sound on or off">♪</button>
     <button type="button" id="night" aria-label="Day or night">☾</button>
+    <button type="button" id="menu" aria-label="Choose a game">≡</button>
   </div>
 </div>
 <div class="bag" id="bag" aria-label="Objects found"></div>
 <div class="tip" id="tip" aria-hidden="true"></div>
+<div class="toast" id="toast" aria-live="polite" hidden></div>
+<div class="blink" id="blink" aria-hidden="true"></div>
+<div class="choices frame" id="choices" hidden><p id="choices-q">Something is gone. What was it?</p><div class="opts" id="opts"></div></div>
+<div class="box" id="box" hidden><span class="lbl">the box</span><div class="slots" id="slots"></div><button type="button" class="btn" id="pack-done" hidden>Done packing ▸</button></div>
 
 <div class="story frame" id="story" role="dialog" aria-labelledby="story-t" hidden>
   <div class="portrait" id="story-p"></div>
@@ -39,15 +44,25 @@
 
 <div class="card" id="title">
   <div class="frame in">
-    <p class="kicker">What We Carry · a tiny game</p>
+    <p class="kicker">What We Carry · tiny games</p>
     <h1>My Room</h1>
-    <p>This is my real room, and the things I keep up and carry with me. Every object is something I own, redrawn in pixels. Click around and find out who lives here: twelve things to discover.</p>
-    <ul class="keys">
-      <li>Click anything that looks interesting</li>
-      <li>A sparkle hints at things you haven't found</li>
-      <li><kbd>N</kbd> night · <kbd>M</kbd> sound</li>
-    </ul>
-    <button class="btn" type="button" id="start">Start ▸</button>
+    <p>This is my real room, and the things I keep up and carry with me. Every object is something I own, redrawn in pixels. Pick a game.</p>
+    <div class="games">
+      <button type="button" class="game-btn" id="start"><b>Find twelve things</b><span>Click around and find out who lives here. A sparkle hints at what you haven't seen.</span></button>
+      <button type="button" class="game-btn" id="start-missing"><b>What's missing?</b><span>Look at the room, the lights blink, something is gone. Five rounds.</span></button>
+      <button type="button" class="game-btn" id="start-pack"><b>Pack five</b><span>You are moving out and the box only fits five things. What do you carry?</span></button>
+    </div>
+    <ul class="keys"><li><kbd>N</kbd> night · <kbd>M</kbd> sound · <kbd>≡</kbd> back to this menu</li></ul>
+  </div>
+</div>
+
+<div class="card" id="result" hidden>
+  <div class="frame in">
+    <p class="kicker" id="result-k"></p>
+    <h1 id="result-h"></h1>
+    <div class="carried" id="result-icons"></div>
+    <p id="result-p"></p>
+    <p class="row"><button class="btn" type="button" id="again">Play again ▸</button><button class="btn ghost" type="button" id="to-menu">Other games</button></p>
   </div>
 </div>
 
@@ -55,17 +70,17 @@
   <div class="frame in">
     <p class="kicker">all found</p>
     <h1>Objects I carry</h1>
-    <div class="carry" id="carry"></div>
+    <div class="carried" id="carry"></div>
     <p>Trails, a few bottles, magnets I made, something green, and a desk where the work happens. Thanks for coming in.</p>
     <p class="row"><a class="btn" href="../#work">See my work ▸</a><button class="btn ghost" type="button" id="stay">Stay a while</button></p>
   </div>
 </div>
 
-<script src="../js/pixel-art.js?v=20261016m"></script>
-<script src="../js/room-engine.js?v=20261016m" data-root="../"></script>
-<script src="../js/content.js?v=20261016m"></script>
-<script src="../js/story.js?v=20261016m"></script>
-<script src="../js/covers.js?v=20261016m"></script>
-<script src="../js/game.js?v=20261016m"></script>
+<script src="../js/pixel-art.js?v=20261016n"></script>
+<script src="../js/room-engine.js?v=20261016n" data-root="../"></script>
+<script src="../js/content.js?v=20261016n"></script>
+<script src="../js/story.js?v=20261016n"></script>
+<script src="../js/covers.js?v=20261016n"></script>
+<script src="../js/game.js?v=20261016n"></script>
 </body>
 </html>

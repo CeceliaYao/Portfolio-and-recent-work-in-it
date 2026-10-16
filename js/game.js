@@ -1,4 +1,5 @@
-/* My Room, from What We Carry: look around, click things, remember them. */
+/* My Room, from What We Carry: three tiny games in my room.
+   Find twelve things, What's missing? (a memory game) and Pack five (choose what to carry). */
 (function () {
 'use strict';
 const { Room, canvas } = window.PixelRoom;
@@ -39,7 +40,7 @@ room.on('hover', o => {
 });
 addEventListener('keydown', e => {
   const k = e.key.toLowerCase();
-  if (!playing) { if (k === 'enter' || k === ' ') { e.preventDefault(); start(); } return; }
+  if (!playing) { if ((k === 'enter' || k === ' ') && !$('#title').hidden && document.activeElement === document.body) { e.preventDefault(); start(); } return; }
   if (talking) { if (e.repeat) return; if (k === 'escape' || k === 'enter' || k === ' ') { e.preventDefault(); story._finish && typer ? story._finish() : closeStory(); } return; }
   if (k === 'n') toggleNight();
   if (k === 'm') toggleSound();
@@ -149,8 +150,116 @@ $('#night').onclick = toggleNight;
 room.on('night', n => $('#night').textContent = n ? '☀' : '☾');
 $('#night').textContent = room.night ? '☀' : '☾';
 
+/* ---------- more games: What's missing? and Pack five ---------- */
+// things that can go missing or be packed: every object with its own drawing, apart from the window and door
+const POOL = ['visor', 'backpack', 'poles', 'perfume', 'penguin', 'lamp', 'ps5', 'picasso', 'beads', 'jade', 'whisky', 'bourbon', 'gin', 'catpot', 'succulent', 'kitty', 'water', 'photos'];
+let mode = 'find';
+const toast = $('#toast');
+function say(t, ms) { toast.textContent = t; toast.hidden = false; clearTimeout(say.t); if (ms) say.t = setTimeout(() => toast.hidden = true, ms); }
+const nameOf = id => room.find(id).name;
+const iconOf = id => { const o = room.find(id); return o.img.toDataURL ? o.img.toDataURL() : o.img.src; };
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function showAll() { room.objects.forEach(o => { o.hidden = false; }); }
+function result(k, h, ids, p) {
+  $('#result-k').textContent = k; $('#result-h').textContent = h; $('#result-p').textContent = p;
+  $('#result-icons').innerHTML = ids.map(id => `<div title="${esc(nameOf(id))}"><img src="${iconOf(id)}" alt="${esc(nameOf(id))}"></div>`).join('');
+  $('#result').hidden = false;
+}
+function resetModes() {
+  clearTimeout(miss.timer); clearInterval(miss.tick); $('#choices').hidden = true; $('#box').hidden = true; toast.hidden = true;
+  $('#result').hidden = true; showAll(); packed.length = 0; drawSlots();
+}
+function menu() { resetModes(); closeStory(); playing = false; mode = 'find'; $('#bag').hidden = false; $('#title').hidden = false; }
+$('#menu').onclick = menu;
+$('#to-menu').onclick = menu;
+$('#again').onclick = () => { $('#result').hidden = true; mode === 'missing' ? startMissing() : startPack(); };
+
+/* What's missing? look, blink, one thing is gone, pick it from four */
+const miss = { round: 0, score: 0, gone: null, used: [], timer: 0, tick: 0 };
+function startMissing() {
+  resetModes(); $('#title').hidden = true; $('#bag').hidden = true; mode = 'missing'; playing = false;
+  Object.assign(miss, { round: 0, score: 0, gone: null, used: [] });
+  nextRound();
+}
+function nextRound() {
+  showAll(); $('#choices').hidden = true;
+  if (miss.round >= 5) return endMissing();
+  miss.round++;
+  $('#count').textContent = `round ${miss.round} / 5`;
+  let left = 4 - Math.min(2, miss.round - 1);   // a little less time to look each round
+  say(`Remember the room… ${left}`);
+  miss.tick = setInterval(() => { left--; if (left > 0) say(`Remember the room… ${left}`); }, 1000);
+  miss.timer = setTimeout(() => { clearInterval(miss.tick); vanish(); }, left * 1000);
+  blip(523, .08, 'square', .04);
+}
+function vanish() {
+  const blink = $('#blink'); blink.classList.remove('on'); void blink.offsetWidth; blink.classList.add('on');
+  blip(196, .25, 'triangle', .06);
+  setTimeout(() => {
+    const pool = POOL.filter(id => !miss.used.includes(id));
+    miss.gone = pool[(Math.random() * pool.length) | 0]; miss.used.push(miss.gone);
+    room.find(miss.gone).hidden = true;
+    const opts = shuffle([miss.gone, ...shuffle(POOL.filter(id => id !== miss.gone)).slice(0, 3)]);
+    $('#opts').innerHTML = opts.map(id => `<button type="button" data-id="${id}"><img src="${iconOf(id)}" alt=""><span>${esc(nameOf(id))}</span></button>`).join('');
+    $('#choices-q').textContent = 'Something is gone. What was it?';
+    $('#choices').hidden = false; say('Look closely…', 1500);
+  }, 260);
+}
+$('#opts').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (!b || $('#opts').dataset.lock) return;
+  const right = b.dataset.id === miss.gone; $('#opts').dataset.lock = '1';
+  b.classList.add(right ? 'right' : 'wrong'); $('#opts').querySelector(`[data-id="${miss.gone}"]`).classList.add('right');
+  if (right) { miss.score++; blip(784, .08, 'square', .05); blip(1046, .12, 'square', .05, .09); } else blip(220, .2, 'square', .05);
+  $('#choices-q').textContent = right ? `Yes, the ${nameOf(miss.gone).toLowerCase()}.` : `It was the ${nameOf(miss.gone).toLowerCase()}.`;
+  room.find(miss.gone).hidden = false; room.focus = room.find(miss.gone);
+  setTimeout(() => { delete $('#opts').dataset.lock; room.focus = null; nextRound(); }, 1600);
+});
+function endMissing() {
+  $('#count').textContent = `${miss.score} / 5`; toast.hidden = true;
+  const line = miss.score === 5 ? 'You know this room as well as I do.' : miss.score >= 3 ? 'Some things stay with you, some slip away.' : 'Rooms are easy to forget. That is why I keep the things.';
+  result('What\'s missing?', `${miss.score} of 5 remembered`, miss.used, line);
+  [523, 659, 784].forEach((f, i) => blip(f, .12, 'square', .05, i * .1));
+}
+$('#start-missing').onclick = startMissing;
+
+/* Pack five: click the things you'd carry; they leave the room and go into the box */
+const packed = [];
+function drawSlots() {
+  $('#slots').innerHTML = Array.from({ length: 5 }, (_, i) => packed[i] ? `<button type="button" data-id="${packed[i]}" title="Put back: ${esc(nameOf(packed[i]))}"><img src="${iconOf(packed[i])}" alt="${esc(nameOf(packed[i]))}"></button>` : '<div></div>').join('');
+  $('#pack-done').hidden = packed.length < 5;
+  if (mode === 'pack') $('#count').textContent = `${packed.length} / 5 packed`;
+}
+function startPack() {
+  resetModes(); $('#title').hidden = true; $('#bag').hidden = true; mode = 'pack'; playing = false;
+  $('#box').hidden = false; drawSlots(); say('The box only fits five things. Click what you would carry.', 4000);
+}
+function packIt(o) {
+  if (!POOL.includes(o.id) || packed.includes(o.id)) return;
+  if (packed.length >= 5) { say('The box is full. Click something in the box to put it back.', 2500); blip(220, .15, 'square', .04); return; }
+  // fly a copy of the drawing from the room down into the box
+  const [sx, sy] = room.toScreen(o.x, o.y), fly = new Image(); fly.src = iconOf(o.id); fly.className = 'fly';
+  fly.style.left = sx + 'px'; fly.style.top = sy + 'px'; fly.style.width = o.w * room.scale + 'px';
+  document.body.append(fly);
+  const slot = $('#slots').children[packed.length].getBoundingClientRect();
+  requestAnimationFrame(() => { fly.style.transform = `translate(${slot.left - sx}px, ${slot.top - sy}px) scale(${36 / (o.w * room.scale)})`; fly.style.opacity = .3; });
+  setTimeout(() => fly.remove(), 650);
+  o.hidden = true; packed.push(o.id); tip.classList.remove('on');
+  setTimeout(drawSlots, 600); blip(660, .06, 'square', .05);
+}
+$('#slots').addEventListener('click', e => {
+  const b = e.target.closest('[data-id]'); if (!b) return;
+  packed.splice(packed.indexOf(b.dataset.id), 1); room.find(b.dataset.id).hidden = false; drawSlots(); blip(440, .06, 'square', .04);
+});
+$('#pack-done').onclick = () => {
+  const left = POOL.length - packed.length;
+  result('Pack five', 'What I would carry', packed.slice(), `${left} things stay behind in the room. The memory box only has room for so much.`);
+  [523, 659, 784, 1046].forEach((f, i) => blip(f, .12, 'square', .05, i * .1));
+};
+$('#start-pack').onclick = startPack;
+room.on('select', o => { if (mode === 'pack' && !$('#box').hidden && $('#result').hidden) packIt(o); });
+
 /* ---------- start ---------- */
-function start() { if (playing) return; $('#title').hidden = true; playing = true; $('#count').textContent = '0 / ' + GOALS.length; blip(440, .08); blip(660, .1, 'square', .05, .08); }
+function start() { if (playing) return; resetModes(); mode = 'find'; $('#bag').hidden = false; $('#title').hidden = true; playing = true; $('#count').textContent = '0 / ' + GOALS.length; blip(440, .08); blip(660, .1, 'square', .05, .08); }
 $('#start').onclick = start;
 addEventListener('resize', () => { room.opts.contain = innerWidth > innerHeight; room.fit(); });
 })();
