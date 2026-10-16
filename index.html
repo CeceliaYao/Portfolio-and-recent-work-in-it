@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&family=DotGothic16&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=20261016j">
+<link rel="stylesheet" href="css/site.css?v=20261016l">
 </head>
 <body>
 
@@ -90,6 +90,24 @@
       <p class="btns"><button class="btn" type="button" id="carry-read">Read the project ▸</button><a class="btn ghost" href="room/" target="_blank" rel="noopener">Play the room ↗</a></p>
     </div>
     <div class="island-wrap" data-reveal>
+      <div class="island-modes" role="tablist" aria-label="Ways to play">
+        <button type="button" role="tab" data-mode="explore" aria-selected="true">Explore</button>
+        <button type="button" role="tab" data-mode="unpack" aria-selected="false">Unpack</button>
+        <button type="button" role="tab" data-mode="carry" aria-selected="false">Carry five</button>
+        <button type="button" role="tab" data-mode="sun" aria-selected="false">Sun</button>
+      </div>
+      <div class="island-panel" id="island-panel" aria-live="polite">
+        <div data-for="explore"><span>Click anything to look closer.</span><button type="button" class="back" id="island-back" hidden>◂ back to the room</button></div>
+        <div data-for="unpack" hidden><label><span>packed</span><input type="range" id="island-unpack" min="0" max="100" value="0" aria-label="Unpack the room"><span>unpacked</span></label></div>
+        <div data-for="carry" hidden><span id="carry-count">The box has room for five things. Click what you would carry.</span><span class="chips" id="carry-chips"></span></div>
+        <div data-for="sun" hidden><label><span>6:00</span><input type="range" id="island-hour" min="6" max="22" step="0.1" value="13" aria-label="Time of day"><span>22:00</span></label><b id="hour-label">13:00</b></div>
+      </div>
+      <div class="carry-card" id="carry-card" hidden>
+        <p class="kicker">What I would carry</p>
+        <ol id="carry-list"></ol>
+        <p class="note">The memory box only has room for so much.</p>
+        <button type="button" class="btn" id="carry-again">Unpack and choose again</button>
+      </div>
       <div id="island" aria-label="My room as a 3D island. Drag to turn it."></div>
       <div class="island-ui" role="group" aria-label="Turn the 3D room">
         <button type="button" data-orbit="-1,0" aria-label="Turn left">◂</button>
@@ -159,16 +177,16 @@
   </div>
 </div>
 
-<script src="js/pixel-art.js?v=20261016j"></script>
-<script src="js/room-engine.js?v=20261016j" data-root="./"></script>
-<script src="js/content.js?v=20261016j"></script>
-<script src="js/story.js?v=20261016j"></script>
-<script src="js/covers.js?v=20261016j"></script>
-<script src="js/fx.js?v=20261016j"></script>
-<script src="js/music.js?v=20261016j"></script>
-<script src="js/home.js?v=20261016j"></script>
+<script src="js/pixel-art.js?v=20261016l"></script>
+<script src="js/room-engine.js?v=20261016l" data-root="./"></script>
+<script src="js/content.js?v=20261016l"></script>
+<script src="js/story.js?v=20261016l"></script>
+<script src="js/covers.js?v=20261016l"></script>
+<script src="js/fx.js?v=20261016l"></script>
+<script src="js/music.js?v=20261016l"></script>
+<script src="js/home.js?v=20261016l"></script>
 <script type="module">
-import { createIsland } from './js/island.js?v=20261016j';
+import { createIsland } from './js/island.js?v=20261016l';
 window.mountIsland && window.mountIsland(createIsland);
 </script>
 </body>

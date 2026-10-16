@@ -451,11 +451,36 @@ window.mountIsland = create => {
         if (!o) { tip.classList.remove('on'); return; }
         tip.textContent = o.name; tip.style.left = x + 'px'; tip.style.top = (y - 18) + 'px'; tip.classList.add('on');
       },
-      onSelect: tag => { const o = room.find(tag); if (o) { coin(); tip.classList.remove('on'); act(o); } }
+      onSelect: tag => { const o = room.find(tag); if (o) { coin(); tip.classList.remove('on'); act(o); } },
+      onFocus: tag => { $('#island-back').hidden = !tag; if (!tag) closeStory(); },
+      onCarry: (list, full) => {
+        const name = t => (room.find(t) || {}).name || t;
+        $('#carry-count').textContent = full ? 'The box is full.' : `${list.length} of 5 packed. Click what you would carry.`;
+        $('#carry-chips').innerHTML = list.map(t => `<button type="button" data-back="${esc(t)}" title="Put it back">${esc(name(t))} ×</button>`).join('');
+        $('#carry-list').innerHTML = list.map(t => `<li>${esc(name(t))}</li>`).join('');
+        $('#carry-card').hidden = !full; if (full) coin();
+      }
     }); } catch (e) { wrap.querySelector('.island-fallback').hidden = false; host.remove(); return; }
     wrap.querySelectorAll('[data-orbit]').forEach(b => b.onclick = () => { const [t, p] = b.dataset.orbit.split(',').map(Number); island.orbit(t, p); });
     wrap.querySelectorAll('[data-zoom]').forEach(b => b.onclick = () => island.zoom(+b.dataset.zoom));
     wrap.querySelector('[data-reset]').onclick = () => island.reset();
+    // ways to play
+    const panel = $('#island-panel');
+    wrap.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
+      const m = b.dataset.mode; coin();
+      wrap.querySelectorAll('[data-mode]').forEach(x => x.setAttribute('aria-selected', String(x === b)));
+      panel.querySelectorAll('[data-for]').forEach(d => d.hidden = d.dataset.for !== m);
+      $('#carry-card').hidden = true; closeStory();
+      if (m !== 'unpack') $('#island-unpack').value = 0;
+      if (m === 'sun') { $('#island-hour').value = 13; $('#hour-label').textContent = '13:00'; }
+      island.setMode(m);
+      if (m === 'carry') { $('#carry-count').textContent = 'The box has room for five things. Click what you would carry.'; $('#carry-chips').innerHTML = ''; }
+    });
+    $('#island-unpack').oninput = e => island.setUnpack(e.target.value / 100);
+    $('#island-hour').oninput = e => { const h = +e.target.value; island.setHour(h); $('#hour-label').textContent = `${Math.floor(h)}:${String(Math.round((h % 1) * 60)).padStart(2, '0').replace('60', '00')}`; };
+    $('#island-back').onclick = () => { island.unfocus(); closeStory(); };
+    $('#carry-chips').onclick = e => { const b = e.target.closest('[data-back]'); if (b) island.putBack(b.dataset.back); };
+    $('#carry-again').onclick = () => { island.unpackAll(); $('#carry-card').hidden = true; };
   };
   // build it only when it is about to be seen
   new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); go(); } }, { rootMargin: '300px' }).observe(host);

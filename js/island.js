@@ -9,7 +9,7 @@ const COL = {
 };
 
 export function createIsland(host, opts) {
-  opts = Object.assign({ onSelect: () => {}, onHover: () => {}, pixel: 3 }, opts || {});
+  opts = Object.assign({ onSelect: () => {}, onHover: () => {}, onCarry: () => {}, onFocus: () => {}, pixel: 3 }, opts || {});
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(1);
@@ -25,7 +25,7 @@ export function createIsland(host, opts) {
   /* ---------- camera: orthographic, three-quarter view ---------- */
   const cam = new THREE.OrthographicCamera(-20, 20, 20, -20, 0.1, 400);
   // the camera orbits a target: theta goes all the way round, phi tilts from overhead to below the island
-  const target = new THREE.Vector3(0, 2.5, 0), DIST = 80;
+  const HOME_TARGET = new THREE.Vector3(0, 2.5, 0), target = HOME_TARGET.clone(), DIST = 80;
   const HOME = { theta: Math.PI / 4 - .2, phi: 1.02, zoom: 1 };
   const PHI_MIN = .12, PHI_MAX = 2.2;
   let theta = HOME.theta, phi = HOME.phi, vT = 0, vP = 0;
@@ -52,18 +52,21 @@ export function createIsland(host, opts) {
   const mats = {};
   const mat = (c, em) => { const k = c + (em || ''); return mats[k] || (mats[k] = new THREE.MeshLambertMaterial({ color: c, emissive: em || '#000000' })); };
   const pickables = [];
+  // every piece of the room is recorded with its rest pose, so the play modes can move it and always put it back
+  let building = false; const parts = [];
   // box from its minimum corner; tagged boxes get their own material so they can light up on hover
   function B(x, y, z, w, h, d, c, tag, em) {
     const m = new THREE.Mesh(unit, tag ? new THREE.MeshLambertMaterial({ color: c, emissive: em || '#000000' }) : mat(c, em));
     m.position.set(x, y, z); m.scale.set(w, h, d);
     m.castShadow = true; m.receiveShadow = true;
     if (tag) { m.userData.tag = tag; m.userData.em = new THREE.Color(em || '#000000'); pickables.push(m); }
+    if (building) parts.push(m);
     island.add(m); return m;
   }
 
   // walls get their own materials so a wall between the camera and the room can fade away (cutaway view)
   const wallMats = { back: new THREE.MeshLambertMaterial({ color: COL.wall, transparent: true }), left: new THREE.MeshLambertMaterial({ color: COL.wall, transparent: true }) };
-  function Wall(side, x, y, z, w, h, d) { const m = B(x, y, z, w, h, d, COL.wall); m.material = wallMats[side]; return m; }
+  function Wall(side, x, y, z, w, h, d) { const m = B(x, y, z, w, h, d, COL.wall); m.material = wallMats[side]; m.userData.wall = true; return m; }
 
   /* ---------- the floating island: instanced voxel columns ---------- */
   const R = 15.6, cells = [];
@@ -107,10 +110,12 @@ export function createIsland(host, opts) {
     m.position.set(x, y, z); if (wall === 'left') m.rotation.y = Math.PI / 2;
     m.receiveShadow = true;
     if (tag) { m.userData.tag = tag; m.userData.em = new THREE.Color('#000000'); pickables.push(m); }
+    if (building) parts.push(m);
     island.add(m); return m;
   }
   const WH = 11;
   B(-10, -1, -7, 20, 1, 14, COL.carpet);                                    // floor
+  building = true;
   // walls (the back wall has an opening for the window, the left wall one for the door)
   Wall('back', -11, 0, -8, 13.4, WH, 1); Wall('back', 8.6, 0, -8, 1.4, WH, 1);
   Wall('back', 2.4, 0, -8, 6.2, 3.6, 1); Wall('back', 2.4, 9.2, -8, 6.2, WH - 9.2, 1);
@@ -229,7 +234,7 @@ export function createIsland(host, opts) {
   B(-9.9, 5.35, .9, .9, .16, 1.4, '#fbf7ef', 'visor'); B(-9.95, 5.5, .9, .2, .55, 1.4, '#e8e2d6', 'visor'); B(-9.1, 5.33, .9, .12, .1, 1.4, '#9aa2a9', 'visor');
   const pole = (z, tilt) => { const g = new THREE.Group(); g.position.set(-9.6, 0, z); g.rotation.x = tilt;
     [[0, 4.4, .16, '#d9789a'], [4.4, .9, .26, '#2c2730'], [0, .3, .1, '#9aa2a9']].forEach(([y, h, w, c]) => { const m = new THREE.Mesh(unit, new THREE.MeshLambertMaterial({ color: c, emissive: '#000000' })); m.position.set(-w / 2, y, -w / 2); m.scale.set(w, h, w); m.castShadow = true; m.userData.tag = 'poles'; m.userData.em = new THREE.Color('#000000'); pickables.push(m); g.add(m); });
-    island.add(g); };
+    if (building) parts.push(g); island.add(g); };
   pole(2.4, -.06); pole(2.85, .05);
   B(-10.05, 0, 3.6, .1, 7, 2.8, '#b0743f', 'door'); B(-9.95, .5, 3.85, .05, 2.6, 2.3, '#9c6534', 'door'); B(-9.95, 3.6, 3.85, .05, 2.9, 2.3, '#9c6534', 'door');
   B(-9.9, 3.3, 5.8, .2, .3, .3, '#ffd95a', 'door');
@@ -242,6 +247,16 @@ export function createIsland(host, opts) {
   for (let i = 0; i < 17; i++) bulbs.push(B(-9.6 + i * 1.18, 10.0 - (i % 2) * .3, -6.95, .26, .34, .24, bulbCols[i % 4], null));
   for (let i = 0; i < 12; i++) bulbs.push(B(-9.95, 10.0 - (i % 2) * .3, -6.3 + i * 1.12, .24, .34, .26, bulbCols[(i + 1) % 4], null));
   bulbs.forEach((b, i) => { b.material = new THREE.MeshLambertMaterial({ color: bulbCols[i % 4], emissive: '#000000' }); b.castShadow = false; });
+
+  building = false;
+  const tagOf = p => p.userData.tag || (p.children[0] && p.children[0].userData.tag) || null;
+  const byTag = {};
+  parts.forEach((p, i) => {
+    const c = new THREE.Box3().setFromObject(p).getCenter(new THREE.Vector3());
+    const r = Math.sin(i * 12.9898) * 43758.5453;
+    p.userData.rest = { pos: p.position.clone(), rot: p.rotation.clone(), scale: p.scale.clone(), center: c, seed: r - Math.floor(r) };
+    const t = tagOf(p); if (t) (byTag[t] = byTag[t] || []).push(p);
+  });
 
   // outside: a tree behind the left wall, a lamp post, some flowers
   { const tx = -13.4, tz = -3.2; B(tx, -1, tz, 1, 6, 1, '#6e4026');
@@ -264,7 +279,8 @@ export function createIsland(host, opts) {
 
   /* ---------- day / night ---------- */
   let night = false;
-  function setNight(n) {
+  function setNight(n, fromSun) {
+    if (!fromSun) siteNight = n;
     night = n;
     hemi.intensity = n ? .32 : 1.05; hemi.color.set(n ? '#5a6ab8' : '#cfe9ff'); hemi.groundColor.set(n ? '#2a2440' : '#e6cfa8');
     sun.intensity = n ? .35 : 1.6; sun.color.set(n ? '#8fa0ff' : '#fff1d6');
@@ -273,6 +289,79 @@ export function createIsland(host, opts) {
     bulb.material.emissive.set(n ? '#ffd27a' : '#000000');
     clouds.forEach(c => c.children.forEach(m => m.material.color.set(n ? '#5a5a9a' : '#ffffff')));
     request();
+  }
+
+  /* ---------- play modes ---------- */
+  let mode = 'explore';
+  // Unpack: everything lifts off its place and the walls fold down; at 0 every piece is exactly back at rest
+  let unpack = 0, unpackGoal = 0;
+  function applyUnpack(u) {
+    parts.forEach(p => {
+      const r = p.userData.rest; if (!r || p.userData.carried) return;
+      if (p.userData.wall) { p.scale.y = r.scale.y * (1 - .92 * u); return; }
+      const c = r.center, len = Math.hypot(c.x, c.z) || 1, out = u * (1.2 + r.seed * 2.2);
+      p.position.set(r.pos.x + c.x / len * out, r.pos.y + u * (1.4 + r.seed * 4 + Math.max(0, c.y) * .35), r.pos.z + c.z / len * out);
+      p.rotation.y = r.rot.y + u * (r.seed - .5) * .9;
+    });
+  }
+  // Carry: a moving box; choose five things to take with you
+  const MAX_CARRY = 5, carried = [], flights = [];
+  const box = new THREE.Group(); box.position.set(-1.5, 0, 2.4); box.scale.setScalar(.001); island.add(box);
+  [[0, 0, 0, 3.2, 1.9, 2.6, '#c99a62'], [.05, 1.9, -.15, 3.1, .12, .3, '#b07a42'], [.05, 1.9, 2.45, 3.1, .12, .3, '#b07a42'], [-.25, 1.6, -.05, .3, .9, 2.7, '#b07a42'], [3.15, 1.6, -.05, .3, .9, 2.7, '#b07a42'], [1.2, .7, 2.61, .8, .5, .02, '#fbf6ea']].forEach(([x, y, z, w, h, d, c]) => {
+    const m = new THREE.Mesh(unit, new THREE.MeshLambertMaterial({ color: c })); m.position.set(x, y, z); m.scale.set(w, h, d); m.castShadow = m.receiveShadow = true; box.add(m);
+  });
+  let boxGoal = 0;
+  const boxSpot = () => new THREE.Vector3(box.position.x + 1.6 + (Math.random() - .5) * 1.2, 1.4, box.position.z + 1.3 + (Math.random() - .5) * .8);
+  function carry(tag) {
+    if (!byTag[tag] || tag === 'window' || tag === 'door' || carried.includes(tag) || carried.length >= MAX_CARRY) return false;
+    carried.push(tag);
+    byTag[tag].forEach(p => { p.userData.carried = true; flights.push({ p, from: p.position.clone(), to: boxSpot(), s0: p.scale.clone(), s1: p.userData.rest.scale.clone().multiplyScalar(.2), t: 0, into: true }); });
+    opts.onCarry(carried.slice(), carried.length >= MAX_CARRY); request(); return true;
+  }
+  function putBack(tag) {
+    const i = carried.indexOf(tag); if (i < 0) return;
+    carried.splice(i, 1);
+    byTag[tag].forEach(p => { p.visible = true; flights.push({ p, from: boxSpot(), to: p.userData.rest.pos.clone(), s0: p.userData.rest.scale.clone().multiplyScalar(.2), s1: p.userData.rest.scale.clone(), t: 0, into: false }); });
+    opts.onCarry(carried.slice(), false); request();
+  }
+  function unpackAll() { carried.slice().forEach(putBack); }
+  // Explore: the chosen object comes forward and the rest of the room steps back
+  let focus = null, zoomBack = false; const dimmed = new Set();
+  function setFocus(tag) {
+    focus = null;
+    if (tag && byTag[tag]) { const b = new THREE.Box3(); byTag[tag].forEach(p => b.expandByObject(p)); focus = { tag, center: b.getCenter(new THREE.Vector3()) }; }
+    dimmed.clear();
+    if (focus) parts.forEach(p => p.traverse(o => { if (o.isMesh && tagOf(o) !== tag && !(o.userData.tag === tag)) dimmed.add(o.material); }));
+    if (!focus) zoomBack = true;
+    opts.onFocus(focus ? tag : null); request();
+  }
+  const allMats = new Set(); parts.forEach(p => p.traverse(o => { if (o.isMesh && !o.userData.wall) allMats.add(o.material); }));
+  // Sun: move the time of day across the sky
+  let hour = null;
+  function setHour(h) {
+    hour = h;
+    if (h == null) { sun.position.set(18, 30, 10); setNight(siteNight); return; }
+    const isNight = h < 6.4 || h >= 19.4; setNight(isNight, true);
+    const a = (h - 6) / 14 * Math.PI, e = Math.sin(a);
+    sun.position.set(Math.cos(a) * 40, Math.max(2, e * 38) + 2, 12);
+    if (!isNight) {
+      const warm = Math.max(0, 1 - e * 2.2);
+      sun.color.set('#fff1d6').lerp(new THREE.Color('#ff9a5a'), warm); sun.intensity = .5 + e * 1.2;
+      hemi.intensity = .45 + e * .65; hemi.color.set('#cfe9ff').lerp(new THREE.Color('#ffc9a0'), warm * .6);
+    }
+    request();
+  }
+  let siteNight = !!opts.night;
+  function setMode(m) {
+    if (m === mode) return;
+    if (mode === 'unpack') unpackGoal = 0;
+    if (mode === 'carry') { unpackAll(); boxGoal = 0; }
+    if (mode === 'sun') setHour(null);
+    if (focus) setFocus(null);
+    mode = m;
+    if (m === 'carry') { boxGoal = 1; goHome = true; }
+    if (m === 'sun') setHour(13);
+    idle = 0; request();
   }
 
   /* ---------- size: render small, scale up crisp ---------- */
@@ -333,7 +422,11 @@ export function createIsland(host, opts) {
   cv.addEventListener('dblclick', () => { goHome = true; idle = 0; request(); });
   cv.addEventListener('pointerup', e => {
     const tap = dragging && moved < 6 && pts.size === 1; lift(e);
-    if (tap) { const t = pick(e); if (t) { pop(t); opts.onSelect(t); } }
+    if (!tap) return;
+    const t = pick(e);
+    if (mode === 'carry') { if (t && carry(t)) return; if (t && carried.includes(t)) return; return; }
+    if (!t) { if (focus) setFocus(null); return; }
+    pop(t); if (mode === 'explore') setFocus(t); opts.onSelect(t);
   });
   cv.addEventListener('pointercancel', lift);
   // the mouse wheel zooms only while ctrl / pinch-to-zoom on a trackpad is held, so the page still scrolls normally
@@ -358,6 +451,18 @@ export function createIsland(host, opts) {
         if (Math.abs(dT) < .002 && Math.abs(HOME.phi - phi) < .002) goHome = false;
       } else if (!reduced && idle > 4) theta += dt * .12;   // a slow orbit while nobody is touching it
     }
+    // focus glides the camera to the chosen object; without focus it returns to the middle of the room
+    target.lerp(focus ? focus.center : HOME_TARGET, Math.min(1, dt * 4));
+    if (focus) { cam.zoom += (2.1 - cam.zoom) * Math.min(1, dt * 4); cam.updateProjectionMatrix(); }
+    else if (zoomBack) { cam.zoom += (HOME.zoom - cam.zoom) * Math.min(1, dt * 4); cam.updateProjectionMatrix(); if (Math.abs(cam.zoom - HOME.zoom) < .01) zoomBack = false; }
+    allMats.forEach(m => { const to = dimmed.has(m) ? .16 : 1; if (Math.abs((m.opacity ?? 1) - to) > .005 || (to < 1 && !m.transparent)) { m.transparent = true; m.opacity += (to - m.opacity) * Math.min(1, dt * 7); m.depthWrite = m.opacity > .9; } });
+    if (Math.abs(unpack - unpackGoal) > .001) { unpack += (unpackGoal - unpack) * Math.min(1, dt * 6); applyUnpack(unpack); } else if (unpack !== unpackGoal) { unpack = unpackGoal; applyUnpack(unpack); }
+    const bs = box.scale.x + (Math.max(.001, boxGoal) - box.scale.x) * Math.min(1, dt * 6); box.scale.setScalar(bs); box.visible = bs > .01;
+    for (let i = flights.length - 1; i >= 0; i--) {
+      const f = flights[i]; f.t = Math.min(1, f.t + dt / .7); const k = f.t < .5 ? 2 * f.t * f.t : 1 - Math.pow(-2 * f.t + 2, 2) / 2;
+      f.p.position.lerpVectors(f.from, f.to, k); f.p.position.y += Math.sin(k * Math.PI) * 4; f.p.scale.lerpVectors(f.s0, f.s1, k);
+      if (f.t >= 1) { if (f.into) f.p.visible = false; else { f.p.userData.carried = false; f.p.position.copy(f.p.userData.rest.pos); f.p.rotation.copy(f.p.userData.rest.rot); } flights.splice(i, 1); }
+    }
     placeCamera();
     // cutaway: a wall between the camera and the room fades to glass
     const fade = (m, outside) => { const to = outside ? .12 : 1; m.opacity += (to - m.opacity) * Math.min(1, dt * 8); m.depthWrite = m.opacity > .9; };
@@ -370,7 +475,7 @@ export function createIsland(host, opts) {
     screen.material.emissiveIntensity = night ? 1 : .55;
     for (let i = hops.length - 1; i >= 0; i--) { const h = hops[i]; h.t += dt; h.m.position.y = h.y + Math.sin(Math.min(1, h.t / .35) * Math.PI) * .8; if (h.t > .35) { h.m.position.y = h.y; hops.splice(i, 1); } }
     renderer.render(scene, cam);
-    if (visible && (!reduced || dragging || goHome || hops.length || Math.abs(vT) + Math.abs(vP) > .0005)) raf = requestAnimationFrame(frame);
+    if (visible && (!reduced || dragging || goHome || focus || zoomBack || flights.length || hops.length || Math.abs(unpack - unpackGoal) > .001 || Math.abs(vT) + Math.abs(vP) > .0005)) raf = requestAnimationFrame(frame);
   }
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) request(); }).observe(host);
   size(); setNight(!!opts.night);
@@ -380,6 +485,8 @@ export function createIsland(host, opts) {
     // buttons: turn round, tilt up or down, zoom, and go back to the home view
     orbit: (dT, dP) => { idle = 0; goHome = false; vT = dT * .08; vP = dP * .08; request(); },
     zoom: k => { idle = 0; cam.zoom = Math.max(.7, Math.min(2.2, cam.zoom * k)); cam.updateProjectionMatrix(); request(); },
-    reset: () => { goHome = true; idle = 0; request(); }
+    reset: () => { if (focus) setFocus(null); goHome = true; idle = 0; request(); },
+    setMode, setUnpack: v => { unpackGoal = v; request(); }, setHour: h => setHour(h),
+    putBack, unpackAll, unfocus: () => setFocus(null)
   };
 }
