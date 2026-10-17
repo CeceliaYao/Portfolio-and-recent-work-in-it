@@ -12,8 +12,7 @@ const PROFILE = {
   links: [
     { label: 'Instagram', href: 'https://www.instagram.com/ceceliayao.design/' },
     { label: 'TikTok', href: 'https://www.tiktok.com/@ceceliayao.design' },
-    { label: 'Behance', href: 'https://www.behance.net/qinxiyao' },
-    { label: 'GitHub', href: 'https://github.com/CeceliaYao' }
+    { label: 'Behance', href: 'https://www.behance.net/qinxiyao' }
   ],
   email: '' // add an address here and a mail link appears in Contact
 };

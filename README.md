@@ -20,7 +20,7 @@ No build step. Plain HTML, CSS and JavaScript; open `index.html` through any sta
 | A real screenshot for a project | put it in `assets/work/` and set `image: 'assets/work/name.jpg'` |
 | Gallery images / playable builds | `gallery` and `play` on each project in `WORKS` |
 | What each object says | `js/content.js` → `STORIES` |
-| Instagram, TikTok, Behance, GitHub | `js/content.js` → `PROFILE` |
+| Instagram, TikTok, Behance | `js/content.js` → `PROFILE` |
 | Object positions in the room | `js/room-engine.js` → `OBJECTS` |
 | The pixel drawings of my things | `js/pixel-art.js` |
 | Real photos shown on click | `assets/cutouts/` (cut-outs as .webp, plain photos as .jpg) |
