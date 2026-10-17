@@ -195,7 +195,7 @@ function renderApp(id) {
     });
   } else if (id === 'about') {
     body.innerHTML = `<div class="about" style="grid-template-columns:160px 1fr"><div class="me frame" style="padding:14px"></div><div class="os-about">${[...document.querySelectorAll('.intro-text > p:not(.kicker), .intro-text .facts')].map(n => n.outerHTML).join('')}</div></div>`;
-    const c = spriteGirl(0, 0); const big = scaleUp(c, 6); big.style.width = '70%'; body.querySelector('.me').append(big);
+    const big = document.createElement('canvas'); big.style.width = '70%'; big.style.imageRendering = 'pixelated'; body.querySelector('.me').append(big); window.Avatar.mount(big);
     body.querySelectorAll('.kicker').forEach(k => k.remove());
   } else if (id === 'arcade') {
     body.innerHTML = '<div class="arcade"></div>';
@@ -431,8 +431,8 @@ cards.forEach(({ g, w }) => {
 
 
 /* ======================= about, contact ======================= */
-const me = $('#me'); const big = scaleUp(spriteGirl(0, 0), 1); me.getContext('2d').drawImage(big, 0, 0);
-let blink = 0; setInterval(() => { blink = (blink + 1) % 4; const x = me.getContext('2d'); x.clearRect(0, 0, 16, 28); x.drawImage(spriteGirl(0, blink === 3 ? 1 : 0), 0, 0); }, 900);
+// the pixel me, drawn from my photo: it breathes, blinks, watches the pointer and smiles when you come close
+window.Avatar.mount($('#me'));
 $('#inv').innerHTML = SKILLS.map(s => `<div data-k="${esc(s.k)}" tabindex="0" aria-label="${esc(s.k)}">${esc(s.n)}</div>`).join('');
 function linksHTML() {
   const ls = PROFILE.links.slice(); if (PROFILE.email) ls.unshift({ label: PROFILE.email, href: 'mailto:' + PROFILE.email });

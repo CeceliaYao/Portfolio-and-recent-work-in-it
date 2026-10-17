@@ -755,3 +755,7 @@ main{overflow-x:clip}
 @media (max-width:860px){#island{aspect-ratio:1/1}}
 /* round 13: the work thumbnails are cut to 16:9 around the key idea, so show them whole */
 .wc-cv{aspect-ratio:16/9}
+/* round 14: the pixel me is drawn from my photo, so give it room to be seen */
+.portraits .me{width:150px;aspect-ratio:6/7;padding:8px;right:-36px;top:-36px}
+.portraits .me canvas{width:100%;image-rendering:pixelated;cursor:pointer}
+@media (max-width:860px){.portraits .me{width:112px;right:-14px;top:-24px}}
