@@ -92,26 +92,29 @@ const WORKS = [
   {
     id: 'next-chapter', title: 'The Next Chapter', unit: 'Team exhibition game · main coder', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#e39aac',
-    role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title-screen.png', thumb: 'assets/work/thumbs/next-chapter.jpg', pixel: true,
-    gallery: ['assets/work/next-chapter/title-screen.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
+    role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/exhibition-1.jpg', thumb: 'assets/work/thumbs/next-chapter-exhibition.jpg',
+    gallery: ['exhibition-2.jpg', 'exhibition-4.jpg', 'exhibition-3.jpg', 'latest-door.jpg', 'latest-title.jpg', 'latest-nursery.jpg', 'latest-teen.jpg', 'latest-memory-box.jpg', 'latest-moving-out.jpg', 'latest-video.jpg', 'versions.jpg', 'title-screen.png', 'teen-2014.png', 'sprites.png'].map(f => 'assets/work/next-chapter/' + f),
     play: [
-      { label: 'The Next Chapter (first pixel build)', href: 'play/the-next-chapter/', ratio: '16/9', hint: 'Drag things from the box into the room.' }
+      { label: 'The Next Chapter (latest version)', href: 'https://ceceliayao.github.io/The-Next-Chapter/', ratio: '4/3' },
+      { label: 'The first pixel build', href: 'play/the-next-chapter/', ratio: '16/9', hint: 'Drag things from the box into the room.' }
     ],
     summary: 'One room, from nursery to moving out: what we keep up, carry on, and leave behind.',
     body: [
-      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The version shown here is the first build, which I made as the team\'s main coder. It is fully pixel art; the exhibition build that followed moved to an early-2000s desktop look, and the game is still being revised.',
+      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, from the nursery in 2000 to moving out in 2018: unpacking, tidying and deciding what to carry into the next chapter.',
+      'At the exhibition it ran on a monitor and an iPad with headphones, on a table of real childhood things: teddy bears, a doll, storybooks and toys, and QR-code cards that link to the game.',
       'Our team uses a studio-role model with collaborative co-authorship: I am main coder; Chloee Park leads design and supports coding; Isabella Kiosses leads documentation and film; Lyebin Cho leads film and photo. Decisions are discussed collectively, while role holders make specialist calls; as primary coder, I make final technical decisions.',
       'My part is the core interaction system, player input and state logic, asset integration, technical problem-solving and testing; the visual and film work belongs to my teammates.'
     ],
     process: [
-      { h: 'One room, six chapters', p: 'The room moves through 2000, 2005, 2010, 2014, 2017 and 2018. The same space keeps changing, and the objects in it recur, disappear or change meaning as the girl grows up.' },
-      { h: 'The core loop', p: 'Each chapter opens with a task, such as Mum asking for the room to be cleaned. The visitor drags things out of the moving box into the room; an upkeep meter and a memory count track what has been looked after and what has been kept.' },
-      { h: 'Built to run all day', p: 'The game has to run repeatedly on a public computer and survive real visitors, so I kept the input and state logic simple and predictable, and every chapter can be entered directly from the title screen.' },
-      { h: 'Iteration', p: 'The first build is fully pixel art. The team then moved the exhibition build to an early-2000s desktop look, which frames the game as a computer from the years the story starts in.' }
+      { h: 'One room, six chapters', p: 'Nursery, childhood, tween, teen, young adult and moving out, from 2000 to 2018. The same space keeps changing, and the objects in it recur, disappear or change meaning as the girl grows up.' },
+      { h: 'The core loop', p: 'Each chapter opens with a moving box. The visitor drags each thing into the room, with dotted lines showing where it can go, while messages from Mum and a little brother pop up. An upkeep meter tracks the room.' },
+      { h: 'What you keep', p: 'When the room is tidy, the visitor packs a memory box for the next chapter. Teddy always comes, and there is room for only a few more things. Things you don\'t keep stay in the past.' },
+      { h: 'Eleven versions', p: 'The first build was fully pixel art. Over eleven versions the game gained a door you sign in at, a desktop title screen, real photos of objects as memories, the memory box, a menu with a way back to the door, and a moving-out video with real hands packing a real box.' },
+      { h: 'Built to run all day', p: 'It runs again and again on a public computer and a tablet, so I kept input and state logic simple and predictable, and every chapter can be entered straight from the title screen.' }
     ],
     tools: ['p5.js', 'JavaScript', 'Web Audio', 'Pixel art'],
     credits: 'Isabella Kiosses (film & didactic) · Lyebin Cho (film & photo) · Chloee Park (design) · Qinxi Yao (main coder)',
-    links: [{ label: 'Exhibition build', href: 'https://ceceliayao.github.io/The-Next-Chapter/' }]
+    links: [{ label: 'Play the latest version', href: 'https://ceceliayao.github.io/The-Next-Chapter/' }]
   },
   {
     id: 'astrobius', title: 'Astrobius', unit: 'Experimental type design · World Science Festival brief', year: '2026',
