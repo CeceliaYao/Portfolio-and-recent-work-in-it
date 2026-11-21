@@ -6,9 +6,9 @@ The page opens with a short introduction, then steps into my room. You open the 
 
 - `index.html`: the homepage (intro, room, work, What We Carry in 3D, arcade, contact)
 - `room/`: **My Room**, the same room as three tiny games: Find twelve things, What's missing? (look, the lights blink, pick what vanished; five rounds) and Pack five (the box only fits five things: what do you carry?)
-- `play/`: work that runs in the browser: the first pixel build of The Next Chapter (KKB385) and Echo Corridor (DXB211)
+- `play/`: work that runs in the browser: the first pixel build of The Next Chapter and Echo Corridor
 
-QUT work on the site: The Next Chapter (KKB385), Echo Corridor (DXB211), HITH Brick (DYB223), ShopMirror 2032 (DXB210), Astrobius (DVB201), What We Carry (KKB385).
+Work on the site: What We Carry, Echo Corridor, The Next Chapter, Astrobius, HITH Brick and ShopMirror 2032.
 
 No build step. Plain HTML, CSS and JavaScript; open `index.html` through any static server (`python3 -m http.server`) or GitHub Pages. It works on phones too: the room can be dragged sideways and the 3D island turned with a finger.
 

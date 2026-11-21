@@ -755,3 +755,11 @@ main{overflow-x:clip}
 @media (max-width:860px){#island{aspect-ratio:1/1}}
 /* round 13: the work thumbnails are cut to 16:9 around the key idea, so show them whole */
 .wc-cv{aspect-ratio:16/9}
+/* round 15: how each project came together, as numbered pixel steps */
+.case .process{margin:34px 0 30px;max-width:40em}
+.case .process ol{list-style:none;margin:14px 0 0;padding:0;counter-reset:st;display:grid;gap:18px}
+.case .process li{counter-increment:st;position:relative;padding:14px 18px 16px 64px;background:var(--cream);box-shadow:0 0 0 3px var(--ink)}
+.case .process li::before{content:counter(st,decimal-leading-zero);position:absolute;left:12px;top:14px;width:38px;height:32px;display:grid;place-items:center;font-family:var(--display);font-size:16px;background:var(--ac);box-shadow:0 0 0 3px var(--ink)}
+.case .process b{display:block;font-family:var(--display);font-weight:600;font-size:22px;margin-bottom:6px}
+.case .process li p{font-size:20px;margin:0;max-width:none}
+@media (max-width:640px){.case .process li{padding-left:56px}.case .process b{font-size:19px}.case .process li p{font-size:18px}}

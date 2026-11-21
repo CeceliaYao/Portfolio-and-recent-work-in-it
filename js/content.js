@@ -51,21 +51,26 @@ const STORIES = {
 /* Selected work. `image` is the cover; `gallery` and `play` fill the project page. */
 const WORKS = [
   {
-    id: 'my-room', title: 'What We Carry', unit: 'KKB385 · Individual project', year: '2026',
+    id: 'my-room', title: 'What We Carry', unit: 'Personal project · game and web 3D', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#e9c46a',
     role: 'Solo · my own new game', kind: 'Personal game · web & 3D', cover: 'myRoom', image: 'assets/work/covers/my-room.jpg', thumb: 'assets/work/thumbs/my-room.jpg', pixel: true,
     play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
-    summary: 'A new personal game I created, about my own room, connected to my A1 and A3 work.',
+    summary: 'My own room, turned into a small game about the things we keep, lose and carry.',
     body: [
-      'What We Carry is a new little game I created on my own. Its subject is my own room, and it grows out of my A1 and our A3: it was developed after our A3 team discussions about one room evolving across life stages and the objects that recur, disappear or change meaning, and it carries on the keep-or-remove question from my A1. It is an interactive game based on my current room. The objects in the room reflect my real life, including my experiences, interests and things that are personally meaningful to me. Players can explore the room and interact with different objects to learn more about me. It connects to our A3 group project through the idea of meaningful objects.',
-      'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.',
-      'One of my two-year goals is to expand creative coding into interactive 3D web experiences. The first step was a small Three.js scene for What We Carry: the floating room on the homepage. It builds on my p5.js foundation and is documented as research and precedents, interaction flow, prototype, testing, iteration and final playable outcome.'
+      'What We Carry is a small game I made about my own room. Every object you can click is something I own, photographed and redrawn in pixels: my hiking gear, the bottles on the rack, the magnets on the fridge, the photos on the cork board. Players explore the room and interact with the objects to learn who I am.',
+      'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.'
+    ],
+    process: [
+      { h: 'The question', p: 'Can a room introduce a person? The idea came from a team discussion about one room changing across life stages, and the objects that recur, disappear or change meaning. I wanted to test it on the room I actually live in.' },
+      { h: 'Real objects, one visual voice', p: 'Only real objects, so every story is true. Pixel art keeps them readable at a small size and gives the whole room one consistent voice. Each object answers a click with a short line about why it matters, instead of a label.' },
+      { h: 'From looking to remembering', p: 'Three short games turn the room into play: Find twelve things; What’s missing?, where the lights blink and one object is gone; and Pack five, where the moving box only fits five things and the rest stays behind. Pack five hands the keep-or-remove decision to the player.' },
+      { h: 'Into 3D', p: 'The same room became a floating Three.js island, my first step from p5.js into interactive 3D for the web. It has four ways to play: Explore brings one object forward and dims the rest, Unpack lifts everything off its place, Carry five repeats the packing choice in 3D, and Sun moves the light from morning to night.' }
     ],
     tools: ['JavaScript', 'Three.js', 'Canvas', 'Pixel art'],
     links: [{ label: 'Play full screen', href: 'room/' }, { label: 'Instagram series', href: 'https://www.instagram.com/ceceliayao.design/' }]
   },
   {
-    id: 'echo-corridor', title: 'Echo Corridor', unit: 'DXB211 · Creative Coding', year: '2026',
+    id: 'echo-corridor', title: 'Echo Corridor', unit: 'Solo game prototype · public arcade cabinet', year: '2026',
     skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#8cc3dd',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/covers/echo-corridor.jpg', thumb: 'assets/work/thumbs/echo-corridor.jpg',
     gallery: ['assets/work/echo-corridor/play.jpg', 'assets/work/echo-corridor/p02.jpg', 'assets/work/echo-corridor/p04.jpg', 'assets/work/echo-corridor/p05.jpg'],
@@ -73,67 +78,93 @@ const WORKS = [
     summary: 'A sound stealth maze where the dark hunts your sound.',
     body: [
       'Echo Corridor is a pixel stealth maze designed for the Louie PLAY cabinet. The player explores a dark corridor, collects glowing memory shards, and escapes through the exit once every shard is taken. The enemies cannot see the player. They hunt sound. Each footstep creates a visible trace and a timed sound event, so the challenge is not simply moving quickly. The player must decide when to walk, when to distract, and when to stay silent.',
-      'The project began after seeing a Pac-Man cabinet in West End, Brisbane. My first playable version was close to a standard chase game, and testing showed that it felt predictable and sometimes unfair, because the enemy always knew the player position. The breakthrough came when I made enemies respond to sound instead of sight: footsteps, decoys and mute states are stored as events with position, age and strength, and enemies use breadth-first search over the maze grid to move toward the strongest reachable sound.'
+      'The enemies are a small game AI: they perceive sound events, not the player, and plan a path toward what they hear.'
+    ],
+    process: [
+      { h: 'Starting point', p: 'The project began after seeing a Pac-Man cabinet in West End, Brisbane. Pac-Man proves how powerful a simple maze can be when goals, danger and movement are visible at once, so I kept the maze, pickups and roaming threat as the structure.' },
+      { h: 'First version and testing', p: 'My first playable version was close to a standard chase game. Testing showed it felt predictable and sometimes unfair, because the enemy always knew where the player was. I simplified the level and asked what would make the maze feel original rather than a copy.' },
+      { h: 'The breakthrough: enemies that hear', p: 'Footsteps, decoys and mute states are stored as sound events with position, age and strength. Enemies use breadth-first search over the maze grid to move toward the strongest reachable sound. Pathfinding made the shadows feel intentional, and sound targeting made the player responsible for the danger they create. Fading footprints and sound rings became evidence of the player’s behaviour rather than decoration.' },
+      { h: 'Clarity for a public cabinet', p: 'Three direct buttons: pick up, decoy, mute. After the first level felt abrupt I added chapter captions, then a sprite legend and help panel, because the sound rules needed to be learnable within seconds by a first-time player. Baba Is You influenced the rule clarity: every mechanic returns to one question, what noise did I just make and who will hear it?' }
     ],
     tools: ['p5.js', 'BFS pathfinding', 'State machines', 'Pixelify Sans'],
     links: [{ label: 'Play full screen', href: 'play/echo-corridor/' }]
   },
   {
-    id: 'next-chapter', title: 'The Next Chapter', unit: 'KKB385 · Creative Enterprise Studio 3', year: '2026',
+    id: 'next-chapter', title: 'The Next Chapter', unit: 'Team exhibition game · main coder', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#e39aac',
-    role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title.png', thumb: 'assets/work/thumbs/next-chapter.jpg', pixel: true,
-    gallery: ['assets/work/next-chapter/title.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
+    role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/title-screen.png', thumb: 'assets/work/thumbs/next-chapter.jpg', pixel: true,
+    gallery: ['assets/work/next-chapter/title-screen.png', 'assets/work/next-chapter/teen-2014.png', 'assets/work/next-chapter/sprites.png', 'assets/work/next-chapter.jpg'],
     play: [
       { label: 'The Next Chapter (first pixel build)', href: 'play/the-next-chapter/', ratio: '16/9', hint: 'Drag things from the box into the room.' }
     ],
     summary: 'One room, from nursery to moving out: what we keep up, carry on, and leave behind.',
     body: [
-      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The first version shown here is one I built for our A3 as the main coder. It is fully pixel art, and the game will keep changing as we revise it; the exhibition build that followed moved to an early-2000s desktop look.',
+      'An interactive game display about upkeep. The visitor looks after one bedroom across six chapters of a girl\'s life, unpacking, tidying and deciding what to carry into the next chapter. The version shown here is the first build, which I made as the team\'s main coder. It is fully pixel art; the exhibition build that followed moved to an early-2000s desktop look, and the game is still being revised.',
       'Our team uses a studio-role model with collaborative co-authorship: I am main coder; Chloee Park leads design and supports coding; Isabella Kiosses leads documentation and film; Lyebin Cho leads film and photo. Decisions are discussed collectively, while role holders make specialist calls; as primary coder, I make final technical decisions.',
-      'I can claim the core interaction system, player input/state logic, asset integration, technical problem-solving and testing, while crediting teammates for visual and film contributions. The exhibition develops reliable interactive systems because it must run repeatedly on a public computer and withstand real visitor use.'
+      'My part is the core interaction system, player input and state logic, asset integration, technical problem-solving and testing; the visual and film work belongs to my teammates.'
+    ],
+    process: [
+      { h: 'One room, six chapters', p: 'The room moves through 2000, 2005, 2010, 2014, 2017 and 2018. The same space keeps changing, and the objects in it recur, disappear or change meaning as the girl grows up.' },
+      { h: 'The core loop', p: 'Each chapter opens with a task, such as Mum asking for the room to be cleaned. The visitor drags things out of the moving box into the room; an upkeep meter and a memory count track what has been looked after and what has been kept.' },
+      { h: 'Built to run all day', p: 'The game has to run repeatedly on a public computer and survive real visitors, so I kept the input and state logic simple and predictable, and every chapter can be entered directly from the title screen.' },
+      { h: 'Iteration', p: 'The first build is fully pixel art. The team then moved the exhibition build to an early-2000s desktop look, which frames the game as a computer from the years the story starts in.' }
     ],
     tools: ['p5.js', 'JavaScript', 'Web Audio', 'Pixel art'],
     credits: 'Isabella Kiosses (film & didactic) · Lyebin Cho (film & photo) · Chloee Park (design) · Qinxi Yao (main coder)',
     links: [{ label: 'Exhibition build', href: 'https://ceceliayao.github.io/The-Next-Chapter/' }]
   },
   {
-    id: 'astrobius', title: 'Astrobius', unit: 'DVB201 · Experimental Type Design', year: '2026',
+    id: 'astrobius', title: 'Astrobius', unit: 'Experimental type design · World Science Festival brief', year: '2026',
     skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#a99bd0',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/covers/astrobius.jpg', thumb: 'assets/work/thumbs/astrobius.jpg', tall: true,
     gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
     body: [
       'The name is a portmanteau of Astro (the celestial) and Möbius (the infinite continuity). Inspired by the realisation that the laws of physics govern both the vastness of the cosmos and the precision of the microscopic world, the typeface serves as a visual bridge between two scales of existence.',
-      'It began with soft ribbon sketches and moved toward orbit, rhythm and continuity. The zine documents that process from sketches to a printed result. I first explored bright accent colours, then removed them because they competed with the typeface and grey paper. The final zine uses a restrained black, grey and metallic direction, with Poppins for reading.'
+      'The zine documents the whole process, from sketches to a printed result.'
+    ],
+    process: [
+      { h: 'Sketch', p: 'It began with soft ribbon sketches, letters drawn as one continuous loop.' },
+      { h: 'System', p: 'The ribbons moved toward orbit, rhythm and continuity: the Möbius idea of a line that never ends.' },
+      { h: 'Colour test', p: 'I first explored bright accent colours, then removed them because they competed with the typeface and the grey paper.' },
+      { h: 'Print', p: 'The final zine uses a restrained black, grey and metallic direction, with Poppins for reading.' }
     ],
     tools: ['Illustrator', 'InDesign', '3D render', 'Print'],
     links: []
   },
   {
-    id: 'hith-brick', title: 'HITH Brick', unit: 'DYB223 · Queensland Health', year: '2026',
+    id: 'hith-brick', title: 'HITH Brick', unit: 'Healthcare interaction design · Queensland Health brief', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#9cc584',
     role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/covers/hith-brick.jpg', thumb: 'assets/work/thumbs/hith-brick.jpg',
     gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
     body: [
-      'A home visit should not be made harder by clinicians searching through separate bags, cables and consumables while a patient waits. I followed the visit from beginning to end: the nurse prepares and inspects, nurse and patient plan and practise the morning checks together, the nurse reviews the devices and clinical tools, and only then does the Brick switch to patient mode.',
-      'Amy, the patient, then runs her own blood pressure and oxygen checks, with clear states for "no reliable reading yet", "reading saved offline" and "measurement stopped", and keeps a plan, notes and reminders. Clinicians review the returned data. All sixty-two final Figma screens are ordered to follow the video\'s interaction progression.'
+      'A home visit should not be made harder by clinicians searching through separate bags, cables and consumables while a patient waits. HITH Brick is a shared device for Hospital in the Home that moves from the nurse to the patient.'
+    ],
+    process: [
+      { h: 'Follow the whole visit', p: 'I followed the visit from beginning to end: the nurse prepares and inspects, nurse and patient plan and practise the morning checks together, the nurse reviews the devices and clinical tools, and only then does the Brick switch to patient mode.' },
+      { h: 'Design for the patient alone', p: 'Amy, the patient, then runs her own blood pressure and oxygen checks, with clear states for “no reliable reading yet”, “reading saved offline” and “measurement stopped”, and keeps a plan, notes and reminders. Clinicians review the returned data.' },
+      { h: 'Prototype as a story', p: 'All sixty-two final Figma screens are ordered to follow the interaction progression of the video prototype.' }
     ],
     tools: ['Figma', 'Clinical workflow', 'WCAG 2.2', 'Video prototype'],
     links: []
   },
   {
-    id: 'shopmirror', title: 'ShopMirror 2032', unit: 'DXB210 · Interaction Design', year: '2026',
+    id: 'shopmirror', title: 'ShopMirror 2032', unit: 'Speculative interaction design', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#eeb17d',
     role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/covers/shopmirror.jpg', thumb: 'assets/work/thumbs/shopmirror.jpg',
     gallery: ['modes', 'personas', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
     summary: 'The recommendation that reveals what it knows about you.',
     quote: 'Can personalisation still create revenue when explanation appears before persuasion, not after commitment?',
     body: [
-      'This concept continues my A1 challenge on purchase history and recommendations in shopping apps. ShopMirror 2032 is a speculative shopping app for late-night everyday purchases. It recommends products using purchase history, browsing rhythm and saved preferences.',
-      'I started with twelve hand-drawn directions comparing manipulative and privacy-centred possibilities. The main interaction became a mode switch: Deceptive Mode hides recommendation logic, delays fees and makes privacy control tiring; Ethical Mode shows why an item appears, what data is used, what is excluded and the full price before payment.',
-      'Mia and RecSys-32 operate as design constraints. Mia needs fast checkout, fair price and understandable data use. RecSys-32, the recommendation engine, can either optimise conversion or support trust. Eight hand-drawn storyboard frames and eight wireframes follow the same shopping task in both modes.',
+      'This concept continues my earlier research into purchase history and recommendations in shopping apps. ShopMirror 2032 is a speculative shopping app for late-night everyday purchases. It recommends products using purchase history, browsing rhythm and saved preferences.',
       'I learned that dark patterns are not single tricks. In ShopMirror, urgency, hidden fees, sharing defaults and opt-out friction work as one system. The ethical version gives users explanation and reversible control, while the business still earns through transparent membership or voluntary data exchange.'
+    ],
+    process: [
+      { h: 'Twelve directions', p: 'I started with twelve hand-drawn directions comparing manipulative and privacy-centred possibilities.' },
+      { h: 'One switch', p: 'The main interaction became a mode switch: Deceptive Mode hides recommendation logic, delays fees and makes privacy control tiring; Ethical Mode shows why an item appears, what data is used, what is excluded and the full price before payment.' },
+      { h: 'Two constraints', p: 'Mia and RecSys-32 operate as design constraints. Mia needs fast checkout, fair price and understandable data use. RecSys-32, the recommendation engine, can either optimise conversion or support trust.' },
+      { h: 'Same task, both modes', p: 'Eight hand-drawn storyboard frames and eight wireframes follow the same shopping task in both modes.' }
     ],
     tools: ['Figma', 'Hand sketching', 'Storyboarding', 'Speculative design'],
     links: []

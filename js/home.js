@@ -363,13 +363,14 @@ function openCase(i) {
     ${w.skills ? `<div class="shows"><span>What this shows</span>${chips(w)}</div>` : ''}
     <div class="cols">
       <dl>
-        <dt>Unit</dt><dd>${esc(w.unit)}</dd>
+        <dt>Context</dt><dd>${esc(w.unit)}</dd>
         <dt>Year</dt><dd>${esc(w.year)}</dd>
         <dt>Role</dt><dd>${esc(w.role)}</dd>
         <dt>Tools</dt><dd>${w.tools.map(esc).join('<br>')}</dd>
         ${w.credits ? `<dt>Team</dt><dd>${esc(w.credits).replace(/ · /g, '<br>')}</dd>` : ''}
       </dl>
       <div class="body">${w.body.map((p, k) => `<p>${esc(p)}</p>` + (k === 1 && w.quote ? `<blockquote>${esc(w.quote)}</blockquote>` : '')).join('')}
+        ${w.process ? `<div class="process"><p class="kicker">How it came together</p><ol>${w.process.map(st => `<li><b>${esc(st.h)}</b><p>${esc(st.p)}</p></li>`).join('')}</ol></div>` : ''}
         ${w.play ? `<div class="plays">${w.play.map((g, k) => `<button class="btn" type="button" data-play="${k}">Play ${esc(g.label)} here ▸</button>`).join('')}</div>` : ''}
         ${w.links.length ? `<p style="display:flex;gap:18px;flex-wrap:wrap;margin-top:30px">${w.links.map(l => `<a class="btn" href="${esc(l.href)}" ${/^http/.test(l.href) ? 'target="_blank" rel="noopener"' : ''}>${esc(l.label)} ▸</a>`).join('')}</p>` : ''}
       </div>

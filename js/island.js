@@ -167,7 +167,7 @@ export function createIsland(host, opts) {
   P(-8.6, 8.9, -6.97, 1.1, 1.1, clockTex, 'back', null, true);
   // my four project posters, in wooden frames
   const framed = (x, y, w, h) => B(x - w / 2 - .12, y - h / 2 - .12, -7, w + .24, h + .24, .1, '#b8865a');
-  [['poster-next-chapter', 'assets/work/next-chapter/title.png', -3.4, 8.7, 2.4, 1.35],
+  [['poster-next-chapter', 'assets/work/next-chapter/title-screen.png', -3.4, 8.7, 2.4, 1.35],
    ['poster-astrobius', 'assets/work/astrobius/poster.jpg', -1.1, 8.6, 1.15, 1.62],
    ['poster-shopmirror', 'assets/work/shopmirror/personas.jpg', .85, 8.9, 1.7, .96],
    ['poster-echo-corridor', 'assets/work/echo-corridor/p01.jpg', -2.6, 6.3, 1.9, 1.42]].forEach(([tag, src, x, y, w, h]) => { framed(x, y, w, h); P(x, y, -6.89, w, h, T(src), 'back', tag); });

@@ -54,7 +54,7 @@ const UI = (() => {
       '    <p class="small">or pick a disc to jump to a chapter · best with sound on ♪</p>' +
       '  </div>' +
       '</div>' +
-      '<div class="title-foot">KKB385 · A3 · an interactive room by Isabella, Lyebin, Chloee &amp; Cecelia</div>', 'title-screen');
+      '<div class="title-foot">an interactive room by Isabella, Lyebin, Chloee &amp; Cecelia</div>', 'title-screen');
     el.querySelector('#startBtn').addEventListener('click', () => H.onStart());
     el.querySelectorAll('.disc').forEach(b => b.addEventListener('click', () => H.onJump(+b.dataset.i)));
     showHUD(false); hideHint();
