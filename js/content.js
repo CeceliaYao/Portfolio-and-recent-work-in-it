@@ -100,7 +100,7 @@ const WORKS = [
     id: 'astrobius', title: 'Astrobius', unit: 'Experimental type design · World Science Festival brief', year: '2026',
     skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#a99bd0',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/covers/astrobius.jpg', thumb: 'assets/work/thumbs/astrobius.jpg', tall: true,
-    gallery: ['../covers/astrobius', 'poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
+    gallery: ['poster-cosmos', 'poster-intro', '../covers/astrobius', 'poster', 'colour', 'thumbs', 'process/p05', 'process/p06', 'process/p07', 'process/p08', 'process/p09', 'process/p10', 'process/p11', 'process/p12', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
     body: [
       'The name is a portmanteau of Astro (the celestial) and Möbius (the infinite continuity). Inspired by the realisation that the laws of physics govern both the vastness of the cosmos and the precision of the microscopic world, the typeface serves as a visual bridge between two scales of existence.',
@@ -119,7 +119,8 @@ const WORKS = [
     id: 'hith-brick', title: 'HITH Brick', unit: 'Healthcare interaction design · Queensland Health brief', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Research Synthesis', 'Audience Empathy'], accent: '#9cc584',
     role: 'Solo · interaction design', kind: 'Health UX', image: 'assets/work/covers/hith-brick.jpg', thumb: 'assets/work/thumbs/hith-brick.jpg',
-    gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg'),
+    gallery: ['p01', 'p03', 'p04', 'p07', 'p09'].map(p => 'assets/work/hith-brick/' + p + '.jpg')
+      .concat(['p09', 'p10', 'p12', 'p13', 'p14', 'p19', 'p23', 'p33', 'p43', 'p47', 'p49', 'p50', 'p52', 'p54', 'p58', 'p59', 'p61', 'p62', 'p63'].map(p => 'assets/work/hith-brick/ddr/' + p + '.jpg')),
     summary: 'Shared care handover for Hospital in the Home: prepare, practise together, then hand over.',
     body: [
       'A home visit should not be made harder by clinicians searching through separate bags, cables and consumables while a patient waits. HITH Brick is a shared device for Hospital in the Home that moves from the nurse to the patient.'
@@ -136,7 +137,8 @@ const WORKS = [
     id: 'shopmirror', title: 'ShopMirror 2032', unit: 'Speculative interaction design', year: '2026',
     skills: ['Interaction & UI/UX Design', 'Figma Prototyping', 'Storyboarding & Scenario Design', 'Critical Reflection'], accent: '#eeb17d',
     role: 'Solo', kind: 'Speculative UX', cover: 'shopMirror', image: 'assets/work/covers/shopmirror.jpg', thumb: 'assets/work/thumbs/shopmirror.jpg',
-    gallery: ['modes', 'personas', 'sketches', 'storyboard', 'lofi'].map(p => 'assets/work/shopmirror/' + p + '.jpg'),
+    gallery: ['hifi', 'modes', 'personas', 'sketches', 'storyboard', 'lofi', 'lofi-screens'].map(p => 'assets/work/shopmirror/' + p + '.jpg')
+      .concat(['deceptive-home', 'deceptive-product', 'deceptive-checkout', 'deceptive-privacy', 'ethical-home', 'ethical-product', 'ethical-data', 'ethical-order'].map(p => 'assets/work/shopmirror/screens/' + p + '.jpg')),
     summary: 'The recommendation that reveals what it knows about you.',
     quote: 'Can personalisation still create revenue when explanation appears before persuasion, not after commitment?',
     body: [
