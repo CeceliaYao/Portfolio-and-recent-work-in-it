@@ -763,3 +763,8 @@ main{overflow-x:clip}
 .case .process b{display:block;font-family:var(--display);font-weight:600;font-size:22px;margin-bottom:6px}
 .case .process li p{font-size:20px;margin:0;max-width:none}
 @media (max-width:640px){.case .process li{padding-left:56px}.case .process b{font-size:19px}.case .process li p{font-size:18px}}
+/* round 16: the door sits below the title instead of over it */
+#door{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3.5vh}
+#door .title{position:relative;top:auto;left:auto;right:auto;z-index:1}
+#door .title span{display:block;margin-top:.6vh}
+#door .doorway{width:min(27vh,52vw);margin-top:0;z-index:1}
