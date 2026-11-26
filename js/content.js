@@ -51,29 +51,10 @@ const STORIES = {
 /* Selected work. `image` is the cover; `gallery` and `play` fill the project page. */
 const WORKS = [
   {
-    id: 'my-room', title: 'What We Carry', unit: 'Personal project · game and web 3D', year: '2026',
-    skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#e9c46a',
-    role: 'Solo · my own new game', kind: 'Personal game · web & 3D', cover: 'myRoom', image: 'assets/work/covers/my-room.jpg', thumb: 'assets/work/thumbs/my-room.jpg', pixel: true,
-    play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
-    summary: 'My own room, turned into a small game about the things we keep, lose and carry.',
-    body: [
-      'What We Carry is a small game I made about my own room. Every object you can click is something I own, photographed and redrawn in pixels: my hiking gear, the bottles on the rack, the magnets on the fridge, the photos on the cork board. Players explore the room and interact with the objects to learn who I am.',
-      'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.'
-    ],
-    process: [
-      { h: 'The question', p: 'Can a room introduce a person? The idea came from a team discussion about one room changing across life stages, and the objects that recur, disappear or change meaning. I wanted to test it on the room I actually live in.' },
-      { h: 'Real objects, one visual voice', p: 'Only real objects, so every story is true. Pixel art keeps them readable at a small size and gives the whole room one consistent voice. Each object answers a click with a short line about why it matters, instead of a label.' },
-      { h: 'From looking to remembering', p: 'Three short games turn the room into play: Find twelve things; What’s missing?, where the lights blink and one object is gone; and Pack five, where the moving box only fits five things and the rest stays behind. Pack five hands the keep-or-remove decision to the player.' },
-      { h: 'Into 3D', p: 'The same room became a floating Three.js island, my first step from p5.js into interactive 3D for the web. It has four ways to play: Explore brings one object forward and dims the rest, Unpack lifts everything off its place, Carry five repeats the packing choice in 3D, and Sun moves the light from morning to night.' }
-    ],
-    tools: ['JavaScript', 'Three.js', 'Canvas', 'Pixel art'],
-    links: [{ label: 'Play full screen', href: 'room/' }, { label: 'Instagram series', href: 'https://www.instagram.com/ceceliayao.design/' }]
-  },
-  {
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'Solo game prototype · public arcade cabinet', year: '2026',
     skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#8cc3dd',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/covers/echo-corridor.jpg', thumb: 'assets/work/thumbs/echo-corridor.jpg',
-    gallery: ['level3', 'rules', 'decoy', 'help', 'story', 'caught', 'code-footsteps', 'code-sound', 'code-decoy', 'code-level', 'p04', 'p05'].map(f => 'assets/work/echo-corridor/' + f + '.jpg'),
+    gallery: ['title', 'prologue', 'level3', 'hud', 'walk', 'mute', 'rules', 'decoy', 'help', 'story', 'caught', 'code-footsteps', 'code-sound', 'code-decoy', 'code-level', 'p02', 'p04', 'p05'].map(f => 'assets/work/echo-corridor/' + f + '.jpg'),
     play: [{ label: 'Echo Corridor', href: 'play/echo-corridor/', ratio: '16/9', hint: 'Arrows or WASD to move. 1 pick up, 2 decoy, 3 mute.' }],
     summary: 'A sound stealth maze where the dark hunts your sound.',
     body: [
@@ -93,7 +74,7 @@ const WORKS = [
     id: 'next-chapter', title: 'The Next Chapter', unit: 'Team exhibition game · main coder', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#e39aac',
     role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/exhibition-1.jpg', thumb: 'assets/work/thumbs/next-chapter-exhibition.jpg',
-    gallery: ['exhibition-2.jpg', 'exhibition-4.jpg', 'exhibition-3.jpg', 'latest-door.jpg', 'latest-title.jpg', 'latest-nursery.jpg', 'latest-teen.jpg', 'latest-memory-box.jpg', 'latest-moving-out.jpg', 'latest-video.jpg', 'versions.jpg'].map(f => 'assets/work/next-chapter/' + f),
+    gallery: ['exhibition-2.jpg', 'exhibition-4.jpg', 'exhibition-3.jpg', 'latest-door.jpg', 'latest-title.jpg', 'room-nursery.jpg', 'room-childhood.jpg', 'room-tween.jpg', 'room-teen.jpg', 'room-young-adult.jpg', 'room-moving-out.jpg', 'latest-teen.jpg', 'memory-c-doll.jpg', 'memory-t-skates.jpg', 'memory-t-bag.jpg', 'latest-memory-box.jpg', 'latest-moving-out.jpg', 'latest-video.jpg', 'versions.jpg'].map(f => 'assets/work/next-chapter/' + f),
     play: [
       { label: 'The Next Chapter', href: 'https://ceceliayao.github.io/The-Next-Chapter/', ratio: '4/3', hint: 'Drag things from the box into the room. Click a ! to open a memory.' }
     ],
@@ -119,7 +100,7 @@ const WORKS = [
     id: 'astrobius', title: 'Astrobius', unit: 'Experimental type design · World Science Festival brief', year: '2026',
     skills: ['Type Design', 'Visual Storytelling', 'Concept Development & Framing', 'Presentation & Documentation'], accent: '#a99bd0',
     role: 'Solo', kind: 'Typeface & zine', cover: 'astrobius', image: 'assets/work/covers/astrobius.jpg', thumb: 'assets/work/thumbs/astrobius.jpg', tall: true,
-    gallery: ['poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
+    gallery: ['../covers/astrobius', 'poster', 'colour', 'thumbs', 'p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12', 'p13', 'p14', 'p15', 'p16'].map(p => 'assets/work/astrobius/' + p + '.jpg'),
     summary: 'Where the celestial meets the atomic. An experimental typeface for World Science Festival Brisbane.',
     body: [
       'The name is a portmanteau of Astro (the celestial) and Möbius (the infinite continuity). Inspired by the realisation that the laws of physics govern both the vastness of the cosmos and the precision of the microscopic world, the typeface serves as a visual bridge between two scales of existence.',
@@ -170,6 +151,26 @@ const WORKS = [
     ],
     tools: ['Figma', 'Hand sketching', 'Storyboarding', 'Speculative design'],
     links: []
+  },
+  {
+    id: 'my-room', title: 'What We Carry', unit: 'Personal project · game and web 3D', year: '2026',
+    skills: ['Creative Coding & Interactive Prototyping', 'Three.js / Web 3D', 'Concept Development & Framing', 'Visual Storytelling'], accent: '#e9c46a',
+    role: 'Solo · my own new game', kind: 'Personal game · web & 3D', cover: 'myRoom', image: 'assets/work/covers/my-room.jpg', thumb: 'assets/work/thumbs/my-room.jpg', pixel: true,
+    play: [{ label: 'My Room', href: 'room/', ratio: '16/9' }],
+    gallery: ['real-to-pixel', 'game-menu', 'story-bottles', 'story-picasso', 'story-hiking', 'whats-missing', 'pack-five', 'what-i-carried', '3d-day', '3d-unpack', '3d-sunset', '3d-night'].map(f => 'assets/work/my-room/' + f + '.jpg'),
+    summary: 'My own room, turned into a small game about the things we keep, lose and carry.',
+    body: [
+      'What We Carry is a small game I made about my own room. Every object you can click is something I own, photographed and redrawn in pixels: my hiking gear, the bottles on the rack, the magnets on the fridge, the photos on the cork board. Players explore the room and interact with the objects to learn who I am.',
+      'For references I compared room games through presentation, colour and style. Unpacking and Whisper of the House show how a desk, books and keepsakes can carry someone\'s interests. A Storied Life: Tabitha was useful for a quieter memory theme and short descriptions of meaningful objects.'
+    ],
+    process: [
+      { h: 'The question', p: 'Can a room introduce a person? The idea came from a team discussion about one room changing across life stages, and the objects that recur, disappear or change meaning. I wanted to test it on the room I actually live in.' },
+      { h: 'Real objects, one visual voice', p: 'Only real objects, so every story is true. Pixel art keeps them readable at a small size and gives the whole room one consistent voice. Each object answers a click with a short line about why it matters, instead of a label.' },
+      { h: 'From looking to remembering', p: 'Three short games turn the room into play: Find twelve things; What’s missing?, where the lights blink and one object is gone; and Pack five, where the moving box only fits five things and the rest stays behind. Pack five hands the keep-or-remove decision to the player.' },
+      { h: 'Into 3D', p: 'The same room became a floating Three.js island, my first step from p5.js into interactive 3D for the web. It has four ways to play: Explore brings one object forward and dims the rest, Unpack lifts everything off its place, Carry five repeats the packing choice in 3D, and Sun moves the light from morning to night.' }
+    ],
+    tools: ['JavaScript', 'Three.js', 'Canvas', 'Pixel art'],
+    links: [{ label: 'Play full screen', href: 'room/' }, { label: 'Instagram series', href: 'https://www.instagram.com/ceceliayao.design/' }]
   }
 ];
 
