@@ -73,7 +73,7 @@ const WORKS = [
     id: 'echo-corridor', title: 'Echo Corridor', unit: 'Solo game prototype · public arcade cabinet', year: '2026',
     skills: ['p5.js / JavaScript', 'Game-state / Data Logic', 'Interaction Prototyping', 'User Research & Usability Testing'], accent: '#8cc3dd',
     role: 'Solo', kind: 'Arcade game', cover: 'echoCorridor', image: 'assets/work/covers/echo-corridor.jpg', thumb: 'assets/work/thumbs/echo-corridor.jpg',
-    gallery: ['assets/work/echo-corridor/play.jpg', 'assets/work/echo-corridor/p02.jpg', 'assets/work/echo-corridor/p04.jpg', 'assets/work/echo-corridor/p05.jpg'],
+    gallery: ['level3', 'rules', 'decoy', 'help', 'story', 'caught', 'code-footsteps', 'code-sound', 'code-decoy', 'code-level', 'p04', 'p05'].map(f => 'assets/work/echo-corridor/' + f + '.jpg'),
     play: [{ label: 'Echo Corridor', href: 'play/echo-corridor/', ratio: '16/9', hint: 'Arrows or WASD to move. 1 pick up, 2 decoy, 3 mute.' }],
     summary: 'A sound stealth maze where the dark hunts your sound.',
     body: [
@@ -93,10 +93,9 @@ const WORKS = [
     id: 'next-chapter', title: 'The Next Chapter', unit: 'Team exhibition game · main coder', year: '2026',
     skills: ['Creative Coding & Interactive Prototyping', 'Team Collaboration', 'Game-state / Data Logic', 'Role Ownership'], accent: '#e39aac',
     role: 'Main coder · team of four', kind: 'Exhibition game', cover: 'nextChapter', image: 'assets/work/next-chapter/exhibition-1.jpg', thumb: 'assets/work/thumbs/next-chapter-exhibition.jpg',
-    gallery: ['exhibition-2.jpg', 'exhibition-4.jpg', 'exhibition-3.jpg', 'latest-door.jpg', 'latest-title.jpg', 'latest-nursery.jpg', 'latest-teen.jpg', 'latest-memory-box.jpg', 'latest-moving-out.jpg', 'latest-video.jpg', 'versions.jpg', 'title-screen.png', 'teen-2014.png', 'sprites.png'].map(f => 'assets/work/next-chapter/' + f),
+    gallery: ['exhibition-2.jpg', 'exhibition-4.jpg', 'exhibition-3.jpg', 'latest-door.jpg', 'latest-title.jpg', 'latest-nursery.jpg', 'latest-teen.jpg', 'latest-memory-box.jpg', 'latest-moving-out.jpg', 'latest-video.jpg', 'versions.jpg'].map(f => 'assets/work/next-chapter/' + f),
     play: [
-      { label: 'The Next Chapter (latest version)', href: 'https://ceceliayao.github.io/The-Next-Chapter/', ratio: '4/3' },
-      { label: 'The first pixel build', href: 'play/the-next-chapter/', ratio: '16/9', hint: 'Drag things from the box into the room.' }
+      { label: 'The Next Chapter', href: 'https://ceceliayao.github.io/The-Next-Chapter/', ratio: '4/3', hint: 'Drag things from the box into the room. Click a ! to open a memory.' }
     ],
     summary: 'One room, from nursery to moving out: what we keep up, carry on, and leave behind.',
     body: [

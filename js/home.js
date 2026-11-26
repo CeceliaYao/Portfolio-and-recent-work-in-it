@@ -408,12 +408,11 @@ player.addEventListener('click', e => { if (e.target === player) closePlayer(); 
 
 // same order as the work list; The Next Chapter's exhibition build sits next to its first pixel build
 const cards = [];
-WORKS.forEach(w => {
-  if (w.id === 'next-chapter') cards.push({ g: { label: 'The Next Chapter', href: w.links[0].href, external: true }, w });
-  (w.play || []).forEach(g => cards.push({ g, w }));
-});
+// the arcade runs in this order: the exhibition game, the arcade game, then my room
+['next-chapter', 'echo-corridor', 'my-room'].map(id => WORKS.find(w => w.id === id)).filter(Boolean)
+  .forEach(w => (w.play || []).forEach(g => cards.push({ g, w })));
 const grid = $('#arcade');
-const sketchImg = { 'Echo Corridor': 'assets/work/echo-corridor/play.jpg' };
+const sketchImg = { 'Echo Corridor': 'assets/work/echo-corridor/level3-clean.jpg', 'The Next Chapter': 'assets/work/next-chapter/latest-title.jpg' };
 cards.forEach(({ g, w }) => {
   const b = document.createElement(g.external ? 'a' : 'button');
   b.className = 'cab';
